@@ -1,0 +1,13 @@
+{
+  "commun": {
+    "langue": "Language",
+    "annuler": "Cancel",
+    "enregistrer": "Save",
+    "fermer": "Close",
+    "copier": "Copy",
+    "rafraichir": "Refresh",
+    "reessayer": "Retry",
+    "chargement": "Loading…",
+    "aucun": "None"
+  }
+}

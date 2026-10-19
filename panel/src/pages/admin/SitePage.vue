@@ -6,6 +6,7 @@ import StateBlock from '@/components/StateBlock.vue';
 import Icon from '@/components/Icon.vue';
 import { useSiteStore } from '@/stores/site';
 import { useToastStore } from '@/stores/toasts';
+import { langues } from '@/i18n';
 import { COULEUR_DEFAUT, SITE_DEFAUT, cloner, couleurRgb, fusionner, sectionVide, type SiteConfig } from '@/site/schema';
 
 /**
@@ -188,6 +189,13 @@ onBeforeRouteLeave(() => !modifie.value || window.confirm('Des modifications ne 
               <Icon name="close" :size="14" />
             </button>
           </span>
+        </label>
+        <label class="field">
+          <span class="field__label">Langue par défaut</span>
+          <select v-model="brouillon.identite.langue" class="select">
+            <option v-for="l in langues" :key="l.code" :value="l.code">{{ l.nom }}</option>
+          </select>
+          <small class="u-faint">Chaque visiteur peut en changer. Textes : WebClient/WebBin/lang/.</small>
         </label>
         <label class="field perso__large">
           <span class="field__label">Phrase d’accueil</span>

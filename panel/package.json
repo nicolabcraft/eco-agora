@@ -10,9 +10,11 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit",
-    "prebuild": "node scripts/mark-build.mjs",
+    "prebuild": "node scripts/mark-build.mjs && node scripts/build-locales.mjs",
     "postbuild": "node scripts/prune-assets.mjs",
-    "package": "npm run build && node scripts/package-release.mjs"
+    "package": "npm run build && node scripts/package-release.mjs",
+    "locales": "node scripts/build-locales.mjs",
+    "predev": "node scripts/build-locales.mjs"
   },
   "dependencies": {
     "axios": "^1.7.9",

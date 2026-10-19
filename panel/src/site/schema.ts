@@ -31,6 +31,8 @@ export interface SiteConfig {
     logo: string;
     /** Couleur d'accent, #rrggbb. Vide : orange par defaut. */
     couleur: string;
+    /** Langue par defaut des visiteurs (code de lang/langues.json). Chacun peut en changer. */
+    langue: string;
   };
   liens: {
     /** Site de la communaute, en bas de la barre laterale. */
@@ -125,7 +127,7 @@ const REGLES_EXEMPLE: RegleSection[] = [
 ];
 
 export const SITE_DEFAUT: SiteConfig = {
-  identite: { nom: '', baseline: '', logo: '', couleur: '' },
+  identite: { nom: '', baseline: '', logo: '', couleur: '', langue: 'fr' },
   liens: { site: '', siteLibelle: '', hebergeurMention: '', hebergeurUrl: '' },
   jeu: { hote: '', hoteSecours: '', port: 0 },
   wiki: { langue: 'fr' },

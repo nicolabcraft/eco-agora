@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import Icon from './Icon.vue';
 import AnnonceBanner from './AnnonceBanner.vue';
@@ -9,12 +9,30 @@ import { useSessionStore } from '@/stores/session';
 import { num } from '@/utils/format';
 import { useSiteStore } from '@/stores/site';
 import { lienSur } from '@/site/schema';
+import { choisirLangue, langue, langues } from '@/i18n';
 
 const route = useRoute();
 const srv = useServerStore();
 const session = useSessionStore();
 const site = useSiteStore();
 const mobileOpen = ref(false);
+
+/**
+ * Interface d'origine d'Eco, si l'installation l'a rangee dans legacy/ : les
+ * mods qui s'integrent a l'interface d'origine restent ainsi accessibles. Sans
+ * ce fichier, le serveur renvoie notre propre panel : on le reconnait a sa
+ * balise generator.
+ */
+const interfaceOrigine = ref(false);
+onMounted(async () => {
+  try {
+    const r = await fetch('/legacy/', { cache: 'no-cache' });
+    const html = r.ok ? await r.text() : '';
+    interfaceOrigine.value = html.includes('<div id="app">') && !html.includes('content="Eco Agora"');
+  } catch {
+    interfaceOrigine.value = false;
+  }
+});
 
 /** Liens de la personnalisation, filtres : seuls http(s) et chemins locaux passent. */
 const lienSite = computed(() => lienSur(site.config.liens.site));
@@ -128,6 +146,11 @@ function isActive(to: string): boolean {
             <Icon :name="item.icon" />
             <span>{{ item.label }}</span>
           </RouterLink>
+          <a v-if="interfaceOrigine" href="/legacy/" target="_blank" rel="noopener" class="nav__item">
+            <Icon name="layers" />
+            <span>Interface d’origine d’Eco</span>
+            <Icon name="link" :size="13" class="nav__item-ext" />
+          </a>
         </div>
 
         <div class="nav__group">
@@ -208,6 +231,13 @@ function isActive(to: string): boolean {
         </div>
 
         <div class="u-fill" />
+
+        <label v-if="langues.length > 1" class="topbar__langue" :title="$t('commun.langue')">
+          <Icon name="globe" :size="15" />
+          <select class="select select--sm" :value="langue" :aria-label="$t('commun.langue')" @change="choisirLangue(($event.target as HTMLSelectElement).value)">
+            <option v-for="l in langues" :key="l.code" :value="l.code">{{ l.nom }}</option>
+          </select>
+        </label>
 
         <button class="btn btn--ghost btn--sm" title="Rafraîchir" @click="srv.refresh()">
           <Icon name="refresh" :size="15" />
@@ -318,6 +348,8 @@ function isActive(to: string): boolean {
 .topbar__live { display: flex; align-items: center; gap: 7px; font-size: 13px; }
 .topbar__meteor { margin-left: var(--sp-2); }
 .topbar__sep { margin: 0 2px; }
+.topbar__langue { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); }
+.topbar__langue .select { padding: 4px 26px 4px 8px; font-size: 13px; width: auto; }
 .topbar__user {
   display: flex; align-items: center; gap: var(--sp-2); max-width: 220px;
   padding: 6px 12px; border-radius: var(--r-ghost); font-size: 13px;
