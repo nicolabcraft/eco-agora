@@ -1,0 +1,84 @@
+/*
+ * Jetons de design d'Eco Agora.
+ * La couleur d'accent (--primary-rgb) est remplacee au chargement par celle
+ * choisie dans Administration > Personnalisation : ne l'ecrivez jamais en dur,
+ * utilisez var(--primary) ou rgb(var(--primary-rgb) / alpha).
+ */
+:root {
+  /* --- Marque --- */
+  --primary-rgb: 255 107 13;
+  --primary: rgb(var(--primary-rgb));
+  --secondary: #ad6151;
+  --dark: #161419;
+  --light: #eeedf0;
+  --bg-main: #3f4351;
+  --color-discord: #5865f2;
+  --color-twitch: #9146ff;
+
+  /* --- Surfaces derivees --- */
+  --surface: #161419;
+  --surface-2: #1e1b23;
+  --surface-3: #262230;
+  --surface-inset: rgba(238, 237, 240, 0.03);
+  --page-bg: #3f4351;
+  --page-bg-deep: #363a47;
+
+  /* --- Traits & separateurs --- */
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.15);
+  --hairline-warm: rgba(173, 97, 81, 0.2);
+
+  /* --- Texte --- */
+  --text: #eeedf0;
+  --text-muted: rgba(238, 237, 240, 0.62);
+  --text-faint: rgba(238, 237, 240, 0.38);
+  --text-on-primary: #1a1206;
+
+  /* --- Etats --- */
+  --success: #4caf6d;
+  --warning: #f0a92a;
+  --danger: #e5544b;
+  --info: #4aa3d8;
+
+  /* --- Palette de series pour les graphes (lisible sur fond sombre) --- */
+  --series-1: #ff6b0d;
+  --series-2: #4aa3d8;
+  --series-3: #6fcf7f;
+  --series-4: #c58af9;
+  --series-5: #f0c419;
+  --series-6: #ff8fa3;
+  --series-7: #5fd0c4;
+  --series-8: #ad6151;
+
+  /* --- Rayons --- */
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-pill: 25px;
+  --r-ghost: 20px;
+
+  /* --- Ombres --- */
+  --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.3);
+  --shadow-pop: 0 12px 34px rgba(0, 0, 0, 0.45);
+  --shadow-primary: 0 6px 18px rgb(var(--primary-rgb) / 0.35);
+
+  /* --- Espacements --- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* --- Typographie --- */
+  --font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: "Cascadia Mono", "Consolas", "SFMono-Regular", monospace;
+
+  /* --- Gabarit --- */
+  --nav-w: 264px;
+  --nav-w-collapsed: 72px;
+  --topbar-h: 60px;
+  --content-max: 1560px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}

@@ -1,0 +1,10 @@
+node_modules/
+bin/
+obj/
+release/
+release.zip
+*.zip
+local.props
+dist/
+panel/vite.local.config.ts
+eco-agora*.zip
