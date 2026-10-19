@@ -1,4 +1,4 @@
-# Eco Agora — mod serveur
+# Eco Agora : mod serveur
 
 Mod compilé pour Eco 0.14.2.1 : API du panel (`/api/agora`), personnalisation du
 site, journal d'activité, relevés (économie, ventes, connectés, horloge) et salle

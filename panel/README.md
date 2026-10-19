@@ -1,4 +1,4 @@
-# Eco Agora — panel web
+# Eco Agora : panel web
 
 Panel Vue 3 + Vite pour serveur Eco 0.14.2.1 : espace citoyen public (carte 3D,
 statistiques, écologie, marché, économie, gouvernance, règlement, wiki) et espace
