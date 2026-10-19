@@ -1,6 +1,6 @@
-# Eco Agora — mentions
+# Eco Agora : mentions
 
-Required Notice: Copyright (c) 2026 Nicolas Abrantes — Eco Agora
+Required Notice: Copyright (c) 2026 Nicolas Abrantes, Eco Agora
 
 Eco Agora est distribué sous la **PolyForm Noncommercial License 1.0.0**
 (fichier `LICENSE.md`) : gratuit, code ouvert, modifiable et réutilisable,

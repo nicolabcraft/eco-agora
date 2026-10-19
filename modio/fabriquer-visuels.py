@@ -47,7 +47,7 @@ VISUELS=[
  ("03-statistiques.png","Statistiques","Plus de 200 séries du serveur, superposables et exportables.","200+ server statistics, overlay up to 6 series, CSV/PNG export."),
  ("04-ecologie.png","Écologie et climat","CO₂, température, pollutions : la santé de la planète.","Ecology: CO₂, temperature and pollution tracking."),
  ("05-reglement.png","Votre règlement","Rédigé depuis le panel, section par section.","Write your server rules right from the panel."),
- ("06-personnalisation.png","Personnalisation","Nom, couleur, logo, liens, rideau d’ouverture — sans rien recompiler.","Customise name, colour, logo, links and opening countdown — no rebuild."),
+ ("06-personnalisation.png","Personnalisation","Nom, couleur, logo, liens, rideau d’ouverture, sans rien recompiler.","Customise name, colour, logo, links and opening countdown, no rebuild needed."),
  ("07-sante.png","Administration","Santé, joueurs, console, chat, annonces, journal d’activité.","Admin area: health, players, console, chat, announcements, activity log."),
 ]
 DECALAGES={"02-carte.png":230,"05-reglement.png":0,"06-personnalisation.png":0}

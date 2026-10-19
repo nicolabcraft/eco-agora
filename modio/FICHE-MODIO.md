@@ -1,4 +1,4 @@
-# Fiche mod.io — Eco Agora 1.0.0
+# Fiche mod.io : Eco Agora 1.0.0
 
 À copier dans le formulaire mod.io (jeu : **Eco**). La description est dans
 `description.html` : à coller en mode code source de l'éditeur (bouton `<>`).
@@ -7,7 +7,7 @@
 
 | Champ | Valeur |
 |---|---|
-| Nom | **Eco Agora — Panel web pour serveur** |
+| Nom | **Eco Agora : panel web pour serveur** |
 | URL (name_id) | `eco-agora` |
 | Logo | `logo.png` (1920×1080, 16:9) |
 | Galerie | `galerie-01.png` à `galerie-07.png` (1920×1080), dans l'ordre |

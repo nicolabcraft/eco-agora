@@ -70,6 +70,6 @@ champ dans `pages/admin/SitePage.vue`, et sa lecture via `useSiteStore()`.
 ## Licence
 
 **PolyForm Noncommercial 1.0.0** (`LICENSE.md`) : gratuit, code ouvert,
-modifiable et réutilisable, mais **aucun usage commercial** — ni vente, ni
+modifiable et réutilisable, mais **aucun usage commercial** : ni vente, ni
 vente d'une version modifiée. Mentions et exceptions (moteur de carte de
 Strange Loop Games, three.js, icônes) : `NOTICE.md`.
