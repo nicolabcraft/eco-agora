@@ -12,13 +12,14 @@ import type { PluginInfo } from '@/api/types';
 import { useServerStore } from '@/stores/server';
 import { useToastStore } from '@/stores/toasts';
 import { num } from '@/utils/format';
+import { t } from '@/i18n';
 
 type Job = 'identity' | 'access' | 'plugin';
 
 const ACCESS = [
-  { value: 'public', label: 'Public', hint: 'Visible dans le navigateur de serveurs' },
-  { value: 'hidden', label: 'Masqué', hint: 'Accessible mais non listé' },
-  { value: 'private', label: 'Privé', hint: 'Accès restreint' },
+  { value: 'public', label: t('adminConfig.acces.public'), hint: t('adminConfig.acces.publicAide') },
+  { value: 'hidden', label: t('adminConfig.acces.masque'), hint: t('adminConfig.acces.masqueAide') },
+  { value: 'private', label: t('adminConfig.acces.prive'), hint: t('adminConfig.acces.priveAide') },
 ];
 
 const srv = useServerStore();
@@ -59,9 +60,9 @@ const identityDirty = computed(
 /** Ce que la confirmation doit annoncer : seuls les champs reellement modifies. */
 const identitySummary = computed(() => {
   const parts: string[] = [];
-  if (serverName.value.trim() !== originalName.value) parts.push(`nom : ${serverName.value.trim()}`);
+  if (serverName.value.trim() !== originalName.value) parts.push(t('adminConfig.resume.nom', { valeur: serverName.value.trim() }));
   if (descriptionReady.value === true && description.value.trim() !== originalDescription.value) {
-    parts.push(`description : ${description.value.trim().slice(0, 120) || '(vide)'}`);
+    parts.push(t('adminConfig.resume.description', { valeur: description.value.trim().slice(0, 120) || t('adminConfig.resume.vide') }));
   }
   return parts.join(' · ');
 });
@@ -101,14 +102,14 @@ async function load(): Promise<void> {
   } else {
     // Repli : le nom complet lu par le mod ; celui de /info est tronque s'il a des accents.
     serverName.value = (presentation.status === 'fulfilled' && presentation.value.name) || srv.info?.Description || '';
-    nameError.value = name.reason instanceof Error ? name.reason.message : 'Nom illisible';
+    nameError.value = name.reason instanceof Error ? name.reason.message : t('adminConfig.erreurs.nomIllisible');
   }
   if (acc.status === 'fulfilled') {
     access.value = String(acc.value ?? '');
   } else {
     // `/info` expose déjà la visibilité : on s'en sert comme repli.
     access.value = srv.info?.Access ?? '';
-    accessError.value = acc.reason instanceof Error ? acc.reason.message : 'Accès illisible';
+    accessError.value = acc.reason instanceof Error ? acc.reason.message : t('adminConfig.erreurs.accesIllisible');
   }
 
   if (presentation.status === 'fulfilled' && presentation.value?.available) {
@@ -138,7 +139,7 @@ async function openConfig(name: string): Promise<void> {
       cfg && typeof cfg === 'object' && !Array.isArray(cfg) ? (cfg as Record<string, unknown>) : null;
     rawMode.value = pluginModel.value === null;
   } catch (err) {
-    pluginError.value = err instanceof Error ? err.message : 'Configuration illisible';
+    pluginError.value = err instanceof Error ? err.message : t('adminConfig.erreurs.configIllisible');
   } finally {
     busy.value = false;
   }
@@ -156,31 +157,31 @@ async function commit(): Promise<void> {
       if (nextName && nextName !== originalName.value) {
         await admin.setServerName(nextName);
         originalName.value = nextName;
-        toasts.ok('Nom du serveur mis à jour');
+        toasts.ok(t('adminConfig.toasts.nomMaj'));
       }
       const nextDescription = description.value.replace(/\r\n/g, '\n').trim();
       if (descriptionReady.value === true && nextDescription !== originalDescription.value) {
         const result = await agoraServer.setDescription(nextDescription);
         originalDescription.value = nextDescription;
-        if (result?.warning) toasts.fail('Description enregistrée avec une réserve', result.warning);
-        else toasts.ok('Description mise à jour');
+        if (result?.warning) toasts.fail(t('adminConfig.toasts.descReserve'), result.warning);
+        else toasts.ok(t('adminConfig.toasts.descMaj'));
       }
     } else if (kind === 'access') {
       await admin.setAccess(access.value, accessPassword.value || undefined);
       accessPassword.value = '';
-      toasts.ok('Niveau d\u2019accès mis à jour');
+      toasts.ok(t('adminConfig.toasts.accesMaj'));
     } else if (kind === 'plugin' && openPlugin.value) {
       // En mode formulaire, on renvoie l'objet edite ; sinon le JSON saisi.
       const parsed = rawMode.value
         ? (JSON.parse(pluginJson.value) as unknown)
         : pluginModel.value;
       await admin.savePluginConfig(openPlugin.value, parsed);
-      toasts.ok('Configuration enregistrée', openPlugin.value);
+      toasts.ok(t('adminConfig.toasts.configEnregistree'), openPlugin.value);
     }
     await srv.refresh();
   } catch (err) {
-    const msg = err instanceof SyntaxError ? 'JSON invalide' : err instanceof Error ? err.message : 'Échec';
-    toasts.fail('Modification refusée', msg);
+    const msg = err instanceof SyntaxError ? t('adminConfig.erreurs.jsonInvalide') : err instanceof Error ? err.message : t('adminConfig.erreurs.echec');
+    toasts.fail(t('adminConfig.toasts.refusee'), msg);
   } finally {
     busy.value = false;
   }
@@ -193,34 +194,33 @@ onMounted(() => void load());
   <div class="cfg">
     <SectionTitle
       :level="1"
-      title="Configuration"
-      hint="Identité du serveur, visibilité et réglages des greffons. Toute écriture demande une confirmation."
+      :title="$t('adminConfig.titre')"
+      :hint="$t('adminConfig.hint')"
     />
 
-    <StateBlock v-if="loading" kind="loading" title="Lecture des réglages" />
+    <StateBlock v-if="loading" kind="loading" :title="$t('adminConfig.lecture')" />
 
     <template v-else>
       <div class="cfg__grid">
         <section class="card">
           <div class="card__head">
             <div>
-              <h3 class="card__title">Identité du serveur</h3>
-              <p class="card__sub">Nom et description affichés dans le navigateur de serveurs.</p>
+              <h3 class="card__title">{{ $t('adminConfig.identite.titre') }}</h3>
+              <p class="card__sub">{{ $t('adminConfig.identite.sub') }}</p>
             </div>
           </div>
           <AdminGuardNotice v-if="nameError" :error="nameError" />
           <label class="field">
-            <span class="field__label">Nom</span>
+            <span class="field__label">{{ $t('adminConfig.identite.nom') }}</span>
             <input v-model="serverName" class="input" type="text" />
           </label>
           <p class="u-faint cfg__hint">
-            N’entourez pas le nom de guillemets : le panel les ajoute si besoin. Un nom vide est
-            refusé, car il empêcherait le serveur de redémarrer.
+            {{ $t('adminConfig.identite.nomAide') }}
           </p>
 
           <label class="field cfg__desc">
             <span class="field__label">
-              Description
+              {{ $t('adminConfig.identite.description') }}
               <span class="u-faint">
                 {{ description.trim().length }} / {{ descriptionMax }}
               </span>
@@ -231,14 +231,13 @@ onMounted(() => void load());
               rows="4"
               :maxlength="descriptionMax"
               :disabled="descriptionReady !== true"
-              placeholder="Quelques lignes de présentation pour le navigateur de serveurs."
+              :placeholder="$t('adminConfig.identite.descPlaceholder')"
             />
           </label>
           <p v-if="descriptionReady === false" class="u-faint cfg__hint">
-            Eco n’expose aucune route pour la description : elle passe par le mod
-            <strong>Eco Agora</strong>, injoignable pour le moment. La valeur ci-dessus est celle
-            que publie <code>/info</code>, en lecture seule. Redémarrez le serveur pour activer
-            l’édition.
+            {{ $t('adminConfig.identite.descAvant') }}
+            <strong>Eco Agora</strong>{{ $t('adminConfig.identite.descMilieu') }}
+            <code>/info</code>{{ $t('adminConfig.identite.descApres') }}
           </p>
 
           <div class="card__foot cfg__foot">
@@ -247,7 +246,7 @@ onMounted(() => void load());
               :disabled="!serverName.trim() || busy || !identityDirty"
               @click="job = 'identity'"
             >
-              <Icon name="check" :size="14" /><span>Enregistrer</span>
+              <Icon name="check" :size="14" /><span>{{ $t('adminConfig.identite.enregistrer') }}</span>
             </button>
           </div>
         </section>
@@ -255,10 +254,10 @@ onMounted(() => void load());
         <section class="card">
           <div class="card__head">
             <div>
-              <h3 class="card__title">Visibilité</h3>
+              <h3 class="card__title">{{ $t('adminConfig.visibilite.titre') }}</h3>
               <p class="card__sub">
-                Niveau d’accès actuel : <strong>{{ access || '--' }}</strong>
-                <span v-if="accessError" class="u-faint"> (valeur reprise de /info)</span>
+                {{ $t('adminConfig.visibilite.actuel') }} <strong>{{ access || '--' }}</strong>
+                <span v-if="accessError" class="u-faint"> {{ $t('adminConfig.visibilite.repli') }}</span>
               </p>
             </div>
           </div>
@@ -276,12 +275,12 @@ onMounted(() => void load());
             </button>
           </div>
           <label class="field cfg__pwd">
-            <span class="field__label">Mot de passe (optionnel)</span>
-            <input v-model="accessPassword" class="input" type="text" autocomplete="off" placeholder="Laisser vide pour ne pas changer" />
+            <span class="field__label">{{ $t('adminConfig.visibilite.motDePasse') }}</span>
+            <input v-model="accessPassword" class="input" type="text" autocomplete="off" :placeholder="$t('adminConfig.visibilite.motDePassePlaceholder')" />
           </label>
           <div class="card__foot cfg__foot">
             <button class="btn btn--primary btn--sm" :disabled="!access || busy" @click="job = 'access'">
-              <Icon name="check" :size="14" /><span>Appliquer</span>
+              <Icon name="check" :size="14" /><span>{{ $t('adminConfig.visibilite.appliquer') }}</span>
             </button>
           </div>
         </section>
@@ -290,12 +289,12 @@ onMounted(() => void load());
       <section class="card">
         <div class="card__head">
           <div>
-            <h3 class="card__title">Greffons configurables</h3>
+            <h3 class="card__title">{{ $t('adminConfig.greffons.titre') }}</h3>
             <p class="card__sub">
-              {{ num(configurable.length) }} greffon(s) sur {{ num(plugins.length) }} exposent une configuration.
+              {{ $t('adminConfig.greffons.compte', { n: num(configurable.length), total: num(plugins.length) }, configurable.length) }}
             </p>
           </div>
-          <input v-model="search" class="input cfg__search" type="search" placeholder="Rechercher un greffon" />
+          <input v-model="search" class="input cfg__search" type="search" :placeholder="$t('adminConfig.greffons.recherche')" />
         </div>
 
         <div class="cfg__plugins">
@@ -319,35 +318,35 @@ onMounted(() => void load());
         <div class="card__head">
           <div>
             <h3 class="card__title">{{ openPlugin }}</h3>
-            <p class="card__sub">Configuration au format JSON, telle que le serveur la stocke.</p>
+            <p class="card__sub">{{ $t('adminConfig.greffons.sub') }}</p>
           </div>
-          <button class="btn btn--ghost btn--sm" @click="openPlugin = null">Fermer</button>
+          <button class="btn btn--ghost btn--sm" @click="openPlugin = null">{{ $t('adminConfig.greffons.fermer') }}</button>
         </div>
 
-        <StateBlock v-if="busy && !pluginJson" kind="loading" title="Lecture de la configuration" />
+        <StateBlock v-if="busy && !pluginJson" kind="loading" :title="$t('adminConfig.greffons.lecture')" />
         <AdminGuardNotice v-else-if="pluginError" :error="pluginError" />
         <template v-else>
           <div class="cfg__mode">
             <div class="segmented">
               <button :class="{ 'is-active': !rawMode }" :disabled="pluginModel === null" @click="rawMode = false">
-                Formulaire
+                {{ $t('adminConfig.greffons.formulaire') }}
               </button>
-              <button :class="{ 'is-active': rawMode }" @click="rawMode = true">JSON avancé</button>
+              <button :class="{ 'is-active': rawMode }" @click="rawMode = true">{{ $t('adminConfig.greffons.jsonAvance') }}</button>
             </div>
             <span v-if="pluginModel === null" class="u-faint">
-              Ce greffon n’expose pas un objet : seul l’éditeur JSON s’applique.
+              {{ $t('adminConfig.greffons.pasObjet') }}
             </span>
           </div>
 
           <JsonForm v-if="!rawMode && pluginModel" :model="pluginModel" />
 
           <label v-else class="field">
-            <span class="field__label">JSON</span>
+            <span class="field__label">{{ $t('adminConfig.greffons.json') }}</span>
             <textarea v-model="pluginJson" class="textarea cfg__json" rows="18" spellcheck="false" />
           </label>
           <div class="card__foot cfg__foot">
             <button class="btn btn--primary btn--sm" :disabled="busy" @click="job = 'plugin'">
-              <Icon name="check" :size="14" /><span>Enregistrer la configuration</span>
+              <Icon name="check" :size="14" /><span>{{ $t('adminConfig.greffons.enregistrer') }}</span>
             </button>
           </div>
         </template>
@@ -356,10 +355,10 @@ onMounted(() => void load());
 
     <ConfirmDialog
       :open="job !== null"
-      :title="job === 'identity' ? 'Modifier l’identité du serveur' : job === 'access' ? 'Changer la visibilité' : 'Écrire la configuration du greffon'"
-      text="Cette modification est appliquée immédiatement sur le serveur en cours d'exécution."
+      :title="job === 'identity' ? $t('adminConfig.confirmation.identite') : job === 'access' ? $t('adminConfig.confirmation.acces') : $t('adminConfig.confirmation.greffon')"
+      :text="$t('adminConfig.confirmation.texte')"
       :detail="job === 'identity' ? identitySummary : job === 'access' ? access : (openPlugin ?? '')"
-      confirm-label="Appliquer"
+      :confirm-label="$t('adminConfig.confirmation.appliquer')"
       danger
       @confirm="commit"
       @cancel="job = null"

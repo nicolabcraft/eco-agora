@@ -12,6 +12,7 @@ import { useServerStore } from '@/stores/server';
 import { useSessionStore } from '@/stores/session';
 import { useToastStore } from '@/stores/toasts';
 import { num } from '@/utils/format';
+import { localeIntl, t } from '@/i18n';
 
 interface Action {
   key: string;
@@ -29,28 +30,28 @@ interface Action {
  * attendent un motif, d'autres une durée, et une valeur inattendue les fait échouer.
  */
 const MODERATION: Action[] = [
-  { key: 'kick', label: 'Expulser', command: '/manage kick', danger: true, argHint: 'motif (facultatif)' },
-  { key: 'ban', label: 'Bannir', command: '/manage ban', danger: true, argHint: 'motif (facultatif)' },
-  { key: 'unban', label: 'Débannir', command: '/manage unban', danger: false, argHint: 'motif (facultatif)' },
-  { key: 'mute', label: 'Museler', command: '/manage mute', danger: true, argHint: 'durée en heures (facultatif)' },
-  { key: 'unmute', label: 'Démuseler', command: '/manage unmute', danger: false },
+  { key: 'kick', label: t('adminPlayers.actions.kick'), command: '/manage kick', danger: true, argHint: t('adminPlayers.arguments.motif') },
+  { key: 'ban', label: t('adminPlayers.actions.ban'), command: '/manage ban', danger: true, argHint: t('adminPlayers.arguments.motif') },
+  { key: 'unban', label: t('adminPlayers.actions.unban'), command: '/manage unban', danger: false, argHint: t('adminPlayers.arguments.motif') },
+  { key: 'mute', label: t('adminPlayers.actions.mute'), command: '/manage mute', danger: true, argHint: t('adminPlayers.arguments.duree') },
+  { key: 'unmute', label: t('adminPlayers.actions.unmute'), command: '/manage unmute', danger: false },
 ];
 
 const RIGHTS: Action[] = [
-  { key: 'admin', label: 'Donner admin', command: '/manage admin', danger: true, argHint: 'motif (facultatif)' },
-  { key: 'removeadmin', label: 'Retirer admin', command: '/manage removeadmin', danger: true, argHint: 'motif (facultatif)' },
-  { key: 'whitelist', label: 'Ajouter en liste blanche', command: '/manage whitelist', danger: false, argHint: 'motif (facultatif)' },
-  { key: 'unwhitelist', label: 'Retirer de la liste blanche', command: '/manage unwhitelist', danger: true, argHint: 'motif (facultatif)' },
+  { key: 'admin', label: t('adminPlayers.actions.admin'), command: '/manage admin', danger: true, argHint: t('adminPlayers.arguments.motif') },
+  { key: 'removeadmin', label: t('adminPlayers.actions.removeadmin'), command: '/manage removeadmin', danger: true, argHint: t('adminPlayers.arguments.motif') },
+  { key: 'whitelist', label: t('adminPlayers.actions.whitelist'), command: '/manage whitelist', danger: false, argHint: t('adminPlayers.arguments.motif') },
+  { key: 'unwhitelist', label: t('adminPlayers.actions.unwhitelist'), command: '/manage unwhitelist', danger: true, argHint: t('adminPlayers.arguments.motif') },
 ];
 
 /** Commandes de consultation : elles affichent les listes tenues par le serveur. */
 const LISTS = [
-  { label: 'Joueurs connectés', command: '/manage players' },
-  { label: 'Administrateurs', command: '/listadmins' },
-  { label: 'Liste blanche', command: '/manage whitelist' },
-  { label: 'Bannis', command: '/manage ban' },
-  { label: 'Muselés', command: '/manage mute' },
-  { label: 'Tous les comptes connus', command: '/listusers' },
+  { label: t('adminPlayers.listes.connectes'), command: '/manage players' },
+  { label: t('adminPlayers.listes.admins'), command: '/listadmins' },
+  { label: t('adminPlayers.listes.listeBlanche'), command: '/manage whitelist' },
+  { label: t('adminPlayers.listes.bannis'), command: '/manage ban' },
+  { label: t('adminPlayers.listes.museles'), command: '/manage mute' },
+  { label: t('adminPlayers.listes.comptes'), command: '/listusers' },
 ];
 
 const srv = useServerStore();
@@ -94,7 +95,7 @@ const rows = computed(() => {
     .sort(
       (a, b) =>
         Number(online.value.has(b.Name)) - Number(online.value.has(a.Name)) ||
-        a.Name.localeCompare(b.Name, 'fr'),
+        a.Name.localeCompare(b.Name, localeIntl()),
     );
 });
 
@@ -110,7 +111,7 @@ async function load(): Promise<void> {
   try {
     users.value = await admin.users(minHours.value || undefined);
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Liste indisponible';
+    error.value = err instanceof Error ? err.message : t('adminPlayers.toasts.listeIndisponible');
   }
   admins.value = await server.admins().catch(() => []);
   loading.value = false;
@@ -133,13 +134,13 @@ async function run(command: string): Promise<void> {
         .map((m) => (typeof m === 'string' ? m : String(m.Message ?? m.Text ?? '')))
         .filter(Boolean),
     };
-    if (res.Errored) toasts.warn('Le serveur a signalé une erreur', command);
-    else toasts.ok('Commande exécutée', command);
+    if (res.Errored) toasts.warn(t('adminPlayers.toasts.erreurServeur'), command);
+    else toasts.ok(t('adminPlayers.toasts.executee'), command);
     await showOutput();
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Échec';
+    const message = err instanceof Error ? err.message : t('adminPlayers.toasts.echec');
     output.value = { command, errored: true, lines: [message] };
-    toasts.fail('Action impossible', message);
+    toasts.fail(t('adminPlayers.toasts.impossible'), message);
     await showOutput();
   } finally {
     busy.value = false;
@@ -148,7 +149,7 @@ async function run(command: string): Promise<void> {
 
 function ask(action: Action, username: string): void {
   if (!username.trim()) {
-    toasts.warn('Aucun joueur indiqué');
+    toasts.warn(t('adminPlayers.toasts.aucunJoueur'));
     return;
   }
   chosen.value = action;
@@ -178,33 +179,33 @@ onMounted(() => void load());
   <div class="pl">
     <SectionTitle
       :level="1"
-      title="Joueurs et modération"
-      hint="Comptes connus du serveur et actions de modération. Chaque action est une commande /manage exécutée sous votre identité d’administrateur."
+      :title="$t('adminPlayers.titre')"
+      :hint="$t('adminPlayers.hint')"
     >
       <template #actions>
         <button class="btn btn--ghost btn--sm" @click="load()">
-          <Icon name="refresh" :size="15" /><span>Actualiser</span>
+          <Icon name="refresh" :size="15" /><span>{{ $t('adminPlayers.actualiser') }}</span>
         </button>
       </template>
     </SectionTitle>
 
     <div class="grid-tiles">
-      <StatTile label="Comptes connus" :value="num(users.length)" />
+      <StatTile :label="$t('adminPlayers.tuiles.comptes')" :value="num(users.length)" />
       <StatTile
-        label="En ligne"
+        :label="$t('adminPlayers.tuiles.enLigne')"
         :value="num(srv.info?.OnlinePlayers ?? 0)"
         :tone="(srv.info?.OnlinePlayers ?? 0) > 0 ? 'success' : 'muted'"
       />
-      <StatTile label="Administrateurs" :value="num(admins.length)" tone="warning" />
-      <StatTile label="Pic de joueurs actifs" :value="num(srv.info?.PeakActivePlayers ?? 0)" tone="info" />
+      <StatTile :label="$t('adminPlayers.tuiles.admins')" :value="num(admins.length)" tone="warning" />
+      <StatTile :label="$t('adminPlayers.tuiles.pic')" :value="num(srv.info?.PeakActivePlayers ?? 0)" tone="info" />
     </div>
 
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Annonce dans le chat</h3>
+          <h3 class="card__title">{{ $t('adminPlayers.annonce.titre') }}</h3>
           <p class="card__sub">
-            Diffuse un message à tous les joueurs connectés, via la commande d’annonce du jeu.
+            {{ $t('adminPlayers.annonce.sub') }}
           </p>
         </div>
       </div>
@@ -213,11 +214,11 @@ onMounted(() => void load());
           v-model="announce"
           class="input"
           type="text"
-          placeholder="Redémarrage prévu dans 10 minutes..."
+          :placeholder="$t('adminPlayers.annonce.placeholder')"
           @keydown.enter.prevent="sendAnnounce"
         />
         <button class="btn btn--primary" :disabled="!announce.trim() || busy" @click="sendAnnounce">
-          <Icon name="send" :size="15" /><span>Envoyer</span>
+          <Icon name="send" :size="15" /><span>{{ $t('adminPlayers.annonce.envoyer') }}</span>
         </button>
       </div>
     </section>
@@ -225,9 +226,9 @@ onMounted(() => void load());
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Listes du serveur</h3>
+          <h3 class="card__title">{{ $t('adminPlayers.listes.titre') }}</h3>
           <p class="card__sub">
-            Interroge directement le serveur. La réponse s’affiche juste en dessous.
+            {{ $t('adminPlayers.listes.sub') }}
           </p>
         </div>
       </div>
@@ -248,49 +249,48 @@ onMounted(() => void load());
     <section v-if="output" ref="outputCard" class="card pl__output">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Réponse du serveur</h3>
+          <h3 class="card__title">{{ $t('adminPlayers.reponse.titre') }}</h3>
           <p class="card__sub u-mono">{{ output.command }}</p>
         </div>
         <div class="u-row-tight">
           <span class="badge" :class="output.errored ? 'badge--danger' : 'badge--success'">
-            {{ output.errored ? 'erreur' : 'ok' }}
+            {{ output.errored ? $t('adminPlayers.reponse.erreur') : $t('adminPlayers.reponse.ok') }}
           </span>
-          <button class="btn btn--ghost btn--sm" @click="output = null">Fermer</button>
+          <button class="btn btn--ghost btn--sm" @click="output = null">{{ $t('adminPlayers.reponse.fermer') }}</button>
         </div>
       </div>
-      <pre class="pre-log">{{ output.lines.length ? output.lines.join('\n') : '(aucune sortie)' }}</pre>
+      <pre class="pre-log">{{ output.lines.length ? output.lines.join('\n') : $t('adminPlayers.reponse.vide') }}</pre>
     </section>
 
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Comptes</h3>
+          <h3 class="card__title">{{ $t('adminPlayers.comptes.titre') }}</h3>
           <p class="card__sub">
-            L’API du serveur ne fournit que le nom et les identifiants de plateforme : ni temps de
-            jeu, ni compétences, ni richesse.
+            {{ $t('adminPlayers.comptes.sub') }}
           </p>
         </div>
         <div class="u-row-tight u-wrap">
-          <input v-model="search" class="input pl__search" type="search" placeholder="Rechercher un joueur" />
+          <input v-model="search" class="input pl__search" type="search" :placeholder="$t('adminPlayers.comptes.recherche')" />
           <label class="field pl__hours">
-            <span class="field__label">Heures min.</span>
+            <span class="field__label">{{ $t('adminPlayers.comptes.heuresMin') }}</span>
             <input v-model.number="minHours" class="input" type="number" min="0" step="1" @change="load()" />
           </label>
         </div>
       </div>
 
-      <StateBlock v-if="loading" kind="loading" title="Chargement des comptes" />
+      <StateBlock v-if="loading" kind="loading" :title="$t('adminPlayers.comptes.chargement')" />
       <AdminGuardNotice v-else-if="error" :error="error" />
       <StateBlock
         v-else-if="rows.length === 0"
         kind="empty"
-        title="Aucun compte"
-        text="Aucun joueur ne correspond aux filtres, ou personne n’a encore rejoint le monde."
+        :title="$t('adminPlayers.comptes.aucun')"
+        :text="$t('adminPlayers.comptes.aucunTexte')"
       />
       <div v-else class="table-wrap">
         <table class="table">
           <thead>
-            <tr><th>Joueur</th><th>Statut</th><th>Steam</th><th>PlayFab</th><th class="u-right">Modération</th></tr>
+            <tr><th>{{ $t('adminPlayers.comptes.joueur') }}</th><th>{{ $t('adminPlayers.comptes.statut') }}</th><th>Steam</th><th>PlayFab</th><th class="u-right">{{ $t('adminPlayers.comptes.moderation') }}</th></tr>
           </thead>
           <tbody>
             <tr v-for="u in rows" :key="u.Name + u.SteamId">
@@ -298,10 +298,10 @@ onMounted(() => void load());
                 <div class="u-row-tight">
                   <span class="dot" :class="online.has(u.Name) ? 'dot--on' : 'dot--off'" />
                   <strong>{{ u.Name }}</strong>
-                  <span v-if="isAdminUser(u)" class="badge badge--primary">Admin</span>
+                  <span v-if="isAdminUser(u)" class="badge badge--primary">{{ $t('adminPlayers.comptes.admin') }}</span>
                 </div>
               </td>
-              <td class="u-muted">{{ online.has(u.Name) ? 'En jeu' : 'Hors ligne' }}</td>
+              <td class="u-muted">{{ online.has(u.Name) ? $t('adminPlayers.comptes.enJeu') : $t('adminPlayers.comptes.horsLigne') }}</td>
               <td class="u-mono u-faint">{{ u.SteamId || '--' }}</td>
               <td class="u-mono u-faint">{{ u.PlayFabId || '--' }}</td>
               <td>
@@ -328,14 +328,14 @@ onMounted(() => void load());
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Droits et liste blanche</h3>
+          <h3 class="card__title">{{ $t('adminPlayers.droits.titre') }}</h3>
           <p class="card__sub">
-            Accepte un nom d’utilisateur, un identifiant de compte, un SteamID ou un slgid.
+            {{ $t('adminPlayers.droits.sub') }}
           </p>
         </div>
       </div>
       <div class="pl__row">
-        <input v-model="rightsTarget" class="input" type="text" placeholder="Nom ou identifiant du joueur" />
+        <input v-model="rightsTarget" class="input" type="text" :placeholder="$t('adminPlayers.droits.placeholder')" />
       </div>
       <div class="pl__chips pl__chips--rights">
         <button
@@ -343,7 +343,7 @@ onMounted(() => void load());
           :key="a.key"
           class="btn btn--sm"
           :class="a.danger ? 'btn--danger' : 'btn--ghost'"
-          :title="`${a.command} <joueur>`"
+          :title="`${a.command} ${$t('adminPlayers.droits.joueurArg')}`"
           :disabled="busy || !rightsTarget.trim()"
           @click="ask(a, rightsTarget)"
         >
@@ -355,21 +355,20 @@ onMounted(() => void load());
 
     <ConfirmDialog
       :open="chosen !== null"
-      :title="`${chosen?.label ?? ''} : ${target}`"
-      text="Cette commande est exécutée immédiatement sur le serveur de jeu, qui la journalise."
+      :title="$t('adminPlayers.confirmation.titre', { action: chosen?.label ?? '', cible: target })"
+      :text="$t('adminPlayers.confirmation.texte')"
       :detail="preview"
-      :confirm-label="chosen?.label ?? 'Confirmer'"
+      :confirm-label="chosen?.label ?? $t('adminPlayers.confirmation.confirmer')"
       :danger="chosen?.danger ?? false"
       :require-phrase="chosen?.danger ? target : undefined"
       @confirm="apply"
       @cancel="chosen = null"
     >
       <label v-if="chosen?.argHint" class="field">
-        <span class="field__label">Complément &mdash; {{ chosen.argHint }}</span>
-        <input v-model="extra" class="input" type="text" placeholder="laisser vide en cas de doute" />
+        <span class="field__label">{{ $t('adminPlayers.confirmation.complement', { aide: chosen.argHint }) }}</span>
+        <input v-model="extra" class="input" type="text" :placeholder="$t('adminPlayers.confirmation.complementPlaceholder')" />
         <span class="u-faint pl__arghint">
-          Laissez vide si vous n’êtes pas sûr : certaines sous-commandes d’Eco refusent un
-          complément inattendu.
+          {{ $t('adminPlayers.confirmation.complementAide') }}
         </span>
       </label>
     </ConfirmDialog>

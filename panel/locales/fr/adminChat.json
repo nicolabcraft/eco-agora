@@ -1,0 +1,46 @@
+{
+  "titre": "Chat du serveur",
+  "hint": "Historique des messages échangés en jeu, filtrable par joueur, par canal et par plage de jours.",
+  "erreurs": {
+    "indisponible": "Chat indisponible",
+    "annonceEchec": "La commande d’annonce a échoué"
+  },
+  "toasts": {
+    "chargementImpossible": "Chargement impossible",
+    "annonceDiffusee": "Annonce diffusée à tous les joueurs",
+    "destinataire": "Indiquez un destinataire",
+    "destinataireTexte": "Un canal (#General) ou un nom de joueur.",
+    "envoye": "Message envoyé",
+    "envoiImpossible": "Envoi impossible"
+  },
+  "filtres": {
+    "tout": "Tout",
+    "parJoueur": "Par joueur",
+    "parCanal": "Par canal",
+    "joueur": "Joueur",
+    "joueurPlaceholder": "Nom exact",
+    "canal": "Canal",
+    "jourDebut": "Jour début",
+    "jourFin": "Jour fin",
+    "filtrer": "Filtrer",
+    "plusActifs": "Plus actifs"
+  },
+  "messages": {
+    "titre": "Messages",
+    "charges": "{n} message chargé | {n} messages chargés",
+    "plusAnciens": "Charger 100 plus anciens",
+    "chargement": "Chargement du chat",
+    "aucun": "Aucun message",
+    "aucunTexte": "Aucun message sur cette plage. Élargissez la plage de jours ou changez de filtre."
+  },
+  "ecrire": {
+    "titre": "Écrire dans le jeu",
+    "subAvant": "En diffusion, le message part à tous les joueurs. Sinon, indiquez un destinataire : un canal (par exemple",
+    "subApres": ") ou un nom de joueur.",
+    "diffuserTout": "Diffuser à tout le serveur",
+    "destinatairePlaceholder": "#General ou un joueur",
+    "messagePlaceholder": "Votre message...",
+    "diffuser": "Diffuser",
+    "envoyer": "Envoyer"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Écologie et climat",
+  "hint": "Le simulateur d'Eco suit le carbone, la température et les pollutions. Ces courbes sont l'état de santé réel du monde.",
+  "livingPlants": "Plantes vivantes",
+  "livingAnimals": "Animaux vivants",
+  "daysToMeteor": "Jours avant le météore",
+  "none": "Aucun",
+  "charts": {
+    "co2": "Dioxyde de carbone",
+    "co2Hint": "CO2 total et origines cumulées",
+    "temperature": "Température moyenne du globe",
+    "temperatureHint": "Conséquence directe du CO2 accumulé",
+    "pollution": "Pollutions",
+    "pollutionHint": "Sol, produits chimiques, métaux lourds et pluies acides",
+    "populations": "Populations globales",
+    "populationsHint": "Plantes, arbres et animaux",
+    "citizens": "Citoyens",
+    "citizensHint": "Population totale et citoyens actifs"
+  },
+  "species": {
+    "title": "Populations par espèce",
+    "hint": "Choisissez jusqu'à six espèces parmi les {n} suivies par le serveur.",
+    "loading": "Chargement des espèces",
+    "chart": "Évolution des espèces sélectionnées",
+    "none": "Aucune espèce sélectionnée",
+    "noneText": "Cliquez sur une espèce ci-dessus pour tracer sa population."
+  }
+}

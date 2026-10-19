@@ -7,6 +7,7 @@ import AdminGuardNotice from '@/components/AdminGuardNotice.vue';
 import Icon from '@/components/Icon.vue';
 import { audit, type AuditEvent, type AuditFilters, type AuditStats } from '@/api/audit';
 import { compact, dateTime, num } from '@/utils/format';
+import { t } from '@/i18n';
 
 const PAGE = 50;
 
@@ -42,7 +43,7 @@ async function load(reset = false): Promise<void> {
     events.value = res.events ?? [];
     total.value = res.total ?? 0;
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Journal indisponible';
+    error.value = err instanceof Error ? err.message : t('adminAudit.indisponible');
     events.value = [];
     total.value = 0;
   } finally {
@@ -75,7 +76,10 @@ function reset(): void {
 }
 
 function exportCsv(): void {
-  const header = ['horodatage', 'type', 'joueur', 'cible', 'outil', 'quantite', 'actions', 'x', 'y', 'z'];
+  const header = [
+    t('adminAudit.csv.horodatage'), t('adminAudit.csv.type'), t('adminAudit.csv.joueur'), t('adminAudit.csv.cible'),
+    t('adminAudit.csv.outil'), t('adminAudit.csv.quantite'), t('adminAudit.csv.actions'), 'x', 'y', 'z',
+  ];
   const lines = events.value.map((e) =>
     [e.ts, e.type, e.player ?? '', e.target ?? '', e.tool ?? '', e.quantity, e.count, e.x, e.y, e.z]
       .map((v) => String(v).replace(/;/g, ','))
@@ -98,16 +102,16 @@ onMounted(async () => {
   <div class="au">
     <SectionTitle
       :level="1"
-      title="Journal d’activité"
-      hint="Qui a fait quoi, où et quand. Les actions répétitives sont regroupées par joueur, type, minute et zone."
+      :title="$t('adminAudit.titre')"
+      :hint="$t('adminAudit.hint')"
     >
       <template #actions>
         <div class="u-row-tight u-wrap">
           <button class="btn btn--ghost btn--sm" :disabled="!events.length" @click="exportCsv">
-            <Icon name="download" :size="15" /><span>CSV</span>
+            <Icon name="download" :size="15" /><span>{{ $t('adminAudit.csv.bouton') }}</span>
           </button>
           <button class="btn btn--ghost btn--sm" @click="load()">
-            <Icon name="refresh" :size="15" /><span>Actualiser</span>
+            <Icon name="refresh" :size="15" /><span>{{ $t('adminAudit.actualiser') }}</span>
           </button>
         </div>
       </template>
@@ -115,72 +119,72 @@ onMounted(async () => {
 
     <div v-if="stats" class="grid-tiles">
       <StatTile
-        label="Événements conservés"
+        :label="$t('adminAudit.tuiles.evenements')"
         :value="compact(stats.events)"
-        :hint="stats.retentionDays + ' jours de rétention'"
+        :hint="$t('adminAudit.tuiles.retention', { n: stats.retentionDays }, stats.retentionDays)"
       />
-      <StatTile label="Taille de la base" :value="compact(stats.databaseBytes)" suffix="o" tone="info" />
+      <StatTile :label="$t('adminAudit.tuiles.taille')" :value="compact(stats.databaseBytes)" :suffix="$t('adminAudit.tuiles.octets')" tone="info" />
       <StatTile
-        label="File d’écriture"
+        :label="$t('adminAudit.tuiles.file')"
         :value="num(stats.queued)"
         :tone="stats.queued > 5000 ? 'warning' : 'success'"
-        :hint="compact(stats.written) + ' écrits'"
+        :hint="$t('adminAudit.tuiles.ecrits', { n: compact(stats.written) })"
       />
       <StatTile
-        label="Perdus / erreurs"
+        :label="$t('adminAudit.tuiles.perdus')"
         :value="num(stats.dropped) + ' / ' + num(stats.errors)"
         :tone="stats.dropped + stats.errors > 0 ? 'danger' : 'muted'"
       />
-      <StatTile label="Archivés" :value="compact(stats.archived)" tone="muted" />
+      <StatTile :label="$t('adminAudit.tuiles.archives')" :value="compact(stats.archived)" tone="muted" />
       <StatTile
-        label="Journalisation"
-        :value="stats.enabled ? 'Active' : 'Désactivée'"
+        :label="$t('adminAudit.tuiles.journalisation')"
+        :value="stats.enabled ? $t('adminAudit.tuiles.active') : $t('adminAudit.tuiles.desactivee')"
         :tone="stats.enabled ? 'success' : 'warning'"
-        :hint="'Fenêtre ' + stats.aggregationWindowSeconds + ' s'"
+        :hint="$t('adminAudit.tuiles.fenetre', { n: stats.aggregationWindowSeconds })"
       />
     </div>
 
     <section class="card">
       <div class="au__filters">
         <label class="field au__f">
-          <span class="field__label">Type</span>
+          <span class="field__label">{{ $t('adminAudit.filtres.type') }}</span>
           <div class="select-wrap">
             <select v-model="filters.type" class="select">
-              <option value="">Tous</option>
+              <option value="">{{ $t('adminAudit.filtres.tous') }}</option>
               <option v-for="t in types" :key="t" :value="t">{{ t }}</option>
             </select>
           </div>
         </label>
         <label class="field au__f">
-          <span class="field__label">Joueur</span>
+          <span class="field__label">{{ $t('adminAudit.filtres.joueur') }}</span>
           <div class="select-wrap">
             <select v-model="filters.player" class="select">
-              <option value="">Tous</option>
+              <option value="">{{ $t('adminAudit.filtres.tous') }}</option>
               <option v-for="p in players" :key="p" :value="p">{{ p }}</option>
             </select>
           </div>
         </label>
         <label class="field au__f">
-          <span class="field__label">Cible</span>
-          <input v-model="filters.target" class="input" type="text" placeholder="Objet, espèce" />
+          <span class="field__label">{{ $t('adminAudit.filtres.cible') }}</span>
+          <input v-model="filters.target" class="input" type="text" :placeholder="$t('adminAudit.filtres.ciblePlaceholder')" />
         </label>
         <label class="field au__f">
-          <span class="field__label">Outil</span>
-          <input v-model="filters.tool" class="input" type="text" placeholder="Pioche…" />
+          <span class="field__label">{{ $t('adminAudit.filtres.outil') }}</span>
+          <input v-model="filters.tool" class="input" type="text" :placeholder="$t('adminAudit.filtres.outilPlaceholder')" />
         </label>
         <label class="field au__f">
-          <span class="field__label">Depuis</span>
+          <span class="field__label">{{ $t('adminAudit.filtres.depuis') }}</span>
           <input v-model="filters.from" class="input" type="datetime-local" />
         </label>
         <label class="field au__f">
-          <span class="field__label">Jusqu’à</span>
+          <span class="field__label">{{ $t('adminAudit.filtres.jusqua') }}</span>
           <input v-model="filters.to" class="input" type="datetime-local" />
         </label>
         <div class="u-row-tight au__actions">
           <button class="btn btn--primary btn--sm" @click="load(true)">
-            <Icon name="search" :size="15" /><span>Filtrer</span>
+            <Icon name="search" :size="15" /><span>{{ $t('adminAudit.filtres.filtrer') }}</span>
           </button>
-          <button class="btn btn--ghost btn--sm" @click="reset">Réinitialiser</button>
+          <button class="btn btn--ghost btn--sm" @click="reset">{{ $t('adminAudit.filtres.reinitialiser') }}</button>
         </div>
       </div>
     </section>
@@ -188,29 +192,31 @@ onMounted(async () => {
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Événements</h3>
-          <p class="card__sub">{{ num(total) }} résultat(s) &middot; page {{ page }} sur {{ pages }}</p>
+          <h3 class="card__title">{{ $t('adminAudit.evenements.titre') }}</h3>
+          <p class="card__sub">{{ $t('adminAudit.evenements.resultats', { n: num(total), page, pages }, total) }}</p>
         </div>
         <div class="u-row-tight">
-          <button class="btn btn--ghost btn--sm" :disabled="offset === 0" @click="move(-1)">Précédent</button>
-          <button class="btn btn--ghost btn--sm" :disabled="offset + 50 >= total" @click="move(1)">Suivant</button>
+          <button class="btn btn--ghost btn--sm" :disabled="offset === 0" @click="move(-1)">{{ $t('adminAudit.evenements.precedent') }}</button>
+          <button class="btn btn--ghost btn--sm" :disabled="offset + 50 >= total" @click="move(1)">{{ $t('adminAudit.evenements.suivant') }}</button>
         </div>
       </div>
 
-      <StateBlock v-if="loading" kind="loading" title="Interrogation du journal" />
+      <StateBlock v-if="loading" kind="loading" :title="$t('adminAudit.evenements.interrogation')" />
       <AdminGuardNotice v-else-if="error" :error="error" />
       <StateBlock
         v-else-if="events.length === 0"
         kind="empty"
-        title="Aucun événement"
-        text="Aucune activité ne correspond à ces filtres. Le journal se remplit dès que des joueurs agissent dans le monde."
+        :title="$t('adminAudit.evenements.aucun')"
+        :text="$t('adminAudit.evenements.aucunTexte')"
       />
       <div v-else class="table-wrap">
         <table class="table table--compact">
           <thead>
             <tr>
-              <th>Quand</th><th>Type</th><th>Joueur</th><th>Cible</th><th>Outil</th>
-              <th class="u-right">Quantité</th><th class="u-right">Actions</th><th>Position</th>
+              <th>{{ $t('adminAudit.colonnes.quand') }}</th><th>{{ $t('adminAudit.colonnes.type') }}</th><th>{{ $t('adminAudit.colonnes.joueur') }}</th>
+              <th>{{ $t('adminAudit.colonnes.cible') }}</th><th>{{ $t('adminAudit.colonnes.outil') }}</th>
+              <th class="u-right">{{ $t('adminAudit.colonnes.quantite') }}</th><th class="u-right">{{ $t('adminAudit.colonnes.actions') }}</th>
+              <th>{{ $t('adminAudit.colonnes.position') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -233,7 +239,7 @@ onMounted(async () => {
     </section>
 
     <section v-if="stats && stats.topTypes24h && stats.topTypes24h.length" class="card">
-      <div class="card__head"><h3 class="card__title">Activité des 24 dernières heures</h3></div>
+      <div class="card__head"><h3 class="card__title">{{ $t('adminAudit.activite24h') }}</h3></div>
       <div class="au__top">
         <div v-for="t in stats.topTypes24h" :key="t.type" class="au__top-row">
           <span class="u-fill u-ellipsis">{{ t.type.replace('action.', '') }}</span>

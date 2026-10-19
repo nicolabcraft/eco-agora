@@ -1,0 +1,53 @@
+{
+  "panelEco": "Eco panel",
+  "nav": {
+    "tableauDeBord": "Dashboard",
+    "carte": "World map",
+    "statistiques": "Statistics",
+    "ecologie": "Ecology and climate",
+    "marche": "Market",
+    "economie": "Economy",
+    "gouvernance": "Governance",
+    "reglement": "Rules",
+    "wiki": "Wiki",
+    "sante": "Server health",
+    "joueurs": "Players and moderation",
+    "console": "Console",
+    "chat": "Chat",
+    "annonces": "Site announcements",
+    "journal": "Activity log",
+    "journaux": "Technical logs",
+    "exports": "Exports",
+    "personnalisation": "Customisation",
+    "configuration": "Configuration"
+  },
+  "groupe": {
+    "citoyen": "Citizens",
+    "guides": "Guides",
+    "administration": "Administration",
+    "communaute": "Community"
+  },
+  "admin": "Admin",
+  "interfaceOrigine": "Original Eco interface",
+  "rejoindre": "Join the server",
+  "acces": {
+    "public": "Public",
+    "publicAide": "The server is publicly listed in Eco’s server browser.",
+    "prive": "Private",
+    "priveAide": "Restricted access: the server only accepts authorised players.",
+    "masque": "Hidden",
+    "masqueAide": "The server is reachable but does not appear in Eco’s server browser."
+  },
+  "pied": {
+    "serveur": "Server",
+    "enLigne": "Online",
+    "injoignable": "Unreachable",
+    "visibilite": "Visibility",
+    "version": "Version"
+  },
+  "menu": "Menu",
+  "enLigne": "online",
+  "jour": "Day",
+  "seConnecter": "Sign in",
+  "fermerMenu": "Close menu"
+}

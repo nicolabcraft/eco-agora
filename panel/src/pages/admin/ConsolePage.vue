@@ -7,6 +7,7 @@ import Icon from '@/components/Icon.vue';
 import { commands } from '@/api/eco';
 import { useToastStore } from '@/stores/toasts';
 import { dateTime } from '@/utils/format';
+import { t } from '@/i18n';
 
 interface Entry {
   command: string;
@@ -32,15 +33,15 @@ const historyIndex = ref(-1);
 const pending = ref<string | null>(null);
 
 const suggestions = [
-  { cmd: '/players', help: 'Liste les joueurs connectés' },
-  { cmd: '/time', help: 'Affiche l\u2019heure du monde' },
-  { cmd: '/whitelist', help: 'Gère la liste blanche' },
-  { cmd: '/admin', help: 'Gère les administrateurs' },
-  { cmd: '/announce ', help: 'Message à tout le serveur' },
-  { cmd: '/tp ', help: 'Téléporte un joueur' },
-  { cmd: '/give ', help: 'Donne un objet' },
-  { cmd: '/weather', help: 'État de la météo' },
-  { cmd: '/help', help: 'Liste des commandes du serveur' },
+  { cmd: '/players', help: t('adminConsole.suggestions.players') },
+  { cmd: '/time', help: t('adminConsole.suggestions.time') },
+  { cmd: '/whitelist', help: t('adminConsole.suggestions.whitelist') },
+  { cmd: '/admin', help: t('adminConsole.suggestions.admin') },
+  { cmd: '/announce ', help: t('adminConsole.suggestions.announce') },
+  { cmd: '/tp ', help: t('adminConsole.suggestions.tp') },
+  { cmd: '/give ', help: t('adminConsole.suggestions.give') },
+  { cmd: '/weather', help: t('adminConsole.suggestions.weather') },
+  { cmd: '/help', help: t('adminConsole.suggestions.help') },
 ];
 
 const isRisky = computed(() => RISKY.test(input.value.trim()));
@@ -58,16 +59,16 @@ async function run(cmd: string): Promise<void> {
       typeof m === 'string' ? m : String(m.Message ?? m.Text ?? ''),
     ).filter(Boolean);
     entries.value = [
-      { command: cmd, at: Date.now(), errored: res.Errored, lines: lines.length ? lines : ['(aucune sortie)'] },
+      { command: cmd, at: Date.now(), errored: res.Errored, lines: lines.length ? lines : [t('adminConsole.aucuneSortie')] },
       ...entries.value,
     ].slice(0, 60);
-    if (res.Errored) toasts.warn('La commande a signalé une erreur', cmd);
-    else toasts.ok('Commande exécutée', cmd);
+    if (res.Errored) toasts.warn(t('adminConsole.toasts.erreur'), cmd);
+    else toasts.ok(t('adminConsole.toasts.executee'), cmd);
     pushHistory(cmd);
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Échec de la commande';
+    const message = err instanceof Error ? err.message : t('adminConsole.toasts.echec');
     entries.value = [{ command: cmd, at: Date.now(), errored: true, lines: [message] }, ...entries.value];
-    toasts.fail('Commande refusée', message);
+    toasts.fail(t('adminConsole.toasts.refusee'), message);
   } finally {
     running.value = false;
   }
@@ -108,8 +109,8 @@ onMounted(() => {
   <div class="cons">
     <SectionTitle
       :level="1"
-      title="Console de commandes"
-      hint="Exécute une commande du jeu côté serveur. Les commandes sensibles demandent une confirmation, et le serveur journalise les actions d'administration."
+      :title="$t('adminConsole.titre')"
+      :hint="$t('adminConsole.hint')"
     />
 
     <section class="card">
@@ -131,19 +132,18 @@ onMounted(() => {
         <button class="btn btn--primary" :disabled="!input.trim() || running" @click="submit">
           <span v-if="running" class="spinner" />
           <Icon v-else name="terminal" :size="15" />
-          <span>Exécuter</span>
+          <span>{{ $t('adminConsole.executer') }}</span>
         </button>
       </div>
 
       <p class="cons__hint u-faint">
-        Les commandes qui agissent sur un personnage (<code>/give</code>, <code>/teleport</code>...)
-        sont refusées : le serveur exige un joueur en jeu, pas une commande web. Tapez
-        <code>/help</code> ou une famille seule (<code>/manage</code>) pour voir ses sous-commandes.
+        {{ $t('adminConsole.aide.avant') }}<code>/give</code>, <code>/teleport</code>{{ $t('adminConsole.aide.milieu') }}
+        <code>/help</code> {{ $t('adminConsole.aide.famille') }}<code>/manage</code>{{ $t('adminConsole.aide.apres') }}
       </p>
 
       <p v-if="isRisky" class="cons__warn">
         <Icon name="alert" :size="14" />
-        Cette commande est considérée comme sensible : une confirmation sera demandée.
+        {{ $t('adminConsole.sensible') }}
       </p>
 
       <div class="cons__chips">
@@ -155,15 +155,15 @@ onMounted(() => {
 
     <section class="card">
       <div class="card__head">
-        <h3 class="card__title">Sorties</h3>
-        <button v-if="entries.length" class="btn btn--ghost btn--sm" @click="entries = []">Vider l'affichage</button>
+        <h3 class="card__title">{{ $t('adminConsole.sorties') }}</h3>
+        <button v-if="entries.length" class="btn btn--ghost btn--sm" @click="entries = []">{{ $t('adminConsole.vider') }}</button>
       </div>
 
       <StateBlock
         v-if="entries.length === 0"
         kind="empty"
-        title="Aucune commande exécutée"
-        text="La réponse du serveur, y compris ses messages d'erreur, s'affichera ici."
+        :title="$t('adminConsole.aucune')"
+        :text="$t('adminConsole.aucuneTexte')"
       />
       <ol v-else class="cons__log">
         <li v-for="(e, i) in entries" :key="i" :class="{ 'is-error': e.errored }">
@@ -171,7 +171,7 @@ onMounted(() => {
             <span class="u-mono">{{ e.command }}</span>
             <span class="u-faint">{{ dateTime(e.at) }}</span>
             <span class="badge" :class="e.errored ? 'badge--danger' : 'badge--success'">
-              {{ e.errored ? 'erreur' : 'ok' }}
+              {{ e.errored ? $t('adminConsole.erreur') : $t('adminConsole.ok') }}
             </span>
           </div>
           <pre class="pre-log">{{ e.lines.join('\n') }}</pre>
@@ -181,10 +181,10 @@ onMounted(() => {
 
     <ConfirmDialog
       :open="pending !== null"
-      title="Commande sensible"
-      text="Cette commande peut modifier durablement le serveur ou affecter des joueurs. Vérifiez-la avant de continuer."
+      :title="$t('adminConsole.confirmation.titre')"
+      :text="$t('adminConsole.confirmation.texte')"
       :detail="pending ?? ''"
-      confirm-label="Exécuter la commande"
+      :confirm-label="$t('adminConsole.confirmation.confirmer')"
       danger
       @confirm="confirmRisky"
       @cancel="pending = null"

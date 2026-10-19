@@ -7,6 +7,7 @@ import Icon from '@/components/Icon.vue';
 import { admin } from '@/api/eco';
 import { useToastStore } from '@/stores/toasts';
 import { num } from '@/utils/format';
+import { localeIntl, t } from '@/i18n';
 
 const toasts = useToastStore();
 
@@ -27,13 +28,13 @@ const groups = computed<LogGroup[]>(() => {
   const map = new Map<string, string[]>();
   for (const path of allFiles.value) {
     const sep = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
-    const dir = sep > 0 ? path.slice(0, sep) : 'Racine';
+    const dir = sep > 0 ? path.slice(0, sep) : t('adminLogs.racine');
     if (!map.has(dir)) map.set(dir, []);
     (map.get(dir) as string[]).push(path);
   }
   return [...map.entries()]
     .map(([name, files]) => ({ name, files: files.sort().reverse() }))
-    .sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+    .sort((a, b) => a.name.localeCompare(b.name, localeIntl()));
 });
 
 const lines = computed(() => {
@@ -50,7 +51,7 @@ async function loadFiles(): Promise<void> {
     const first = groups.value[0];
     if (first) openGroup.value = first.name;
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Journaux indisponibles';
+    error.value = err instanceof Error ? err.message : t('adminLogs.indisponible');
   } finally {
     loading.value = false;
   }
@@ -63,7 +64,7 @@ async function openFile(path: string): Promise<void> {
     const raw = await admin.logFile(path);
     content.value = typeof raw === 'string' ? raw : JSON.stringify(raw, null, 2);
   } catch (err) {
-    toasts.fail('Fichier illisible', err instanceof Error ? err.message : '');
+    toasts.fail(t('adminLogs.illisible'), err instanceof Error ? err.message : '');
     content.value = '';
   } finally {
     busy.value = false;
@@ -75,7 +76,7 @@ function download(): void {
   const blob = new Blob([content.value], { type: 'text/plain;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = (file.value || 'journal').replace(/[\/]+/g, '-');
+  a.download = (file.value || t('adminLogs.nomFichier')).replace(/[\/]+/g, '-');
   a.click();
   URL.revokeObjectURL(a.href);
 }
@@ -87,17 +88,17 @@ onMounted(() => void loadFiles());
   <div class="logs">
     <SectionTitle
       :level="1"
-      title="Journaux"
-      hint="Fichiers de journalisation du serveur, par catégorie. Lecture seule."
+      :title="$t('adminLogs.titre')"
+      :hint="$t('adminLogs.hint')"
     />
 
-    <StateBlock v-if="loading" kind="loading" title="Lecture des journaux" />
+    <StateBlock v-if="loading" kind="loading" :title="$t('adminLogs.lecture')" />
     <AdminGuardNotice v-else-if="error" :error="error" />
 
     <div v-else class="logs__layout">
       <aside class="card card--tight logs__side">
-        <h3 class="card__title logs__side-title">Journaux du serveur</h3>
-        <StateBlock v-if="groups.length === 0" kind="empty" title="Aucun fichier" />
+        <h3 class="card__title logs__side-title">{{ $t('adminLogs.serveur') }}</h3>
+        <StateBlock v-if="groups.length === 0" kind="empty" :title="$t('adminLogs.aucunFichier')" />
         <template v-for="g in groups" :key="g.name">
           <button
             class="logs__cat logs__group"
@@ -121,23 +122,23 @@ onMounted(() => void loadFiles());
       <section class="card logs__main">
         <div class="card__head">
           <div>
-            <h3 class="card__title">{{ file ? file.split(/[\/]/).pop() : 'Aucun fichier ouvert' }}</h3>
-            <p class="card__sub">{{ num(lines.length) }} ligne(s){{ filter ? ' correspondantes' : '' }}</p>
+            <h3 class="card__title">{{ file ? file.split(/[\/]/).pop() : $t('adminLogs.aucunOuvert') }}</h3>
+            <p class="card__sub">{{ $t(filter ? 'adminLogs.lignesFiltre' : 'adminLogs.lignes', { n: num(lines.length) }, lines.length) }}</p>
           </div>
           <div class="u-row-tight u-wrap">
-            <input v-model="filter" class="input logs__filter" type="search" placeholder="Filtrer les lignes" />
+            <input v-model="filter" class="input logs__filter" type="search" :placeholder="$t('adminLogs.filtrer')" />
             <button class="btn btn--ghost btn--sm" :disabled="!content" @click="download">
-              <Icon name="download" :size="14" /><span>Télécharger</span>
+              <Icon name="download" :size="14" /><span>{{ $t('adminLogs.telecharger') }}</span>
             </button>
           </div>
         </div>
 
-        <StateBlock v-if="busy" kind="loading" title="Lecture du fichier" />
+        <StateBlock v-if="busy" kind="loading" :title="$t('adminLogs.lectureFichier')" />
         <StateBlock
           v-else-if="!content"
           kind="empty"
-          title="Sélectionnez un journal"
-          text="Choisissez une catégorie puis un fichier dans la colonne de gauche."
+          :title="$t('adminLogs.selection')"
+          :text="$t('adminLogs.selectionTexte')"
         />
         <pre v-else class="pre-log logs__view">{{ lines.join('\n') }}</pre>
       </section>

@@ -1,0 +1,43 @@
+{
+  "title": "Économie",
+  "hint": "Monnaies, richesse, dette et échanges du monde.",
+  "stores": "Commerces",
+  "contracts": "Contrats",
+  "unlimited": "illimité",
+  "unlimitedHolders": "+{n} illim.",
+  "realHoldings": "Avoirs réels des comptes",
+  "realHoldingsHint": "Relevé du mod, toutes devises confondues. Dernière mesure : {date}.",
+  "totalHoldings": "Avoirs totaux",
+  "treasury": "Trésor public",
+  "citizenHoldings": "Avoirs des citoyens",
+  "accounts": "Comptes",
+  "currencies": "Devises",
+  "hidePersonal": "Masquer les monnaies personnelles",
+  "hiddenCount": "{n} monnaie(s) personnelle(s) masquée(s)",
+  "cols": {
+    "currency": "Devise",
+    "holders": "Détenteurs"
+  },
+  "noBacked": "Aucune monnaie gagée",
+  "noBackedText": "Toutes les monnaies du serveur sont personnelles. Décochez le filtre pour les afficher.",
+  "history": "Évolution des avoirs",
+  "historyHint": "Relevé horaire sur quatorze jours.",
+  "modUnavailable": "Relevés économiques indisponibles",
+  "modUnavailableText": "Le mod Eco Agora fournit les avoirs réels des comptes. Il n est chargé qu au démarrage du serveur : redémarrez-le pour activer ces relevés.",
+  "charts": {
+    "wealth": "Richesse et trésor public",
+    "wealthHint": "Patrimoine des citoyens face aux avoirs du gouvernement",
+    "gdp": "Produit intérieur brut",
+    "gdpHint": "Richesse produite par le monde",
+    "debt": "Endettement",
+    "debtHint": "Dette totale et dette moyenne par citoyen actif",
+    "trades": "Échanges",
+    "tradesHint": "Volume échangé sur sept jours et transactions taxées",
+    "currencies": "Monnaies en circulation",
+    "currenciesHint": "Nombre de devises actives",
+    "activity": "Activité commerciale",
+    "activityHint": "Commerce monétaire, troc et frappe de monnaie",
+    "contracts": "Contrats",
+    "contractsHint": "Contrats publiés, rejoints, terminés et échoués"
+  }
+}

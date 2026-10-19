@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import StateBlock from '@/components/StateBlock.vue';
 import { apiGet } from '@/api/http';
 import { num } from '@/utils/format';
+import { localeIntl, t } from '@/i18n';
 
 /**
  * Qui a depense combien dans chaque boutique (administrateurs).
@@ -20,9 +21,9 @@ interface Boutique {
 interface Resume { transactions: number; premiere: string | null; boutiques: Boutique[] }
 
 const PERIODES = [
-  { jours: 1, libelle: '24 h' },
-  { jours: 7, libelle: '7 j' },
-  { jours: 0, libelle: 'Tout' },
+  { jours: 1, libelle: t('ventesBoutiques.periode24h') },
+  { jours: 7, libelle: t('ventesBoutiques.periode7j') },
+  { jours: 0, libelle: t('ventesBoutiques.periodeTout') },
 ];
 
 const jours = ref(0);
@@ -36,7 +37,7 @@ async function charger(): Promise<void> {
   try {
     resume.value = await apiGet<Resume>('/api/agora/ventes/resume', { params: { jours: jours.value } });
   } catch (e) {
-    erreur.value = e instanceof Error ? e.message : 'Ventes indisponibles';
+    erreur.value = e instanceof Error ? e.message : t('ventesBoutiques.indisponibles');
     resume.value = null;
   } finally {
     chargement.value = false;
@@ -49,7 +50,7 @@ const boutiques = computed(() =>
 
 const depuis = computed(() => {
   const p = resume.value?.premiere;
-  return p ? new Date(p).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : null;
+  return p ? new Date(p).toLocaleString(localeIntl(), { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : null;
 });
 
 function montants(liste: Montant[]): string {
@@ -58,7 +59,7 @@ function montants(liste: Montant[]): string {
 }
 
 function quand(iso: string): string {
-  return new Date(iso).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  return new Date(iso).toLocaleString(localeIntl(), { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
 
 onMounted(() => void charger());
@@ -70,8 +71,8 @@ watch(jours, () => void charger());
     <div class="ventes__tete">
       <p class="u-muted ventes__info">
         <template v-if="resume">
-          {{ num(resume.transactions) }} transaction(s)
-          <template v-if="depuis">· relevé depuis le {{ depuis }}</template>
+          {{ $t('ventesBoutiques.transactions', { n: num(resume.transactions) }, resume.transactions) }}
+          <template v-if="depuis">· {{ $t('ventesBoutiques.releveDepuis', { date: depuis }) }}</template>
         </template>
       </p>
       <div class="segmented">
@@ -81,27 +82,27 @@ watch(jours, () => void charger());
       </div>
     </div>
 
-    <StateBlock v-if="chargement" kind="loading" title="Lecture des ventes" />
+    <StateBlock v-if="chargement" kind="loading" :title="$t('ventesBoutiques.lecture')" />
     <StateBlock
       v-else-if="erreur"
       kind="locked"
-      title="Ventes indisponibles"
-      :text="`${erreur}. Les ventes sont relevées par le mod Eco Agora, à partir de son installation.`"
+      :title="$t('ventesBoutiques.indisponibles')"
+      :text="$t('ventesBoutiques.erreurTexte', { erreur })"
     />
     <StateBlock
       v-else-if="boutiques.length === 0"
       kind="empty"
-      title="Aucune vente sur cette période"
-      text="Les transactions apparaissent ici dès qu’un joueur achète ou vend dans une boutique."
+      :title="$t('ventesBoutiques.aucuneVente')"
+      :text="$t('ventesBoutiques.aucuneVenteTexte')"
     />
 
     <section v-for="b in boutiques" v-else :key="b.boutiqueId ?? b.boutique ?? ''" class="card ventes__boutique">
       <div class="card__head">
         <div>
-          <h3 class="card__title">{{ b.boutique || 'Boutique' }}</h3>
+          <h3 class="card__title">{{ b.boutique || $t('ventesBoutiques.boutique') }}</h3>
           <p class="card__sub">
-            {{ b.proprietaire ? `Tenue par ${b.proprietaire}` : '' }} · {{ num(b.transactions) }} transaction(s) ·
-            encaissé : <strong>{{ montants(b.encaisse) }}</strong>
+            {{ b.proprietaire ? $t('ventesBoutiques.tenuePar', { nom: b.proprietaire }) : '' }} · {{ $t('ventesBoutiques.transactions', { n: num(b.transactions) }, b.transactions) }} ·
+            {{ $t('ventesBoutiques.encaisse') }} <strong>{{ montants(b.encaisse) }}</strong>
           </p>
         </div>
       </div>
@@ -109,7 +110,7 @@ watch(jours, () => void charger());
       <div v-if="b.clients.length" class="table-wrap">
         <table class="table table--compact">
           <thead>
-            <tr><th>Client</th><th class="u-right">Dépensé</th><th class="u-right">Achats</th><th class="u-right">Articles</th><th>Dernier achat</th></tr>
+            <tr><th>{{ $t('ventesBoutiques.col.client') }}</th><th class="u-right">{{ $t('ventesBoutiques.col.depense') }}</th><th class="u-right">{{ $t('ventesBoutiques.col.achats') }}</th><th class="u-right">{{ $t('ventesBoutiques.col.articles') }}</th><th>{{ $t('ventesBoutiques.col.dernierAchat') }}</th></tr>
           </thead>
           <tbody>
             <tr v-for="c in b.clients" :key="c.joueur">
@@ -122,13 +123,13 @@ watch(jours, () => void charger());
           </tbody>
         </table>
       </div>
-      <p v-else class="u-faint ventes__vide">Aucun achat de client sur cette période.</p>
+      <p v-else class="u-faint ventes__vide">{{ $t('ventesBoutiques.aucunAchat') }}</p>
 
       <template v-if="b.fournisseurs.length">
-        <h4 class="ventes__sous">La boutique a acheté à</h4>
+        <h4 class="ventes__sous">{{ $t('ventesBoutiques.boutiqueAAchete') }}</h4>
         <div class="table-wrap">
           <table class="table table--compact">
-            <thead><tr><th>Joueur</th><th class="u-right">Reçu</th><th class="u-right">Ventes</th><th class="u-right">Articles</th></tr></thead>
+            <thead><tr><th>{{ $t('ventesBoutiques.col.joueur') }}</th><th class="u-right">{{ $t('ventesBoutiques.col.recu') }}</th><th class="u-right">{{ $t('ventesBoutiques.col.ventes') }}</th><th class="u-right">{{ $t('ventesBoutiques.col.articles') }}</th></tr></thead>
             <tbody>
               <tr v-for="f in b.fournisseurs" :key="f.joueur">
                 <td><strong>{{ f.joueur }}</strong></td>

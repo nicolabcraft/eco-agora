@@ -24,7 +24,7 @@ const ICONS: Record<AnnonceLevel, string> = {
       <div class="u-fill">
         <div class="annonce__head">
           <strong>{{ a.titre }}</strong>
-          <span v-if="a.epinglee" class="badge">Épinglée</span>
+          <span v-if="a.epinglee" class="badge">{{ $t('annonceBanner.epinglee') }}</span>
         </div>
         <p class="annonce__msg">{{ a.message }}</p>
         <a
@@ -34,11 +34,11 @@ const ICONS: Record<AnnonceLevel, string> = {
           rel="noopener"
           class="btn btn--ghost btn--sm annonce__link"
         >
-          <span>{{ a.lienTexte || 'En savoir plus' }}</span>
+          <span>{{ a.lienTexte || $t('annonceBanner.enSavoirPlus') }}</span>
           <Icon name="link" :size="13" />
         </a>
       </div>
-      <button class="annonce__close" title="Masquer cette annonce" @click="annonces.hide(a.id)">
+      <button class="annonce__close" :title="$t('annonceBanner.masquer')" @click="annonces.hide(a.id)">
         <Icon name="close" :size="16" />
       </button>
     </article>

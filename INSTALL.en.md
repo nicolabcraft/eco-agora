@@ -4,7 +4,7 @@ Eco Agora replaces your Eco server's website with a full panel: 3D world map,
 statistics, economy, market, civics, rules, announcements, and an admin area
 (console, chat, moderation, player activity log, configuration).
 
-The interface is in **French**.
+The interface is available in **French** and **English**, and can be translated (see Languages).
 
 The package holds two parts:
 
@@ -20,8 +20,15 @@ EcoModKit; for another Eco version, rebuild it (see DEVELOPPEMENT.md).
 
 With the server **stopped**:
 
-1. **Back up `WebClient/WebBin/index.html`**: it is Eco's original website,
-   which the panel replaces.
+1. **Move Eco's original website into `legacy/`**: the panel replaces
+   `WebClient/WebBin/index.html`. Moved to `legacy/index.html`, the original
+   site stays as a backup and remains reachable at `/legacy/`, so mods that
+   integrate into the original interface keep working (admins get an
+   "Interface d'origine d'Eco" link in the panel).
+   ```
+   mkdir WebClient\WebBin\legacy
+   move WebClient\WebBin\index.html WebClient\WebBin\legacy\index.html
+   ```
 2. Copy the package content to the server root, merging folders. Do not delete
    anything in `WebClient/WebBin/`: the panel uses Eco's original files
    (`Layers/`, `images/`, `i18n/`…).
@@ -54,7 +61,26 @@ secret in it. The curtain's tester password is not a protection (checked in
 the browser); to really close the server, use Eco's password or the waiting
 room below.
 
-## 4. Mod settings
+## 4. Languages
+
+The panel ships in **French** and **English**. Each visitor picks a language
+at the top of the page; the default language is set in
+*Personnalisation › Identité*.
+
+Texts live in `WebClient/WebBin/lang/` and can be edited without rebuilding:
+edit `lang/en.json` to change any wording, or copy it to `de.json`, translate
+the values and add `{ "code": "de", "nom": "Deutsch", "intl": "de-DE" }` to
+`lang/langues.json` to add a language. Missing keys fall back to French. Keep
+a copy of your edited files: a panel update replaces the `lang/` folder.
+
+## 5. Mods using the original interface
+
+Eco Agora only replaces `index.html`: mods with their own pages or API keep
+working, and plugin settings stay in *Administration › Configuration*. Mods
+that add things inside Eco's original interface remain usable through
+`/legacy/` (step 1).
+
+## 6. Mod settings
 
 Eco server admin UI, category **Eco Agora**, or `Configs/EcoAgora.eco`:
 
@@ -69,5 +95,6 @@ Eco server admin UI, category **Eco Agora**, or `Configs/EcoAgora.eco`:
 
 ## Uninstall
 
-Stop the server, delete `Mods/EcoAgora/` (including `data/`), put the original
-`index.html` back and delete `WebClient/WebBin/assets/` and `brand/`.
+Stop the server, delete `Mods/EcoAgora/` (including `data/`), move
+`legacy/index.html` back to `WebClient/WebBin/index.html` and delete
+`WebClient/WebBin/assets/`, `brand/` and `lang/`.

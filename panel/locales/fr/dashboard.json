@@ -1,0 +1,50 @@
+{
+  "addressCopied": "Adresse copiée",
+  "copyFailed": "Copie impossible",
+  "clipboardRefused": "Le navigateur a refusé l’accès au presse-papiers.",
+  "joinDiscord": "Rejoindre le Discord",
+  "openEco": "Ouvre Eco sur {lien}",
+  "openEcoBackup": "Ouvre Eco sur {lien}. Autre adresse : {secours}",
+  "joinServer": "Rejoindre le serveur",
+  "copyAddressTitle": "Copier {adresse} pour la connexion directe",
+  "copyAddress": "Copier l’adresse",
+  "unreachable": "Serveur injoignable",
+  "retry": "Réessayer",
+  "tiles": {
+    "onlinePlayers": "Joueurs en ligne",
+    "registered": "/ {n} inscrits",
+    "adminOnline": "Un administrateur est connecté",
+    "daysElapsed": "Jours écoulés",
+    "paused": "Simulation en pause",
+    "plants": "Plantes",
+    "animals": "Animaux",
+    "activeLaws": "Lois actives",
+    "totalCulture": "Culture totale"
+  },
+  "charts": {
+    "population": "Population citoyenne",
+    "populationHint": "Citoyens totaux, actifs et connectés",
+    "climate": "Climat",
+    "climateHint": "CO2 atmosphérique et température moyenne",
+    "ecosystem": "Écosystème",
+    "ecosystemHint": "Plantes, arbres et animaux du monde",
+    "economy": "Économie",
+    "economyHint": "Richesse des citoyens et trésor public"
+  },
+  "connectedCitizens": "Citoyens connectés",
+  "nobodyOnline": "Personne en ligne",
+  "nobodyOnlineText": "Les citoyens connectés apparaîtront ici en temps réel.",
+  "world": {
+    "title": "État du monde",
+    "version": "Version du serveur",
+    "category": "Catégorie",
+    "collaboration": "Collaboration",
+    "simulation": "Simulation",
+    "peakPlayers": "Pic de joueurs actifs",
+    "economy": "Économie",
+    "exhaustion": "Épuisement",
+    "hours": "{n} h",
+    "disabled": "Désactivé",
+    "shelfLife": "Durée de vie des aliments"
+  }
+}

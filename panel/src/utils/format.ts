@@ -1,9 +1,26 @@
 import { versReel } from './horloge';
-/** Formatage en francais : nombres, durees, unites de jeu. */
+import { aTraduction, localeIntl, t } from '@/i18n';
+/** Formatage dans la langue affichee : nombres, durees, unites de jeu. */
 
-const nf0 = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
-const nf1 = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
-const nf2 = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 });
+/**
+ * Formateurs crees a la premiere utilisation, pas au chargement du module : la
+ * langue n'est connue qu'apres le demarrage. Un changement de langue recharge la
+ * page, mais on garde la locale dans la cle par prudence.
+ */
+const formateurs = new Map<string, Intl.NumberFormat>();
+function nf(digits: 0 | 1 | 2): Intl.NumberFormat {
+  const locale = localeIntl();
+  const cle = `${locale}|${digits}`;
+  let f = formateurs.get(cle);
+  if (!f) {
+    f = new Intl.NumberFormat(locale, { maximumFractionDigits: digits });
+    formateurs.set(cle, f);
+  }
+  return f;
+}
+const nf0 = { format: (v: number): string => nf(0).format(v) };
+const nf1 = { format: (v: number): string => nf(1).format(v) };
+const nf2 = { format: (v: number): string => nf(2).format(v) };
 
 export function num(value: number | null | undefined, digits = 0): string {
   if (value === null || value === undefined || Number.isNaN(value)) return '--';
@@ -30,10 +47,9 @@ export function gameDay(day: number | null | undefined): string {
   const totalMin = Math.round(frac * 24 * 60);
   const h = String(Math.floor(totalMin / 60)).padStart(2, '0');
   const m = String(totalMin % 60).padStart(2, '0');
-  return `Jour ${nf0.format(whole)}, ${h}:${m}`;
+  return t('utils.jourHeure', { jour: nf0.format(whole), h, m });
 }
 
-const JOURS_COURTS = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
 const deux = (n: number): string => String(n).padStart(2, '0');
 
 /**
@@ -44,8 +60,12 @@ export function dateMonde(day: number | null | undefined, long = false): string 
   if (day === null || day === undefined || Number.isNaN(day)) return '--';
   const d = versReel(day * 86400);
   if (!d) return gameDay(day);
-  const court = `${deux(d.getDate())}/${deux(d.getMonth() + 1)} ${deux(d.getHours())}:${deux(d.getMinutes())}`;
-  return long ? `${JOURS_COURTS[d.getDay()]} ${court.replace(' ', ' à ')}` : court;
+  const date = `${deux(d.getDate())}/${deux(d.getMonth() + 1)}`;
+  const heure = `${deux(d.getHours())}:${deux(d.getMinutes())}`;
+  if (!long) return `${date} ${heure}`;
+  // Jour court de la langue affichee (« lun. » en francais).
+  const jour = new Intl.DateTimeFormat(localeIntl(), { weekday: 'short' }).format(d);
+  return t('utils.dateLongue', { jour, date, heure });
 }
 
 /** Duree courte : 1.5 -> "1 j 12 h". */
@@ -53,38 +73,30 @@ export function days(value: number | null | undefined): string {
   if (value === null || value === undefined || Number.isNaN(value)) return '--';
   const whole = Math.floor(value);
   const hours = Math.round((value - whole) * 24);
-  if (whole === 0) return `${hours} h`;
-  return hours === 0 ? `${nf0.format(whole)} j` : `${nf0.format(whole)} j ${hours} h`;
+  if (whole === 0) return t('utils.duree.h', { h: hours });
+  return hours === 0
+    ? t('utils.duree.j', { j: nf0.format(whole) })
+    : t('utils.duree.jh', { j: nf0.format(whole), h: hours });
 }
 
-/** Horodatage Unix (secondes ou millisecondes) -> date locale francaise. */
+/** Horodatage Unix (secondes ou millisecondes) -> date dans la langue affichee. */
 export function dateTime(ts: number | null | undefined): string {
   if (!ts) return '--';
   const ms = ts > 1e12 ? ts : ts * 1000;
-  return new Intl.DateTimeFormat('fr-FR', {
+  return new Intl.DateTimeFormat(localeIntl(), {
     dateStyle: 'short',
     timeStyle: 'short',
   }).format(new Date(ms));
 }
 
-/** Libelles francais des unites renvoyees par l API de statistiques. */
-const UNITS: Record<string, string> = {
-  ActionsPerHour: 'actions/h',
-  CO2PPM: 'ppm CO2',
-  Celsius: '°C',
-  Citizens: 'citoyens',
-  Count: 'unités',
-  CurrencyAmount: 'monnaie',
-  Meters: 'm',
-  Organisms: 'organismes',
-  PPM: 'ppm',
-  Percent: '%',
-  SkillPoints: 'points',
-};
-
+/**
+ * Libelles des unites renvoyees par l API de statistiques : locales/<langue>/utils.json,
+ * cles utils.unites.<Unite>. Une unite inconnue s'affiche telle qu'Eco l'envoie.
+ */
 export function unitLabel(unit: string | null | undefined): string {
   if (!unit) return '';
-  return UNITS[unit] ?? unit;
+  const cle = `utils.unites.${unit}`;
+  return aTraduction(cle) ? t(cle) : unit;
 }
 
 /** Coupe une chaine en gardant un mot entier. */

@@ -68,7 +68,7 @@ const total = (await readdir(join(WEBROOT, 'assets'))).length;
 console.log(`assets/ : ${fragments.size} fragment(s) retenu(s) sur ${total} presents (${(octets / 1048576).toFixed(1)} Mo)`);
 
 // 2. dossiers entierement a nous
-for (const dossier of ['brand']) {
+for (const dossier of ['brand', 'lang']) {
   const source = join(WEBROOT, dossier);
   if (!existsSync(source)) { console.warn(`  ${dossier}/ absent, ignore`); continue; }
   await cp(source, join(SORTIE, 'WebClient/WebBin', dossier), { recursive: true });

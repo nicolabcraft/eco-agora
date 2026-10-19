@@ -1,0 +1,25 @@
+{
+  "jours": "jour | jours",
+  "unite": {
+    "jours": "jours",
+    "heures": "heures",
+    "minutes": "minutes",
+    "secondes": "secondes"
+  },
+  "resume": {
+    "approx": "≈ {j} j",
+    "jhm": "{j} j {h} h {m} min",
+    "hms": "{h} h {m} min {s} s"
+  },
+  "detruitAide": "L’astéroïde a été détruit",
+  "restantAide": "Temps restant avant l’impact de l’astéroïde",
+  "detruit": "Détruit",
+  "impact": "Impact",
+  "detruitTitre": "L’astéroïde a été détruit !",
+  "detruitSous": "La planète est sauvée. Bravo à toute la communauté.",
+  "frappeTitre": "L’astéroïde a frappé",
+  "frappeSous": "L’impact a eu lieu. La suite dépend de votre civilisation.",
+  "impactTitre": "Impact de l’astéroïde",
+  "enAttente": "Le compte à rebours démarrera à l’ouverture du serveur.",
+  "pause": "Le monde est en pause : le compte à rebours est figé jusqu’à la reprise."
+}

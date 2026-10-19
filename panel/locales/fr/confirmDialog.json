@@ -1,0 +1,6 @@
+{
+  "confirmer": "Confirmer",
+  "recopiez": "Confirmation — recopiez",
+  "note": "La casse et les accents n’ont pas d’importance. Le bouton s’active dès que le mot correspond.",
+  "recopiezAide": "Recopiez « {mot} » pour activer ce bouton"
+}

@@ -10,6 +10,7 @@ import { lineOption, type Serie } from '@/utils/chart';
 import { loadCatalog } from '@/composables/useSeries';
 import { dateMonde, num, stripMarkup, unitLabel } from '@/utils/format';
 import { useToastStore } from '@/stores/toasts';
+import { t } from '@/i18n';
 
 const MAX_SERIES = 6;
 const toasts = useToastStore();
@@ -91,7 +92,7 @@ function toggleStat(name: string): void {
     return;
   }
   if (selected.value.length >= MAX_SERIES) {
-    toasts.warn('Six courbes maximum', 'Retirez une statistique avant d\'en ajouter une autre.');
+    toasts.warn(t('statsPage.maxSeries'), t('statsPage.maxSeriesText'));
     return;
   }
   selected.value = [...selected.value, name];
@@ -125,7 +126,7 @@ const presetActif = computed<Preset | null>(() => {
 /** Le monde est trop jeune pour cette plage : elle se confondrait avec « Tout ». */
 function tropCourt(jours: number): string | undefined {
   return spanDays.value < jours
-    ? `Le monde n’a que ${num(spanDays.value, 1)} jour(s) de données : cette plage montrerait tout.`
+    ? t('statsPage.tooShort', { n: num(spanDays.value, 1) })
     : undefined;
 }
 
@@ -147,7 +148,7 @@ async function loadMeta(): Promise<void> {
     const first = groups.value[0];
     if (first) openCategories.value = new Set([first.key]);
   } catch (err) {
-    metaError.value = err instanceof Error ? err.message : 'Catalogue indisponible';
+    metaError.value = err instanceof Error ? err.message : t('statsPage.catalogUnavailable');
   } finally {
     loadingMeta.value = false;
   }
@@ -171,7 +172,7 @@ async function loadData(): Promise<void> {
       };
     });
   } catch (err) {
-    dataError.value = err instanceof Error ? err.message : 'Séries indisponibles';
+    dataError.value = err instanceof Error ? err.message : t('statsPage.seriesUnavailable');
     series.value = [];
   } finally {
     loadingData.value = false;
@@ -180,7 +181,7 @@ async function loadData(): Promise<void> {
 
 function exportCsv(): void {
   if (!hasData.value) return;
-  const header = ['jour', ...series.value.map((s) => s.name)].join(';');
+  const header = [t('statsPage.csvDay'), ...series.value.map((s) => s.name)].join(';');
   const times = series.value[0].times;
   const lines = times.map((t, i) =>
     [t, ...series.value.map((s) => s.values[i] ?? '')].join(';'),
@@ -188,10 +189,10 @@ function exportCsv(): void {
   const blob = new Blob([[header, ...lines].join('\n')], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'statistiques-eco.csv';
+  a.download = `${t('statsPage.fileName')}.csv`;
   a.click();
   URL.revokeObjectURL(a.href);
-  toasts.ok('Export CSV généré');
+  toasts.ok(t('statsPage.csvDone'));
 }
 
 function exportPng(): void {
@@ -199,9 +200,9 @@ function exportPng(): void {
   if (!url) return;
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'statistiques-eco.png';
+  a.download = `${t('statsPage.fileName')}.png`;
   a.click();
-  toasts.ok('Image PNG générée');
+  toasts.ok(t('statsPage.pngDone'));
 }
 
 onMounted(() => void loadMeta().then(() => loadData()));
@@ -212,8 +213,8 @@ watch([selected, from, to], () => void loadData(), { deep: true });
   <div class="stats">
     <SectionTitle
       :level="1"
-      title="Statistiques"
-      :hint="`Le serveur enregistre ${num(catalog.length)} statistiques, un point par heure de jeu. Choisissez jusqu’à ${MAX_SERIES} séries à superposer.`"
+      :title="$t('statsPage.title')"
+      :hint="$t('statsPage.hint', { n: num(catalog.length), max: MAX_SERIES })"
     >
       <template #actions>
         <div class="u-row-tight u-wrap">
@@ -227,8 +228,8 @@ watch([selected, from, to], () => void loadData(), { deep: true });
       </template>
     </SectionTitle>
 
-    <StateBlock v-if="metaError" kind="error" title="Catalogue indisponible" :text="metaError">
-      <button class="btn btn--primary btn--sm" @click="loadMeta()">Réessayer</button>
+    <StateBlock v-if="metaError" kind="error" :title="$t('statsPage.catalogUnavailable')" :text="metaError">
+      <button class="btn btn--primary btn--sm" @click="loadMeta()">{{ $t('statsPage.retry') }}</button>
     </StateBlock>
 
     <div v-else class="stats__layout">
@@ -236,18 +237,18 @@ watch([selected, from, to], () => void loadData(), { deep: true });
       <aside class="card card--tight stats__picker">
         <div class="field">
           <div class="select-wrap stats__search">
-            <input v-model="search" class="input" type="search" placeholder="Rechercher une statistique..." />
+            <input v-model="search" class="input" type="search" :placeholder="$t('statsPage.searchPlaceholder')" />
           </div>
         </div>
 
-        <StateBlock v-if="loadingMeta" kind="loading" title="Chargement du catalogue" />
+        <StateBlock v-if="loadingMeta" kind="loading" :title="$t('statsPage.loadingCatalog')" />
 
         <div v-else class="stats__tree">
           <StateBlock
             v-if="filteredGroups.length === 0"
             kind="empty"
-            title="Aucun résultat"
-            text="Essayez un autre terme de recherche."
+            :title="$t('statsPage.noResult')"
+            :text="$t('statsPage.noResultText')"
           />
           <section v-for="g in filteredGroups" :key="g.key" class="stats__group">
             <button class="stats__group-head" @click="toggleCategory(g.key)">
@@ -281,69 +282,69 @@ watch([selected, from, to], () => void loadData(), { deep: true });
         <section class="card">
           <div class="card__head">
             <div>
-              <h3 class="card__title">Courbes sélectionnées</h3>
+              <h3 class="card__title">{{ $t('statsPage.selectedCurves') }}</h3>
               <p class="card__sub">
-                {{ dateMonde(from) }} &rarr; {{ dateMonde(to) }} &middot; {{ num(spanDays, 2) }} jour(s) de données
+                {{ dateMonde(from) }} &rarr; {{ dateMonde(to) }} &middot; {{ $t('statsPage.daysOfData', { n: num(spanDays, 2) }) }}
               </p>
             </div>
             <div class="segmented">
-              <button :class="{ 'is-active': presetActif === 'all' }" @click="preset('all')">Tout</button>
+              <button :class="{ 'is-active': presetActif === 'all' }" @click="preset('all')">{{ $t('statsPage.all') }}</button>
               <button
                 :class="{ 'is-active': presetActif === 'last1' && spanDays > 1 }"
                 :disabled="spanDays <= 1"
                 :title="tropCourt(1.0001)"
                 @click="preset('last1')"
-              >24 h</button>
+              >{{ $t('statsPage.last24h') }}</button>
               <button
                 :class="{ 'is-active': presetActif === 'last7' && spanDays > 7 }"
                 :disabled="spanDays <= 7"
                 :title="tropCourt(7.0001)"
                 @click="preset('last7')"
-              >7 j</button>
+              >{{ $t('statsPage.last7d') }}</button>
               <button
                 :class="{ 'is-active': presetActif === 'last30' && spanDays > 30 }"
                 :disabled="spanDays <= 30"
                 :title="tropCourt(30.0001)"
                 @click="preset('last30')"
-              >30 j</button>
+              >{{ $t('statsPage.last30d') }}</button>
             </div>
           </div>
 
           <div class="stats__range">
             <label class="field stats__range-field">
-              <span class="field__label">Début (jour)</span>
+              <span class="field__label">{{ $t('statsPage.start') }}</span>
               <input v-model.number="from" class="input" type="number" :min="bounds[0]" :max="to" step="0.5" />
             </label>
             <label class="field stats__range-field">
-              <span class="field__label">Fin (jour)</span>
+              <span class="field__label">{{ $t('statsPage.end') }}</span>
               <input v-model.number="to" class="input" type="number" :min="from" :max="bounds[1]" step="0.5" />
             </label>
           </div>
 
-          <StateBlock v-if="dataError" kind="error" title="Séries indisponibles" :text="dataError" />
+          <StateBlock v-if="dataError" kind="error" :title="$t('statsPage.seriesUnavailable')" :text="dataError" />
           <StateBlock
             v-else-if="selected.length === 0"
             kind="empty"
-            title="Aucune statistique sélectionnée"
-            text="Cochez une entrée dans la colonne de gauche pour tracer sa courbe."
+            :title="$t('statsPage.noneSelected')"
+            :text="$t('statsPage.noneSelectedText')"
           />
           <StateBlock
             v-else-if="!loadingData && !hasData"
             kind="empty"
-            title="Pas encore d’historique"
-            text="Ce monde vient d’être créé : les séries se remplissent au rythme d’un point par heure de jeu."
+            :title="$t('statsPage.noHistory')"
+            :text="$t('statsPage.noHistoryText')"
           />
           <EChart v-else ref="chart" :option="option" height="420px" :loading="loadingData" />
         </section>
 
         <section v-if="selectedInfos.length" class="card">
-          <div class="card__head"><h3 class="card__title">Détail des séries</h3></div>
+          <div class="card__head"><h3 class="card__title">{{ $t('statsPage.details') }}</h3></div>
           <div class="table-wrap">
             <table class="table table--compact">
               <thead>
                 <tr>
-                  <th>Statistique</th><th>Unité</th><th>Type</th><th class="u-right">Points</th>
-                  <th class="u-right">Dernière valeur</th><th>Description</th>
+                  <th>{{ $t('statsPage.cols.stat') }}</th><th>{{ $t('statsPage.cols.unit') }}</th><th>{{ $t('statsPage.cols.type') }}</th><th class="u-right">{{ $t('statsPage.cols.points') }}</th>
+                  <th class="u-right">{{ $t('statsPage.cols.last') }}</th><th>{{ $t('statsPage.cols.description') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -352,7 +353,7 @@ watch([selected, from, to], () => void loadData(), { deep: true });
                   <td>{{ unitLabel(s.Unit) }}</td>
                   <td>
                     <span class="badge" :class="s.StatType === 'ContinuousValue' ? 'badge--info' : 'badge--primary'">
-                      {{ s.StatType === 'ContinuousValue' ? 'continue' : 'évènement' }}
+                      {{ s.StatType === 'ContinuousValue' ? $t('statsPage.continuous') : $t('statsPage.event') }}
                     </span>
                   </td>
                   <td class="u-right">{{ num(series[i]?.values.length ?? 0) }}</td>

@@ -9,7 +9,7 @@ import { useSessionStore } from '@/stores/session';
 import { num } from '@/utils/format';
 import { useSiteStore } from '@/stores/site';
 import { lienSur } from '@/site/schema';
-import { choisirLangue, langue, langues } from '@/i18n';
+import { choisirLangue, langue, langues, t } from '@/i18n';
 
 const route = useRoute();
 const srv = useServerStore();
@@ -41,45 +41,45 @@ const lienHebergeur = computed(() => lienSur(site.config.liens.hebergeurUrl));
 interface NavItem { to: string; icon: string; label: string; }
 
 const citizenNav: NavItem[] = [
-  { to: '/', icon: 'grid', label: 'Tableau de bord' },
-  { to: '/carte', icon: 'map', label: 'Carte du monde' },
-  { to: '/statistiques', icon: 'activity', label: 'Statistiques' },
-  { to: '/ecologie', icon: 'leaf', label: 'Écologie et climat' },
-  { to: '/marche', icon: 'coins', label: 'Marché' },
-  { to: '/economie', icon: 'chart', label: 'Économie' },
-  { to: '/gouvernance', icon: 'landmark', label: 'Gouvernance' },
+  { to: '/', icon: 'grid', label: t('appShell.nav.tableauDeBord') },
+  { to: '/carte', icon: 'map', label: t('appShell.nav.carte') },
+  { to: '/statistiques', icon: 'activity', label: t('appShell.nav.statistiques') },
+  { to: '/ecologie', icon: 'leaf', label: t('appShell.nav.ecologie') },
+  { to: '/marche', icon: 'coins', label: t('appShell.nav.marche') },
+  { to: '/economie', icon: 'chart', label: t('appShell.nav.economie') },
+  { to: '/gouvernance', icon: 'landmark', label: t('appShell.nav.gouvernance') },
 ];
 
 /** Reglement et Eco Gnome n'apparaissent que s'ils sont actives dans la personnalisation. */
 const guideNav = computed<NavItem[]>(() => [
-  ...(site.config.reglement.actif ? [{ to: '/reglement', icon: 'gavel', label: 'Règlement' }] : []),
-  { to: '/wiki', icon: 'book', label: 'Wiki' },
+  ...(site.config.reglement.actif ? [{ to: '/reglement', icon: 'gavel', label: t('appShell.nav.reglement') }] : []),
+  { to: '/wiki', icon: 'book', label: t('appShell.nav.wiki') },
   ...(site.config.ecoGnome.actif ? [{ to: '/eco-gnome', icon: 'calculate', label: 'Eco Gnome' }] : []),
 ]);
 
 const adminNav: NavItem[] = [
-  { to: '/admin', icon: 'server', label: 'Santé du serveur' },
-  { to: '/admin/joueurs', icon: 'users', label: 'Joueurs et modération' },
-  { to: '/admin/console', icon: 'terminal', label: 'Console' },
-  { to: '/admin/chat', icon: 'message', label: 'Chat' },
-  { to: '/admin/annonces', icon: 'campaign', label: 'Annonces du site' },
-  { to: '/admin/journal', icon: 'search', label: 'Journal d’activité' },
-  { to: '/admin/journaux', icon: 'file', label: 'Journaux techniques' },
-  { to: '/admin/exports', icon: 'download', label: 'Exports' },
-  { to: '/admin/personnalisation', icon: 'edit', label: 'Personnalisation' },
-  { to: '/admin/configuration', icon: 'settings', label: 'Configuration' },
+  { to: '/admin', icon: 'server', label: t('appShell.nav.sante') },
+  { to: '/admin/joueurs', icon: 'users', label: t('appShell.nav.joueurs') },
+  { to: '/admin/console', icon: 'terminal', label: t('appShell.nav.console') },
+  { to: '/admin/chat', icon: 'message', label: t('appShell.nav.chat') },
+  { to: '/admin/annonces', icon: 'campaign', label: t('appShell.nav.annonces') },
+  { to: '/admin/journal', icon: 'search', label: t('appShell.nav.journal') },
+  { to: '/admin/journaux', icon: 'file', label: t('appShell.nav.journaux') },
+  { to: '/admin/exports', icon: 'download', label: t('appShell.nav.exports') },
+  { to: '/admin/personnalisation', icon: 'edit', label: t('appShell.nav.personnalisation') },
+  { to: '/admin/configuration', icon: 'settings', label: t('appShell.nav.configuration') },
 ];
 
 /** Visibilité du serveur dans le navigateur de serveurs d'Eco. */
 const accessLabel = computed(() => {
   const a = srv.info?.Access;
   if (a === 'public') {
-    return { text: 'Public', tone: 'badge--success', help: 'Le serveur est listé publiquement dans le navigateur de serveurs d’Eco.' };
+    return { text: t('appShell.acces.public'), tone: 'badge--success', help: t('appShell.acces.publicAide') };
   }
   if (a === 'private') {
-    return { text: 'Privé', tone: 'badge--danger', help: 'Accès restreint : le serveur n’accepte que les joueurs autorisés.' };
+    return { text: t('appShell.acces.prive'), tone: 'badge--danger', help: t('appShell.acces.priveAide') };
   }
-  return { text: 'Masqué', tone: 'badge--warning', help: 'Le serveur est accessible mais n’apparaît pas dans le navigateur de serveurs d’Eco.' };
+  return { text: t('appShell.acces.masque'), tone: 'badge--warning', help: t('appShell.acces.masqueAide') };
 });
 
 function isActive(to: string): boolean {
@@ -95,13 +95,13 @@ function isActive(to: string): boolean {
         <img :src="site.logo" alt="" class="brand__logo" width="34" height="34" />
         <span class="brand__text">
           <strong>{{ site.nom }}</strong>
-          <small>Panel Eco</small>
+          <small>{{ $t('appShell.panelEco') }}</small>
         </span>
       </RouterLink>
 
       <div class="nav__scroll">
         <div class="nav__group">
-          <div class="nav__group-title">Espace citoyen</div>
+          <div class="nav__group-title">{{ $t('appShell.groupe.citoyen') }}</div>
           <RouterLink
             v-for="item in citizenNav"
             :key="item.to"
@@ -116,7 +116,7 @@ function isActive(to: string): boolean {
         </div>
 
         <div class="nav__group">
-          <div class="nav__group-title">Guides</div>
+          <div class="nav__group-title">{{ $t('appShell.groupe.guides') }}</div>
           <RouterLink
             v-for="item in guideNav"
             :key="item.to"
@@ -132,8 +132,8 @@ function isActive(to: string): boolean {
 
         <div v-if="session.isAdmin" class="nav__group">
           <div class="nav__group-title">
-            Administration
-            <span class="badge badge--primary">Admin</span>
+            {{ $t('appShell.groupe.administration') }}
+            <span class="badge badge--primary">{{ $t('appShell.admin') }}</span>
           </div>
           <RouterLink
             v-for="item in adminNav"
@@ -148,16 +148,16 @@ function isActive(to: string): boolean {
           </RouterLink>
           <a v-if="interfaceOrigine" href="/legacy/" target="_blank" rel="noopener" class="nav__item">
             <Icon name="layers" />
-            <span>Interface d’origine d’Eco</span>
+            <span>{{ $t('appShell.interfaceOrigine') }}</span>
             <Icon name="link" :size="13" class="nav__item-ext" />
           </a>
         </div>
 
         <div class="nav__group">
-          <div class="nav__group-title">Communauté</div>
+          <div class="nav__group-title">{{ $t('appShell.groupe.communaute') }}</div>
           <a v-if="site.rejoindrePossible" :href="site.lienJeu()" class="nav__item nav__item--jeu" :title="site.lienJeu()">
             <Icon name="play" />
-            <span>Rejoindre le serveur</span>
+            <span>{{ $t('appShell.rejoindre') }}</span>
           </a>
           <a
             v-if="srv.info?.DiscordAddress"
@@ -180,20 +180,20 @@ function isActive(to: string): boolean {
 
       <footer class="nav__foot">
         <div class="nav__foot-row">
-          <span class="nav__foot-label">Serveur</span>
+          <span class="nav__foot-label">{{ $t('appShell.pied.serveur') }}</span>
           <span class="nav__foot-value">
             <span class="dot" :class="srv.reachable ? 'dot--on' : 'dot--off'" />
-            {{ srv.reachable ? 'En ligne' : 'Injoignable' }}
+            {{ srv.reachable ? $t('appShell.pied.enLigne') : $t('appShell.pied.injoignable') }}
           </span>
         </div>
         <div class="nav__foot-row">
-          <span class="nav__foot-label">Visibilité</span>
+          <span class="nav__foot-label">{{ $t('appShell.pied.visibilite') }}</span>
           <span :class="['badge', accessLabel.tone]" :title="accessLabel.help">
             {{ accessLabel.text }}
           </span>
         </div>
         <div class="nav__foot-row">
-          <span class="nav__foot-label">Version</span>
+          <span class="nav__foot-label">{{ $t('appShell.pied.version') }}</span>
           <span class="u-faint nav__foot-version">{{ srv.info?.Version ?? '--' }}</span>
         </div>
 
@@ -216,16 +216,16 @@ function isActive(to: string): boolean {
     <!-- Barre superieure et contenu -->
     <div class="main">
       <header class="topbar">
-        <button class="btn btn--ghost btn--icon topbar__burger" title="Menu" @click="mobileOpen = !mobileOpen">
+        <button class="btn btn--ghost btn--icon topbar__burger" :title="$t('appShell.menu')" @click="mobileOpen = !mobileOpen">
           <Icon :name="mobileOpen ? 'close' : 'menu'" />
         </button>
 
         <div class="topbar__live">
           <span class="dot" :class="srv.online > 0 ? 'dot--on' : 'dot--off'" />
           <strong>{{ num(srv.online) }}</strong>
-          <span class="u-muted">en ligne</span>
+          <span class="u-muted">{{ $t('appShell.enLigne') }}</span>
           <span class="u-faint topbar__sep">|</span>
-          <span class="u-muted">Jour</span>
+          <span class="u-muted">{{ $t('appShell.jour') }}</span>
           <strong>{{ num(srv.info?.DaysRunning ?? 0) }}</strong>
           <MeteorCountdown variante="compact" class="topbar__meteor" />
         </div>
@@ -239,19 +239,19 @@ function isActive(to: string): boolean {
           </select>
         </label>
 
-        <button class="btn btn--ghost btn--sm" title="Rafraîchir" @click="srv.refresh()">
+        <button class="btn btn--ghost btn--sm" :title="$t('commun.rafraichir')" @click="srv.refresh()">
           <Icon name="refresh" :size="15" />
-          <span class="topbar__hide-sm">Rafraîchir</span>
+          <span class="topbar__hide-sm">{{ $t('commun.rafraichir') }}</span>
         </button>
 
         <div v-if="session.hasSession" class="topbar__user">
           <Icon name="user" :size="15" />
           <span class="u-ellipsis">{{ session.username }}</span>
-          <span v-if="session.isAdmin" class="badge badge--primary">Admin</span>
+          <span v-if="session.isAdmin" class="badge badge--primary">{{ $t('appShell.admin') }}</span>
         </div>
         <RouterLink v-else to="/connexion" class="btn btn--primary btn--sm">
           <Icon name="user" :size="15" />
-          <span>Se connecter</span>
+          <span>{{ $t('appShell.seConnecter') }}</span>
         </RouterLink>
       </header>
 
@@ -261,7 +261,7 @@ function isActive(to: string): boolean {
       </main>
     </div>
 
-    <button v-if="mobileOpen" class="scrim" aria-label="Fermer le menu" @click="mobileOpen = false" />
+    <button v-if="mobileOpen" class="scrim" :aria-label="$t('appShell.fermerMenu')" @click="mobileOpen = false" />
   </div>
 </template>
 

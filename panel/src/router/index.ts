@@ -1,32 +1,36 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import { useSessionStore } from '@/stores/session';
 import { useSiteStore } from '@/stores/site';
+import { t } from '@/i18n';
+
+// meta.title porte une cle de traduction (routes.*) : la langue n'est pas encore
+// chargee quand ce module est lu, le texte est traduit a l'affichage.
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', name: 'dashboard', component: () => import('@/pages/DashboardPage.vue'), meta: { title: 'Tableau de bord' } },
-  { path: '/carte', name: 'map', component: () => import('@/pages/MapPage.vue'), meta: { title: 'Carte du monde' } },
-  { path: '/statistiques', name: 'stats', component: () => import('@/pages/StatsPage.vue'), meta: { title: 'Statistiques' } },
-  { path: '/ecologie', name: 'ecology', component: () => import('@/pages/EcologyPage.vue'), meta: { title: 'Écologie et climat' } },
-  { path: '/marche', name: 'market', component: () => import('@/pages/MarketPage.vue'), meta: { title: 'Marché' } },
-  { path: '/economie', name: 'economy', component: () => import('@/pages/EconomyPage.vue'), meta: { title: 'Économie' } },
-  { path: '/gouvernance', name: 'civics', component: () => import('@/pages/CivicsPage.vue'), meta: { title: 'Gouvernance' } },
-  { path: '/gouvernance/election/:id', name: 'election', component: () => import('@/pages/ElectionPage.vue'), meta: { title: 'Election' } },
-  { path: '/reglement', name: 'rules', component: () => import('@/pages/RulesPage.vue'), meta: { title: 'Règlement' } },
-  { path: '/wiki', name: 'wiki', component: () => import('@/pages/WikiPage.vue'), meta: { title: 'Wiki' } },
-  { path: '/eco-gnome', name: 'eco-gnome', component: () => import('@/pages/EcoGnomePage.vue'), meta: { title: 'Eco Gnome' } },
-  { path: '/profil', name: 'profile', component: () => import('@/pages/ProfilePage.vue'), meta: { title: 'Mon profil' } },
-  { path: '/connexion', name: 'login', component: () => import('@/pages/LoginPage.vue'), meta: { title: 'Connexion' } },
+  { path: '/', name: 'dashboard', component: () => import('@/pages/DashboardPage.vue'), meta: { title: 'routes.dashboard' } },
+  { path: '/carte', name: 'map', component: () => import('@/pages/MapPage.vue'), meta: { title: 'routes.carte' } },
+  { path: '/statistiques', name: 'stats', component: () => import('@/pages/StatsPage.vue'), meta: { title: 'routes.statistiques' } },
+  { path: '/ecologie', name: 'ecology', component: () => import('@/pages/EcologyPage.vue'), meta: { title: 'routes.ecologie' } },
+  { path: '/marche', name: 'market', component: () => import('@/pages/MarketPage.vue'), meta: { title: 'routes.marche' } },
+  { path: '/economie', name: 'economy', component: () => import('@/pages/EconomyPage.vue'), meta: { title: 'routes.economie' } },
+  { path: '/gouvernance', name: 'civics', component: () => import('@/pages/CivicsPage.vue'), meta: { title: 'routes.gouvernance' } },
+  { path: '/gouvernance/election/:id', name: 'election', component: () => import('@/pages/ElectionPage.vue'), meta: { title: 'routes.election' } },
+  { path: '/reglement', name: 'rules', component: () => import('@/pages/RulesPage.vue'), meta: { title: 'routes.reglement' } },
+  { path: '/wiki', name: 'wiki', component: () => import('@/pages/WikiPage.vue'), meta: { title: 'routes.wiki' } },
+  { path: '/eco-gnome', name: 'eco-gnome', component: () => import('@/pages/EcoGnomePage.vue'), meta: { title: 'routes.ecoGnome' } },
+  { path: '/profil', name: 'profile', component: () => import('@/pages/ProfilePage.vue'), meta: { title: 'routes.profil' } },
+  { path: '/connexion', name: 'login', component: () => import('@/pages/LoginPage.vue'), meta: { title: 'routes.connexion' } },
 
-  { path: '/admin', name: 'admin-health', component: () => import('@/pages/admin/HealthPage.vue'), meta: { title: 'Santé du serveur', admin: true } },
-  { path: '/admin/joueurs', name: 'admin-players', component: () => import('@/pages/admin/PlayersPage.vue'), meta: { title: 'Joueurs et modération', admin: true } },
-  { path: '/admin/console', name: 'admin-console', component: () => import('@/pages/admin/ConsolePage.vue'), meta: { title: 'Console', admin: true } },
-  { path: '/admin/chat', name: 'admin-chat', component: () => import('@/pages/admin/ChatPage.vue'), meta: { title: 'Chat', admin: true } },
-  { path: '/admin/annonces', name: 'admin-annonces', component: () => import('@/pages/admin/AnnouncementsPage.vue'), meta: { title: 'Annonces du site', admin: true } },
-  { path: '/admin/journal', name: 'admin-audit', component: () => import('@/pages/admin/AuditPage.vue'), meta: { title: 'Journal d’activité', admin: true } },
-  { path: '/admin/journaux', name: 'admin-logs', component: () => import('@/pages/admin/LogsPage.vue'), meta: { title: 'Journaux', admin: true } },
-  { path: '/admin/exports', name: 'admin-exports', component: () => import('@/pages/admin/ExportsPage.vue'), meta: { title: 'Exports', admin: true } },
-  { path: '/admin/personnalisation', name: 'admin-site', component: () => import('@/pages/admin/SitePage.vue'), meta: { title: 'Personnalisation', admin: true } },
-  { path: '/admin/configuration', name: 'admin-config', component: () => import('@/pages/admin/ConfigPage.vue'), meta: { title: 'Configuration', admin: true } },
+  { path: '/admin', name: 'admin-health', component: () => import('@/pages/admin/HealthPage.vue'), meta: { title: 'routes.sante', admin: true } },
+  { path: '/admin/joueurs', name: 'admin-players', component: () => import('@/pages/admin/PlayersPage.vue'), meta: { title: 'routes.joueurs', admin: true } },
+  { path: '/admin/console', name: 'admin-console', component: () => import('@/pages/admin/ConsolePage.vue'), meta: { title: 'routes.console', admin: true } },
+  { path: '/admin/chat', name: 'admin-chat', component: () => import('@/pages/admin/ChatPage.vue'), meta: { title: 'routes.chat', admin: true } },
+  { path: '/admin/annonces', name: 'admin-annonces', component: () => import('@/pages/admin/AnnouncementsPage.vue'), meta: { title: 'routes.annonces', admin: true } },
+  { path: '/admin/journal', name: 'admin-audit', component: () => import('@/pages/admin/AuditPage.vue'), meta: { title: 'routes.journal', admin: true } },
+  { path: '/admin/journaux', name: 'admin-logs', component: () => import('@/pages/admin/LogsPage.vue'), meta: { title: 'routes.journaux', admin: true } },
+  { path: '/admin/exports', name: 'admin-exports', component: () => import('@/pages/admin/ExportsPage.vue'), meta: { title: 'routes.exports', admin: true } },
+  { path: '/admin/personnalisation', name: 'admin-site', component: () => import('@/pages/admin/SitePage.vue'), meta: { title: 'routes.personnalisation', admin: true } },
+  { path: '/admin/configuration', name: 'admin-config', component: () => import('@/pages/admin/ConfigPage.vue'), meta: { title: 'routes.configuration', admin: true } },
 
   // Adresses de l'ancien panel d'Eco : le jeu ouvre encore ces liens (par exemple
   // « /election/735105?username=...&worldTicket=... »). La session est lue avant le
@@ -38,7 +42,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/profiling-results', redirect: '/admin' },
   { path: '/plugin/:plugin', redirect: '/admin/configuration' },
 
-  { path: '/:pathMatch(.*)*', name: 'notfound', component: () => import('@/pages/NotFoundPage.vue'), meta: { title: 'Page introuvable' } },
+  { path: '/:pathMatch(.*)*', name: 'notfound', component: () => import('@/pages/NotFoundPage.vue'), meta: { title: 'routes.introuvable' } },
 ];
 
 export const router = createRouter({
@@ -144,7 +148,7 @@ router.afterEach((to) => {
     prechargementLance = true;
     prechargerLesPages();
   }
-  const title = (to.meta.title as string | undefined) ?? '';
+  const cle = (to.meta.title as string | undefined) ?? '';
   const nom = useSiteStore().nom;
-  document.title = title ? `${title} - ${nom}` : `${nom} - Panel Eco`;
+  document.title = cle ? `${t(cle)} - ${nom}` : t('routes.titreDefaut', { nom });
 });

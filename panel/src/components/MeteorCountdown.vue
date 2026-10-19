@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useMeteorStore } from '@/stores/meteor';
+import { t } from '@/i18n';
 
 /**
  * Compte a rebours avant l'impact de l'asteroide.
@@ -20,21 +21,21 @@ const visible = computed(
 const blocs = computed(() => {
   const p = meteor.parts;
   if (!p) return [];
-  if (!p.precis) return [{ valeur: p.jours, libelle: p.jours > 1 ? 'jours' : 'jour' }];
+  if (!p.precis) return [{ valeur: p.jours, libelle: t('meteorCountdown.jours', {}, p.jours) }];
   return [
-    { valeur: p.jours, libelle: 'jours' },
-    { valeur: p.heures, libelle: 'heures' },
-    { valeur: p.minutes, libelle: 'minutes' },
-    { valeur: p.secondes, libelle: 'secondes' },
+    { valeur: p.jours, libelle: t('meteorCountdown.unite.jours') },
+    { valeur: p.heures, libelle: t('meteorCountdown.unite.heures') },
+    { valeur: p.minutes, libelle: t('meteorCountdown.unite.minutes') },
+    { valeur: p.secondes, libelle: t('meteorCountdown.unite.secondes') },
   ];
 });
 
 const resume = computed(() => {
   const p = meteor.parts;
   if (!p) return '';
-  if (!p.precis) return `≈ ${p.jours} j`;
-  if (p.jours > 0) return `${p.jours} j ${p.heures} h ${String(p.minutes).padStart(2, '0')} min`;
-  return `${p.heures} h ${String(p.minutes).padStart(2, '0')} min ${String(p.secondes).padStart(2, '0')} s`;
+  if (!p.precis) return t('meteorCountdown.resume.approx', { j: p.jours });
+  if (p.jours > 0) return t('meteorCountdown.resume.jhm', { j: p.jours, h: p.heures, m: String(p.minutes).padStart(2, '0') });
+  return t('meteorCountdown.resume.hms', { h: p.heures, m: String(p.minutes).padStart(2, '0'), s: String(p.secondes).padStart(2, '0') });
 });
 
 </script>
@@ -46,27 +47,27 @@ const resume = computed(() => {
       v-if="visible && props.variante === 'compact'"
       class="met-chip"
       :class="`met-chip--${meteor.ton}`"
-      :title="meteor.detruit ? 'L’astéroïde a été détruit' : 'Temps restant avant l’impact de l’astéroïde'"
+      :title="meteor.detruit ? $t('meteorCountdown.detruitAide') : $t('meteorCountdown.restantAide')"
     >
       <span aria-hidden="true">☄️</span>
-      <span v-if="meteor.detruit">Détruit</span>
-      <span v-else-if="meteor.impacte">Impact</span>
+      <span v-if="meteor.detruit">{{ $t('meteorCountdown.detruit') }}</span>
+      <span v-else-if="meteor.impacte">{{ $t('meteorCountdown.impact') }}</span>
       <strong v-else>{{ resume }}</strong>
     </span>
 
   <section v-else-if="visible" class="card met" :class="`met--${meteor.ton}`">
       <template v-if="meteor.detruit">
-        <h3 class="met__titre">☄️ L’astéroïde a été détruit !</h3>
-        <p class="met__sous">La planète est sauvée. Bravo à toute la communauté. 🎉</p>
+        <h3 class="met__titre">☄️ {{ $t('meteorCountdown.detruitTitre') }}</h3>
+        <p class="met__sous">{{ $t('meteorCountdown.detruitSous') }} 🎉</p>
       </template>
 
       <template v-else-if="meteor.impacte">
-        <h3 class="met__titre">☄️ L’astéroïde a frappé</h3>
-        <p class="met__sous">L’impact a eu lieu. La suite dépend de votre civilisation.</p>
+        <h3 class="met__titre">☄️ {{ $t('meteorCountdown.frappeTitre') }}</h3>
+        <p class="met__sous">{{ $t('meteorCountdown.frappeSous') }}</p>
       </template>
 
       <template v-else>
-        <h3 class="met__titre">☄️ Impact de l’astéroïde</h3>
+        <h3 class="met__titre">☄️ {{ $t('meteorCountdown.impactTitre') }}</h3>
 
         <div class="met__compte" :class="{ 'met__compte--jours': !meteor.parts?.precis }">
           <div v-for="b in blocs" :key="b.libelle" class="met__bloc">
@@ -76,10 +77,10 @@ const resume = computed(() => {
         </div>
 
         <p v-if="meteor.enAttente" class="met__note">
-          Le compte à rebours démarrera à l’ouverture du serveur.
+          {{ $t('meteorCountdown.enAttente') }}
         </p>
         <p v-else-if="meteor.pause" class="met__note">
-          ⏸ Le monde est en pause : le compte à rebours est figé jusqu’à la reprise.
+          ⏸ {{ $t('meteorCountdown.pause') }}
         </p>
       </template>
   </section>

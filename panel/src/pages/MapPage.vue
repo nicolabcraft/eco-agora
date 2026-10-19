@@ -8,6 +8,7 @@ import type { LayerGroup, MapEngine, MapViewElement } from '@/map/types';
 import { worldMap } from '@/api/eco';
 import { dateMonde, num } from '@/utils/format';
 import { versReel } from '@/utils/horloge';
+import { t } from '@/i18n';
 
 /** Legende servie par le serveur de jeu (hors bundle Vite). */
 const MAP_KEY = '/images/map-key.png';
@@ -41,7 +42,7 @@ const dayLabel = computed(() => {
   const day = Math.floor(secs / 86400) + 1;
   const h = String(Math.floor((secs % 86400) / 3600)).padStart(2, '0');
   const m = String(Math.floor((secs % 3600) / 60)).padStart(2, '0');
-  return `Jour ${day}, ${h}:${m}`;
+  return t('map.dayTime', { day, h, m });
 });
 
 const progress = computed(() =>
@@ -75,7 +76,7 @@ async function boot(): Promise<void> {
     engine = mod.default as unknown as MapEngine;
 
     const el = view.value;
-    if (!el) throw new Error('Conteneur de carte absent');
+    if (!el) throw new Error(t('map.noContainer'));
 
     if (engine.initialized) {
       engine.addView(el);
@@ -105,7 +106,7 @@ async function boot(): Promise<void> {
     dimension.value = dim;
     water.value = lvl;
   } catch (err) {
-    bootError.value = err instanceof Error ? err.message : 'Carte indisponible';
+    bootError.value = err instanceof Error ? err.message : t('map.unavailable');
   } finally {
     booting.value = false;
   }
@@ -160,16 +161,16 @@ onBeforeUnmount(() => {
   <div class="map">
     <SectionTitle
       :level="1"
-      title="Carte du monde"
-      hint="Moteur 3D du serveur : calques d’environnement, historique animé, districts et propriétés."
+      :title="$t('map.title')"
+      :hint="$t('map.hint')"
     >
       <template #actions>
         <div class="u-row-tight u-wrap">
           <span v-if="dimension" class="badge">
-            {{ num(dimension.x) }} x {{ num(dimension.z) }} blocs
+            {{ $t('map.size', { x: num(dimension.x), z: num(dimension.z) }) }}
           </span>
           <span v-if="water !== null" class="badge badge--info">
-            Niveau d’eau {{ num(water * 100, 1) }} %
+            {{ $t('map.waterLevel', { n: num(water * 100, 1) }) }}
           </span>
         </div>
       </template>
@@ -178,30 +179,30 @@ onBeforeUnmount(() => {
     <StateBlock
       v-if="!webglOk"
       kind="error"
-      title="WebGL indisponible"
-      text="Votre navigateur ou votre carte graphique n’autorise pas WebGL : la carte 3D ne peut pas s’afficher."
+      :title="$t('map.noWebgl')"
+      :text="$t('map.noWebglText')"
     />
-    <StateBlock v-else-if="bootError" kind="error" title="Carte indisponible" :text="bootError" />
+    <StateBlock v-else-if="bootError" kind="error" :title="$t('map.unavailable')" :text="bootError" />
 
     <div v-else class="card card--flush map__shell" :class="{ 'map__shell--full': fullscreen }">
       <!-- Barre d’outils -->
       <div class="map__bar">
         <div class="select-wrap map__layer">
           <select class="select" :value="layer" @change="selectLayer(($event.target as HTMLSelectElement).value)">
-            <optgroup v-for="g in groups" :key="g.category" :label="g.category || 'Divers'">
+            <optgroup v-for="g in groups" :key="g.category" :label="g.category || $t('map.misc')">
               <option v-for="l in g.layers" :key="l[0]" :value="l[0]">{{ l[1] }}</option>
             </optgroup>
-            <option v-if="groups.length === 0" value="Terrain">Terrain</option>
+            <option v-if="groups.length === 0" value="Terrain">{{ $t('map.terrain') }}</option>
           </select>
         </div>
 
-        <button class="btn btn--primary btn--sm" :title="paused ? 'Lancer l\'animation' : 'Mettre en pause'" @click="togglePlay">
+        <button class="btn btn--primary btn--sm" :title="paused ? $t('map.playTitle') : $t('map.pauseTitle')" @click="togglePlay">
           <Icon :name="paused ? 'play' : 'pause'" :size="15" />
-          <span>{{ paused ? 'Lire' : 'Pause' }}</span>
+          <span>{{ paused ? $t('map.play') : $t('map.pause') }}</span>
         </button>
 
         <label class="map__speed">
-          <span class="field__label">Vitesse</span>
+          <span class="field__label">{{ $t('map.speed') }}</span>
           <input
             type="range"
             min="0.05"
@@ -210,7 +211,7 @@ onBeforeUnmount(() => {
             :value="speed"
             @input="applySpeed(Number(($event.target as HTMLInputElement).value))"
           />
-          <span class="u-mono">{{ num(speed, 2) }} j/s</span>
+          <span class="u-mono">{{ $t('map.speedUnit', { n: num(speed, 2) }) }}</span>
         </label>
 
         <div class="u-fill" />
@@ -218,9 +219,9 @@ onBeforeUnmount(() => {
         <button class="btn btn--ghost btn--sm" @click="toggleFlat">
           {{ flat ? '3D' : '2D' }}
         </button>
-        <button class="btn btn--ghost btn--sm" :title="fullscreen ? 'Réduire' : 'Agrandir'" @click="toggleFullscreen">
+        <button class="btn btn--ghost btn--sm" :title="fullscreen ? $t('map.shrink') : $t('map.enlarge')" @click="toggleFullscreen">
           <Icon :name="fullscreen ? 'fullscreen_exit' : 'fullscreen'" :size="15" />
-          <span>{{ fullscreen ? 'Réduire' : 'Plein écran' }}</span>
+          <span>{{ fullscreen ? $t('map.shrink') : $t('map.fullscreen') }}</span>
         </button>
       </div>
 
@@ -237,7 +238,7 @@ onBeforeUnmount(() => {
         </div>
         <div v-if="info" class="map__hud map__hud--right">{{ info }}</div>
 
-        <img :src="MAP_KEY" alt="Légende des valeurs" class="map__key" />
+        <img :src="MAP_KEY" :alt="$t('map.legend')" class="map__key" />
       </div>
 
       <!-- Curseur temporel -->
@@ -256,8 +257,7 @@ onBeforeUnmount(() => {
     </div>
 
     <p class="map__note u-muted">
-      Astuce : maintenez le bouton gauche pour faire pivoter la vue, la molette pour zoomer.
-      L’historique d’un calque se charge à la première lecture, ce qui peut prendre quelques secondes.
+      {{ $t('map.tip') }}
     </p>
   </div>
 </template>

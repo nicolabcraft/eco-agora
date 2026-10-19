@@ -1,0 +1,86 @@
+{
+  "titre": "Players and moderation",
+  "hint": "Accounts known to the server and moderation actions. Each action is a /manage command run under your administrator identity.",
+  "actualiser": "Refresh",
+  "actions": {
+    "kick": "Kick",
+    "ban": "Ban",
+    "unban": "Unban",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "admin": "Make admin",
+    "removeadmin": "Remove admin",
+    "whitelist": "Add to whitelist",
+    "unwhitelist": "Remove from whitelist"
+  },
+  "arguments": {
+    "motif": "reason (optional)",
+    "duree": "duration in hours (optional)"
+  },
+  "listes": {
+    "titre": "Server lists",
+    "sub": "Queries the server directly. The response is shown just below.",
+    "connectes": "Online players",
+    "admins": "Administrators",
+    "listeBlanche": "Whitelist",
+    "bannis": "Banned",
+    "museles": "Muted",
+    "comptes": "All known accounts"
+  },
+  "toasts": {
+    "listeIndisponible": "List unavailable",
+    "echec": "Failed",
+    "erreurServeur": "The server reported an error",
+    "executee": "Command executed",
+    "impossible": "Action failed",
+    "aucunJoueur": "No player specified"
+  },
+  "tuiles": {
+    "comptes": "Known accounts",
+    "enLigne": "Online",
+    "admins": "Administrators",
+    "pic": "Peak active players"
+  },
+  "annonce": {
+    "titre": "Chat announcement",
+    "sub": "Broadcasts a message to all online players, using the game’s announce command.",
+    "placeholder": "Restart planned in 10 minutes...",
+    "envoyer": "Send"
+  },
+  "reponse": {
+    "titre": "Server response",
+    "erreur": "error",
+    "ok": "ok",
+    "fermer": "Close",
+    "vide": "(no output)"
+  },
+  "comptes": {
+    "titre": "Accounts",
+    "sub": "The server API only provides the name and platform IDs: no play time, skills or wealth.",
+    "recherche": "Search for a player",
+    "heuresMin": "Min. hours",
+    "chargement": "Loading accounts",
+    "aucun": "No accounts",
+    "aucunTexte": "No player matches the filters, or nobody has joined the world yet.",
+    "joueur": "Player",
+    "statut": "Status",
+    "moderation": "Moderation",
+    "admin": "Admin",
+    "enJeu": "In game",
+    "horsLigne": "Offline"
+  },
+  "droits": {
+    "titre": "Rights and whitelist",
+    "sub": "Accepts a username, an account ID, a SteamID or an slgid.",
+    "placeholder": "Player name or ID",
+    "joueurArg": "<player>"
+  },
+  "confirmation": {
+    "titre": "{action}: {cible}",
+    "texte": "This command is run immediately on the game server, which logs it.",
+    "confirmer": "Confirm",
+    "complement": "Extra argument — {aide}",
+    "complementPlaceholder": "leave empty if unsure",
+    "complementAide": "Leave empty if you are not sure: some Eco subcommands reject an unexpected argument."
+  }
+}

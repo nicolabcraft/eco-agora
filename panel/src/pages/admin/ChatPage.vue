@@ -9,6 +9,7 @@ import type { ChatMessage } from '@/api/types';
 import { useSessionStore } from '@/stores/session';
 import { useToastStore } from '@/stores/toasts';
 import { dateMonde, num, stripMarkup } from '@/utils/format';
+import { t } from '@/i18n';
 
 type Mode = 'all' | 'user' | 'tag';
 
@@ -47,7 +48,7 @@ async function load(): Promise<void> {
       messages.value = await chat.range(startDay.value, endDay.value);
     }
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Chat indisponible';
+    error.value = err instanceof Error ? err.message : t('adminChat.erreurs.indisponible');
     messages.value = [];
   } finally {
     loading.value = false;
@@ -61,7 +62,7 @@ async function loadMore(count: number): Promise<void> {
     const seen = new Set(messages.value.map((m) => m.Timestamp + m.Sender + m.Text));
     messages.value = [...older.filter((m) => !seen.has(m.Timestamp + m.Sender + m.Text)), ...messages.value];
   } catch (err) {
-    toasts.fail('Chargement impossible', err instanceof Error ? err.message : '');
+    toasts.fail(t('adminChat.toasts.chargementImpossible'), err instanceof Error ? err.message : '');
   } finally {
     loading.value = false;
   }
@@ -75,21 +76,21 @@ async function send(): Promise<void> {
     if (broadcast.value) {
       // Diffusion a tout le serveur : commande d'annonce du jeu.
       const res = await commands.exec(`/manage announce ${text}`);
-      if (res.Errored) throw new Error('La commande d’annonce a échoué');
-      toasts.ok('Annonce diffusée à tous les joueurs');
+      if (res.Errored) throw new Error(t('adminChat.erreurs.annonceEchec'));
+      toasts.ok(t('adminChat.toasts.annonceDiffusee'));
     } else {
       const to = recipient.value.trim();
       if (!to) {
-        toasts.warn('Indiquez un destinataire', 'Un canal (#General) ou un nom de joueur.');
+        toasts.warn(t('adminChat.toasts.destinataire'), t('adminChat.toasts.destinataireTexte'));
         return;
       }
       await chat.send(to, text);
-      toasts.ok('Message envoyé', to);
+      toasts.ok(t('adminChat.toasts.envoye'), to);
     }
     message.value = '';
     await load();
   } catch (err) {
-    toasts.fail('Envoi impossible', err instanceof Error ? err.message : '');
+    toasts.fail(t('adminChat.toasts.envoiImpossible'), err instanceof Error ? err.message : '');
   } finally {
     sending.value = false;
   }
@@ -111,43 +112,43 @@ onMounted(async () => {
   <div class="chat">
     <SectionTitle
       :level="1"
-      title="Chat du serveur"
-      hint="Historique des messages échangés en jeu, filtrable par joueur, par canal et par plage de jours."
+      :title="$t('adminChat.titre')"
+      :hint="$t('adminChat.hint')"
     />
 
     <section class="card">
       <div class="chat__filters">
         <div class="segmented">
-          <button :class="{ 'is-active': mode === 'all' }" @click="mode = 'all'; load()">Tout</button>
-          <button :class="{ 'is-active': mode === 'user' }" @click="mode = 'user'">Par joueur</button>
-          <button :class="{ 'is-active': mode === 'tag' }" @click="mode = 'tag'">Par canal</button>
+          <button :class="{ 'is-active': mode === 'all' }" @click="mode = 'all'; load()">{{ $t('adminChat.filtres.tout') }}</button>
+          <button :class="{ 'is-active': mode === 'user' }" @click="mode = 'user'">{{ $t('adminChat.filtres.parJoueur') }}</button>
+          <button :class="{ 'is-active': mode === 'tag' }" @click="mode = 'tag'">{{ $t('adminChat.filtres.parCanal') }}</button>
         </div>
 
         <label v-if="mode === 'user'" class="field chat__field">
-          <span class="field__label">Joueur</span>
-          <input v-model="username" class="input" type="text" placeholder="Nom exact" @keydown.enter.prevent="load" />
+          <span class="field__label">{{ $t('adminChat.filtres.joueur') }}</span>
+          <input v-model="username" class="input" type="text" :placeholder="$t('adminChat.filtres.joueurPlaceholder')" @keydown.enter.prevent="load" />
         </label>
         <label v-if="mode === 'tag'" class="field chat__field">
-          <span class="field__label">Canal</span>
+          <span class="field__label">{{ $t('adminChat.filtres.canal') }}</span>
           <input v-model="tag" class="input" type="text" placeholder="general" @keydown.enter.prevent="load" />
         </label>
 
         <label class="field chat__field chat__field--sm">
-          <span class="field__label">Jour début</span>
+          <span class="field__label">{{ $t('adminChat.filtres.jourDebut') }}</span>
           <input v-model.number="startDay" class="input" type="number" min="0" step="1" />
         </label>
         <label class="field chat__field chat__field--sm">
-          <span class="field__label">Jour fin</span>
+          <span class="field__label">{{ $t('adminChat.filtres.jourFin') }}</span>
           <input v-model.number="endDay" class="input" type="number" min="0" step="1" />
         </label>
 
         <button class="btn btn--primary btn--sm chat__go" :disabled="loading" @click="load">
-          <Icon name="search" :size="15" /><span>Filtrer</span>
+          <Icon name="search" :size="15" /><span>{{ $t('adminChat.filtres.filtrer') }}</span>
         </button>
       </div>
 
       <div v-if="senders.length" class="chat__senders">
-        <span class="field__label">Plus actifs</span>
+        <span class="field__label">{{ $t('adminChat.filtres.plusActifs') }}</span>
         <button
           v-for="[name, count] in senders"
           :key="name"
@@ -162,12 +163,12 @@ onMounted(async () => {
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Messages</h3>
-          <p class="card__sub">{{ num(messages.length) }} message(s) chargé(s)</p>
+          <h3 class="card__title">{{ $t('adminChat.messages.titre') }}</h3>
+          <p class="card__sub">{{ $t('adminChat.messages.charges', { n: num(messages.length) }, messages.length) }}</p>
         </div>
         <div class="u-row-tight">
           <button class="btn btn--ghost btn--sm" :disabled="loading" @click="loadMore(100)">
-            Charger 100 plus anciens
+            {{ $t('adminChat.messages.plusAnciens') }}
           </button>
           <button class="btn btn--ghost btn--sm" :disabled="loading" @click="load">
             <Icon name="refresh" :size="14" />
@@ -175,13 +176,13 @@ onMounted(async () => {
         </div>
       </div>
 
-      <StateBlock v-if="loading && messages.length === 0" kind="loading" title="Chargement du chat" />
+      <StateBlock v-if="loading && messages.length === 0" kind="loading" :title="$t('adminChat.messages.chargement')" />
       <AdminGuardNotice v-else-if="error" :error="error" />
       <StateBlock
         v-else-if="messages.length === 0"
         kind="empty"
-        title="Aucun message"
-        text="Aucun message sur cette plage. Élargissez la plage de jours ou changez de filtre."
+        :title="$t('adminChat.messages.aucun')"
+        :text="$t('adminChat.messages.aucunTexte')"
       />
       <ol v-else class="chat__list">
         <li v-for="(m, i) in messages" :key="i">
@@ -196,34 +197,33 @@ onMounted(async () => {
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Écrire dans le jeu</h3>
+          <h3 class="card__title">{{ $t('adminChat.ecrire.titre') }}</h3>
           <p class="card__sub">
-            En diffusion, le message part à tous les joueurs. Sinon, indiquez un destinataire :
-            un canal (par exemple <code>#General</code>) ou un nom de joueur.
+            {{ $t('adminChat.ecrire.subAvant') }} <code>#General</code>{{ $t('adminChat.ecrire.subApres') }}
           </p>
         </div>
       </div>
       <div class="chat__compose">
         <label class="checkbox chat__mode">
           <input v-model="broadcast" type="checkbox" />
-          <span>Diffuser à tout le serveur</span>
+          <span>{{ $t('adminChat.ecrire.diffuserTout') }}</span>
         </label>
         <input
           v-if="!broadcast"
           v-model="recipient"
           class="input chat__to-field"
           type="text"
-          placeholder="#General ou un joueur"
+          :placeholder="$t('adminChat.ecrire.destinatairePlaceholder')"
         />
         <input
           v-model="message"
           class="input"
           type="text"
-          placeholder="Votre message..."
+          :placeholder="$t('adminChat.ecrire.messagePlaceholder')"
           @keydown.enter.prevent="send"
         />
         <button class="btn btn--primary" :disabled="!message.trim() || sending" @click="send">
-          <Icon name="send" :size="15" /><span>{{ broadcast ? 'Diffuser' : 'Envoyer' }}</span>
+          <Icon name="send" :size="15" /><span>{{ broadcast ? $t('adminChat.ecrire.diffuser') : $t('adminChat.ecrire.envoyer') }}</span>
         </button>
       </div>
     </section>

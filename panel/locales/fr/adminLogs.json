@@ -1,0 +1,19 @@
+{
+  "titre": "Journaux",
+  "hint": "Fichiers de journalisation du serveur, par catégorie. Lecture seule.",
+  "racine": "Racine",
+  "indisponible": "Journaux indisponibles",
+  "illisible": "Fichier illisible",
+  "nomFichier": "journal",
+  "lecture": "Lecture des journaux",
+  "serveur": "Journaux du serveur",
+  "aucunFichier": "Aucun fichier",
+  "aucunOuvert": "Aucun fichier ouvert",
+  "lignes": "{n} ligne | {n} lignes",
+  "lignesFiltre": "{n} ligne correspondante | {n} lignes correspondantes",
+  "filtrer": "Filtrer les lignes",
+  "telecharger": "Télécharger",
+  "lectureFichier": "Lecture du fichier",
+  "selection": "Sélectionnez un journal",
+  "selectionTexte": "Choisissez une catégorie puis un fichier dans la colonne de gauche."
+}

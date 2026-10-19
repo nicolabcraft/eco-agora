@@ -12,6 +12,7 @@ import type { EChartsOption } from 'echarts';
 import { timeLineOption } from '@/utils/chart';
 import { compact } from '@/utils/format';
 import { useServerStore } from '@/stores/server';
+import { localeIntl, t } from '@/i18n';
 
 const srv = useServerStore();
 
@@ -42,7 +43,7 @@ const hiddenCount = computed(
 
 /** Un solde non fini se lit « illimité », jamais « ∞ G ». */
 function money(value: number | undefined): string {
-  if (value === undefined || !Number.isFinite(value)) return 'illimité';
+  if (value === undefined || !Number.isFinite(value)) return t('economy.unlimited');
   return compact(value);
 }
 
@@ -51,9 +52,9 @@ onMounted(async () => {
   const hist = await agoraEconomy.history(14).catch(() => null);
   if (hist && hist.series && hist.series.length) {
     historyOption.value = timeLineOption([
-      { name: 'Avoirs totaux', points: hist.series.map((p) => [p.hour, p.totalHoldings]) },
-      { name: 'Trésor public', points: hist.series.map((p) => [p.hour, p.governmentHoldings]) },
-      { name: 'Avoirs des citoyens', points: hist.series.map((p) => [p.hour, p.personalHoldings]) },
+      { name: t('economy.totalHoldings'), points: hist.series.map((p) => [p.hour, p.totalHoldings]) },
+      { name: t('economy.treasury'), points: hist.series.map((p) => [p.hour, p.governmentHoldings]) },
+      { name: t('economy.citizenHoldings'), points: hist.series.map((p) => [p.hour, p.personalHoldings]) },
     ]);
   }
   modLoading.value = false;
@@ -73,18 +74,18 @@ const marketCounts = computed(() => {
   <div class="econ">
     <SectionTitle
       :level="1"
-      title="Économie"
-      hint="Monnaies, richesse, dette et échanges du monde."
+      :title="$t('economy.title')"
+      :hint="$t('economy.hint')"
     />
 
     <div class="grid-tiles">
       <StatTile
-        label="Commerces"
+        :label="$t('economy.stores')"
         :value="marketCounts.stores !== null ? num(marketCounts.stores) : '--'"
         tone="primary"
       />
       <StatTile
-        label="Contrats"
+        :label="$t('economy.contracts')"
         :value="marketCounts.contracts !== null ? num(marketCounts.contracts) : '--'"
         tone="info"
       />
@@ -94,48 +95,47 @@ const marketCounts = computed(() => {
     <section v-if="snapshot && snapshot.available" class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Avoirs réels des comptes</h3>
+          <h3 class="card__title">{{ $t('economy.realHoldings') }}</h3>
           <p class="card__sub">
-            Relevé du mod, toutes devises confondues. Dernière mesure :
-            {{ snapshot.hour ? new Date(snapshot.hour).toLocaleString('fr-FR') : '--' }}.
+            {{ $t('economy.realHoldingsHint', { date: snapshot.hour ? new Date(snapshot.hour).toLocaleString(localeIntl()) : '--' }) }}
           </p>
         </div>
       </div>
 
       <div class="grid-tiles">
-        <StatTile label="Avoirs totaux" :value="money(snapshot.totalHoldings)" tone="primary" />
-        <StatTile label="Trésor public" :value="money(snapshot.governmentHoldings)" tone="warning" />
-        <StatTile label="Avoirs des citoyens" :value="money(snapshot.personalHoldings)" tone="success" />
-        <StatTile label="Comptes" :value="num(snapshot.accounts ?? 0)" tone="info" />
-        <StatTile label="Devises" :value="num(snapshot.currencies ?? 0)" tone="muted" />
+        <StatTile :label="$t('economy.totalHoldings')" :value="money(snapshot.totalHoldings)" tone="primary" />
+        <StatTile :label="$t('economy.treasury')" :value="money(snapshot.governmentHoldings)" tone="warning" />
+        <StatTile :label="$t('economy.citizenHoldings')" :value="money(snapshot.personalHoldings)" tone="success" />
+        <StatTile :label="$t('economy.accounts')" :value="num(snapshot.accounts ?? 0)" tone="info" />
+        <StatTile :label="$t('economy.currencies')" :value="num(snapshot.currencies ?? 0)" tone="muted" />
       </div>
 
       <div class="u-row u-spread u-wrap econ__filter">
         <label class="checkbox">
           <input v-model="hidePersonal" type="checkbox" />
-          <span>Masquer les monnaies personnelles</span>
+          <span>{{ $t('economy.hidePersonal') }}</span>
         </label>
         <span v-if="hidePersonal && hiddenCount > 0" class="u-faint">
-          {{ hiddenCount }} monnaie(s) personnelle(s) masquée(s)
+          {{ $t('economy.hiddenCount', { n: hiddenCount }) }}
         </span>
       </div>
 
       <div v-if="visibleLines.length" class="table-wrap econ__lines">
         <table class="table table--compact">
           <thead>
-            <tr><th>Devise</th><th class="u-right">Avoirs totaux</th><th class="u-right">Trésor public</th><th class="u-right">Détenteurs</th></tr>
+            <tr><th>{{ $t('economy.cols.currency') }}</th><th class="u-right">{{ $t('economy.totalHoldings') }}</th><th class="u-right">{{ $t('economy.treasury') }}</th><th class="u-right">{{ $t('economy.cols.holders') }}</th></tr>
           </thead>
           <tbody>
             <tr v-for="l in visibleLines" :key="l.name">
               <td><strong>{{ l.name }}</strong></td>
               <td class="u-right">
-                <span v-if="l.unlimited" class="u-faint">illimité</span>
+                <span v-if="l.unlimited" class="u-faint">{{ $t('economy.unlimited') }}</span>
                 <span v-else>{{ num(l.total, 2) }}</span>
               </td>
               <td class="u-right">{{ num(l.government, 2) }}</td>
               <td class="u-right">
                 {{ num(l.holders) }}
-                <span v-if="l.unlimitedHolders" class="u-faint">+{{ l.unlimitedHolders }} illim.</span>
+                <span v-if="l.unlimitedHolders" class="u-faint">{{ $t('economy.unlimitedHolders', { n: l.unlimitedHolders }) }}</span>
               </td>
             </tr>
           </tbody>
@@ -144,16 +144,16 @@ const marketCounts = computed(() => {
       <StateBlock
         v-else
         kind="empty"
-        title="Aucune monnaie gagée"
-        text="Toutes les monnaies du serveur sont personnelles. Décochez le filtre pour les afficher."
+        :title="$t('economy.noBacked')"
+        :text="$t('economy.noBackedText')"
       />
     </section>
 
     <section v-if="historyOption" class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Évolution des avoirs</h3>
-          <p class="card__sub">Relevé horaire sur quatorze jours.</p>
+          <h3 class="card__title">{{ $t('economy.history') }}</h3>
+          <p class="card__sub">{{ $t('economy.historyHint') }}</p>
         </div>
       </div>
       <EChart :option="historyOption" height="280px" />
@@ -162,20 +162,20 @@ const marketCounts = computed(() => {
     <StateBlock
       v-else-if="!modLoading && (!snapshot || !snapshot.available)"
       kind="empty"
-      title="Relevés économiques indisponibles"
-      text="Le mod Eco Agora fournit les avoirs réels des comptes. Il n est chargé qu au démarrage du serveur : redémarrez-le pour activer ces relevés."
+      :title="$t('economy.modUnavailable')"
+      :text="$t('economy.modUnavailableText')"
     />
 
     <div class="econ__split">
       <ChartCard
-        title="Richesse et trésor public"
-        hint="Patrimoine des citoyens face aux avoirs du gouvernement"
+        :title="$t('economy.charts.wealth')"
+        :hint="$t('economy.charts.wealthHint')"
         :names="['PersonalWealthInDefaultCurrency', 'GovernmentHoldingsInDefaultCurrency']"
         height="290px"
       />
       <ChartCard
-        title="Produit intérieur brut"
-        hint="Richesse produite par le monde"
+        :title="$t('economy.charts.gdp')"
+        :hint="$t('economy.charts.gdpHint')"
         :names="['GDP']"
         height="290px"
         area
@@ -184,14 +184,14 @@ const marketCounts = computed(() => {
 
     <div class="econ__split">
       <ChartCard
-        title="Endettement"
-        hint="Dette totale et dette moyenne par citoyen actif"
+        :title="$t('economy.charts.debt')"
+        :hint="$t('economy.charts.debtHint')"
         :names="['Debt', 'DebtPerActiveCitizen']"
         height="260px"
       />
       <ChartCard
-        title="Échanges"
-        hint="Volume échangé sur sept jours et transactions taxées"
+        :title="$t('economy.charts.trades')"
+        :hint="$t('economy.charts.tradesHint')"
         :names="['TradesInLast7Days', 'TaxedTransactions']"
         height="260px"
       />
@@ -199,23 +199,23 @@ const marketCounts = computed(() => {
 
     <div class="econ__split">
       <ChartCard
-        title="Monnaies en circulation"
-        hint="Nombre de devises actives"
+        :title="$t('economy.charts.currencies')"
+        :hint="$t('economy.charts.currenciesHint')"
         :names="['ActiveCurrencies']"
         height="230px"
         area
       />
       <ChartCard
-        title="Activité commerciale"
-        hint="Commerce monétaire, troc et frappe de monnaie"
+        :title="$t('economy.charts.activity')"
+        :hint="$t('economy.charts.activityHint')"
         :names="['CurrencyTrade', 'BarterTrade', 'MintCurrency']"
         height="230px"
       />
     </div>
 
     <ChartCard
-      title="Contrats"
-      hint="Contrats publiés, rejoints, terminés et échoués"
+      :title="$t('economy.charts.contracts')"
+      :hint="$t('economy.charts.contractsHint')"
       :names="['PostedContract', 'JoinedContract', 'CompletedContract', 'FailedContract']"
       height="270px"
     />

@@ -1,0 +1,27 @@
+{
+  "periode24h": "24 h",
+  "periode7j": "7 j",
+  "periodeTout": "Tout",
+  "indisponibles": "Ventes indisponibles",
+  "transactions": "{n} transaction | {n} transactions",
+  "releveDepuis": "relevé depuis le {date}",
+  "lecture": "Lecture des ventes",
+  "erreurTexte": "{erreur}. Les ventes sont relevées par le mod Eco Agora, à partir de son installation.",
+  "aucuneVente": "Aucune vente sur cette période",
+  "aucuneVenteTexte": "Les transactions apparaissent ici dès qu’un joueur achète ou vend dans une boutique.",
+  "boutique": "Boutique",
+  "tenuePar": "Tenue par {nom}",
+  "encaisse": "encaissé :",
+  "col": {
+    "client": "Client",
+    "depense": "Dépensé",
+    "achats": "Achats",
+    "articles": "Articles",
+    "dernierAchat": "Dernier achat",
+    "joueur": "Joueur",
+    "recu": "Reçu",
+    "ventes": "Ventes"
+  },
+  "aucunAchat": "Aucun achat de client sur cette période.",
+  "boutiqueAAchete": "La boutique a acheté à"
+}

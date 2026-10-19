@@ -1,0 +1,33 @@
+{
+  "nouvelleSection": "New section",
+  "reglementTitre": "Rules",
+  "reglementIntro": "Welcome to the server! Before you start your adventure, please take a moment to read the following rules.",
+  "reglementSignature": "Have fun, everyone!",
+  "ouvertureTitre": "Opening soon",
+  "exemple": {
+    "respectTitre": "Respect and cooperation",
+    "respectIntro": "Eco is first and foremost a community and cooperative adventure.",
+    "respectR1": "Respect other players and the staff.",
+    "respectR2": "Insults, harassment and toxic behaviour are not tolerated.",
+    "respectR3": "Favour communication and mutual help: asking a question often avoids a conflict.",
+    "respectR4": "Respect other players’ work, buildings and resources.",
+    "environnementTitre": "Protect the environment",
+    "environnementIntro": "Your actions have lasting consequences on the ecosystem.",
+    "environnementR1": "Avoid overexploiting resources: replant what you cut down.",
+    "environnementR2": "Do not deliberately try to wipe out a species.",
+    "environnementR3": "Limit air, water and soil pollution.",
+    "environnementAlerte": "Deliberate destruction of the ecosystem may lead to staff intervention.",
+    "loisTitre": "Government and laws",
+    "loisIntro": "In Eco, players write the laws and elect their representatives.",
+    "loisR1": "Respect the laws voted by the community, even those you did not support.",
+    "loisR2": "Put your ideas forward through the proper channels (proposals, votes, elections) rather than forcing them.",
+    "bugsTitre": "Bugs and cheating",
+    "bugsIntro": "Software, exploits or bugs that give an unfair advantage are forbidden.",
+    "bugsR1": "If you discover a significant problem, let the staff know.",
+    "objectifTitre": "The goal",
+    "objectifIntro": "A meteor threatens the planet: work together to destroy it in time.",
+    "objectifFin1": "🌍 Build together.",
+    "objectifFin2": "🤝 Help each other.",
+    "objectifFin3": "🌱 Protect your planet."
+  }
+}

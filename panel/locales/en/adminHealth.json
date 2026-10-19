@@ -1,0 +1,39 @@
+{
+  "titre": "Server health",
+  "hint": "Performance report produced by the server, simulation status and profiling files.",
+  "actualiser": "Refresh",
+  "erreurs": {
+    "rapport": "Report unavailable",
+    "profilage": "Profiling unavailable"
+  },
+  "tuiles": {
+    "simulation": "Simulation",
+    "enPause": "Paused",
+    "active": "Running",
+    "vitesse": "Speed {vitesse}",
+    "joueurs": "Players",
+    "adminConnecte": "Admin online",
+    "aucunAdmin": "No admin in game",
+    "objetsVivants": "Living objects",
+    "version": "Version",
+    "acces": "Access",
+    "niveauSimulation": "Simulation level"
+  },
+  "rapport": {
+    "titre": "Performance report",
+    "sub": "Raw text returned by the server engine.",
+    "interrogation": "Querying the server",
+    "vide": "Empty report",
+    "videTexte": "The server has nothing to report for now."
+  },
+  "profilage": {
+    "titre": "Profiling results",
+    "sub": "Files placed in the server’s ProfilingResults folder.",
+    "aucun": "No profiling",
+    "aucunTexte": "Start a capture from the server interface to get files here.",
+    "fichier": "File",
+    "taille": "Size",
+    "cree": "Created on",
+    "octets": "{taille} B"
+  }
+}

@@ -8,6 +8,7 @@ import { loadCatalog } from '@/composables/useSeries';
 import { useServerStore } from '@/stores/server';
 import type { StatInfo } from '@/api/types';
 import { compact, num } from '@/utils/format';
+import { localeIntl } from '@/i18n';
 
 const srv = useServerStore();
 const catalog = ref<StatInfo[]>([]);
@@ -18,7 +19,7 @@ const species = ref<string[]>([]);
 const speciesOptions = computed(() =>
   catalog.value
     .filter((s) => s.Unit === 'Organisms' && s.Name.endsWith('Species'))
-    .sort((a, b) => a.DisplayName.localeCompare(b.DisplayName, 'fr')),
+    .sort((a, b) => a.DisplayName.localeCompare(b.DisplayName, localeIntl())),
 );
 
 onMounted(async () => {
@@ -41,30 +42,30 @@ function toggleSpecies(name: string): void {
   <div class="eco">
     <SectionTitle
       :level="1"
-      title="Écologie et climat"
-      hint="Le simulateur d'Eco suit le carbone, la température et les pollutions. Ces courbes sont l'état de santé réel du monde."
+      :title="$t('ecology.title')"
+      :hint="$t('ecology.hint')"
     />
 
     <div class="grid-tiles">
-      <StatTile label="Plantes vivantes" :value="compact(srv.info?.Plants ?? 0)" tone="success" />
-      <StatTile label="Animaux vivants" :value="compact(srv.info?.Animals ?? 0)" tone="info" />
+      <StatTile :label="$t('ecology.livingPlants')" :value="compact(srv.info?.Plants ?? 0)" tone="success" />
+      <StatTile :label="$t('ecology.livingAnimals')" :value="compact(srv.info?.Animals ?? 0)" tone="info" />
       <StatTile
-        label="Jours avant le météore"
-        :value="srv.info?.HasMeteor ? num(srv.info?.DaysUntilMeteor ?? 0) : 'Aucun'"
+        :label="$t('ecology.daysToMeteor')"
+        :value="srv.info?.HasMeteor ? num(srv.info?.DaysUntilMeteor ?? 0) : $t('ecology.none')"
         :tone="(srv.info?.DaysUntilMeteor ?? 999) <= 30 ? 'warning' : 'muted'"
       />
     </div>
 
     <div class="eco__split">
       <ChartCard
-        title="Dioxyde de carbone"
-        hint="CO2 total et origines cumulées"
+        :title="$t('ecology.charts.co2')"
+        :hint="$t('ecology.charts.co2Hint')"
         :names="['TotalCO2', 'LifetimeCO2FromPollution', 'LifetimeCO2FromPlants', 'LifetimeCO2FromAnimals']"
         height="280px"
       />
       <ChartCard
-        title="Température moyenne du globe"
-        hint="Conséquence directe du CO2 accumulé"
+        :title="$t('ecology.charts.temperature')"
+        :hint="$t('ecology.charts.temperatureHint')"
         :names="['AverageGlobalTemperature']"
         height="280px"
         area
@@ -72,8 +73,8 @@ function toggleSpecies(name: string): void {
     </div>
 
     <ChartCard
-      title="Pollutions"
-      hint="Sol, produits chimiques, métaux lourds et pluies acides"
+      :title="$t('ecology.charts.pollution')"
+      :hint="$t('ecology.charts.pollutionHint')"
       :names="[
         'TotalGroundPollution',
         'TotalSoilPollution',
@@ -86,14 +87,14 @@ function toggleSpecies(name: string): void {
 
     <div class="eco__split">
       <ChartCard
-        title="Populations globales"
-        hint="Plantes, arbres et animaux"
+        :title="$t('ecology.charts.populations')"
+        :hint="$t('ecology.charts.populationsHint')"
         :names="['PlantPopulation', 'TreePopulation', 'AnimalPopulation']"
         height="280px"
       />
       <ChartCard
-        title="Citoyens"
-        hint="Population totale et citoyens actifs"
+        :title="$t('ecology.charts.citizens')"
+        :hint="$t('ecology.charts.citizensHint')"
         :names="['CitizenPopulation', 'ActiveCitizenPopulation']"
         height="280px"
       />
@@ -102,14 +103,14 @@ function toggleSpecies(name: string): void {
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Populations par espèce</h3>
+          <h3 class="card__title">{{ $t('ecology.species.title') }}</h3>
           <p class="card__sub">
-            Choisissez jusqu'à six espèces parmi les {{ num(speciesOptions.length) }} suivies par le serveur.
+            {{ $t('ecology.species.hint', { n: num(speciesOptions.length) }) }}
           </p>
         </div>
       </div>
 
-      <StateBlock v-if="loading" kind="loading" title="Chargement des espèces" />
+      <StateBlock v-if="loading" kind="loading" :title="$t('ecology.species.loading')" />
       <template v-else>
         <div class="eco__chips">
           <button
@@ -124,7 +125,7 @@ function toggleSpecies(name: string): void {
         </div>
         <ChartCard
           v-if="species.length"
-          title="Évolution des espèces sélectionnées"
+          :title="$t('ecology.species.chart')"
           :names="species"
           height="320px"
           class="eco__inner"
@@ -132,8 +133,8 @@ function toggleSpecies(name: string): void {
         <StateBlock
           v-else
           kind="empty"
-          title="Aucune espèce sélectionnée"
-          text="Cliquez sur une espèce ci-dessus pour tracer sa population."
+          :title="$t('ecology.species.none')"
+          :text="$t('ecology.species.noneText')"
         />
       </template>
     </section>

@@ -1,0 +1,41 @@
+{
+  "titre": "Console de commandes",
+  "hint": "Exécute une commande du jeu côté serveur. Les commandes sensibles demandent une confirmation, et le serveur journalise les actions d'administration.",
+  "suggestions": {
+    "players": "Liste les joueurs connectés",
+    "time": "Affiche l’heure du monde",
+    "whitelist": "Gère la liste blanche",
+    "admin": "Gère les administrateurs",
+    "announce": "Message à tout le serveur",
+    "tp": "Téléporte un joueur",
+    "give": "Donne un objet",
+    "weather": "État de la météo",
+    "help": "Liste des commandes du serveur"
+  },
+  "aucuneSortie": "(aucune sortie)",
+  "toasts": {
+    "erreur": "La commande a signalé une erreur",
+    "executee": "Commande exécutée",
+    "echec": "Échec de la commande",
+    "refusee": "Commande refusée"
+  },
+  "executer": "Exécuter",
+  "aide": {
+    "avant": "Les commandes qui agissent sur un personnage (",
+    "milieu": "...) sont refusées : le serveur exige un joueur en jeu, pas une commande web. Tapez",
+    "famille": "ou une famille seule (",
+    "apres": ") pour voir ses sous-commandes."
+  },
+  "sensible": "Cette commande est considérée comme sensible : une confirmation sera demandée.",
+  "sorties": "Sorties",
+  "vider": "Vider l'affichage",
+  "aucune": "Aucune commande exécutée",
+  "aucuneTexte": "La réponse du serveur, y compris ses messages d'erreur, s'affichera ici.",
+  "erreur": "erreur",
+  "ok": "ok",
+  "confirmation": {
+    "titre": "Commande sensible",
+    "texte": "Cette commande peut modifier durablement le serveur ou affecter des joueurs. Vérifiez-la avant de continuer.",
+    "confirmer": "Exécuter la commande"
+  }
+}

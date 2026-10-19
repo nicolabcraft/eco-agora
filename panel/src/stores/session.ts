@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ApiError, apiGet, setApiKey, setAuthToken } from '@/api/http';
+import { t } from '@/i18n';
 
 const STORAGE_KEY = 'agora.session';
 const TTL_MS = 24 * 60 * 60 * 1000;
@@ -174,7 +175,7 @@ export const useSessionStore = defineStore('session', {
 
     appliquerCle(key: string): void {
       this.apiKey = key;
-      this.username = 'Administrateur';
+      this.username = t('stores.session.administrateur');
       setAuthToken(null);
       setApiKey(key);
     },

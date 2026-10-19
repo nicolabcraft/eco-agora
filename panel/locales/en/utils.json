@@ -1,0 +1,23 @@
+{
+  "jourHeure": "Day {jour}, {h}:{m}",
+  "dateLongue": "{jour} {date} at {heure}",
+  "duree": {
+    "h": "{h} h",
+    "j": "{j} d",
+    "jh": "{j} d {h} h"
+  },
+  "fichierJson": "JSON file",
+  "unites": {
+    "ActionsPerHour": "actions/h",
+    "CO2PPM": "ppm CO2",
+    "Celsius": "°C",
+    "Citizens": "citizens",
+    "Count": "units",
+    "CurrencyAmount": "currency",
+    "Meters": "m",
+    "Organisms": "organisms",
+    "PPM": "ppm",
+    "Percent": "%",
+    "SkillPoints": "points"
+  }
+}

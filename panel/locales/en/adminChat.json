@@ -1,0 +1,46 @@
+{
+  "titre": "Server chat",
+  "hint": "History of messages exchanged in game, filterable by player, channel and day range.",
+  "erreurs": {
+    "indisponible": "Chat unavailable",
+    "annonceEchec": "The announce command failed"
+  },
+  "toasts": {
+    "chargementImpossible": "Unable to load",
+    "annonceDiffusee": "Announcement broadcast to all players",
+    "destinataire": "Specify a recipient",
+    "destinataireTexte": "A channel (#General) or a player name.",
+    "envoye": "Message sent",
+    "envoiImpossible": "Unable to send"
+  },
+  "filtres": {
+    "tout": "All",
+    "parJoueur": "By player",
+    "parCanal": "By channel",
+    "joueur": "Player",
+    "joueurPlaceholder": "Exact name",
+    "canal": "Channel",
+    "jourDebut": "Start day",
+    "jourFin": "End day",
+    "filtrer": "Filter",
+    "plusActifs": "Most active"
+  },
+  "messages": {
+    "titre": "Messages",
+    "charges": "{n} message loaded | {n} messages loaded",
+    "plusAnciens": "Load 100 older",
+    "chargement": "Loading chat",
+    "aucun": "No messages",
+    "aucunTexte": "No messages in this range. Widen the day range or change the filter."
+  },
+  "ecrire": {
+    "titre": "Write in game",
+    "subAvant": "When broadcasting, the message goes to all players. Otherwise, specify a recipient: a channel (for example",
+    "subApres": ") or a player name.",
+    "diffuserTout": "Broadcast to the whole server",
+    "destinatairePlaceholder": "#General or a player",
+    "messagePlaceholder": "Your message...",
+    "diffuser": "Broadcast",
+    "envoyer": "Send"
+  }
+}

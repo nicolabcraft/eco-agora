@@ -1,0 +1,53 @@
+{
+  "hint": "The tool to calculate your in-game prices. Handy for setting fair and profitable prices.",
+  "open": "Open Eco Gnome",
+  "copied": "{libelle} copied",
+  "copyFailed": "Copy failed",
+  "clipboardRefused": "The browser denied access to the clipboard.",
+  "codeLabel": "Server join code",
+  "code": "Code",
+  "copyCode": "Copy code",
+  "setupTitle": "Set up Eco Gnome in 4 steps",
+  "commandStart": "Start of command",
+  "copy": "Copy",
+  "replace1": "Replace",
+  "replace2": "with your identifier, without the braces.",
+  "steps": {
+    "account": "Create your account",
+    "accountText": "Go to Eco Gnome and sign in.",
+    "join": "Join the server",
+    "joinText": "On Eco Gnome, join our server with the join code above.",
+    "link": "Link your in-game account",
+    "linkText": "Get your secretid: click your username at the top right of Eco Gnome. Then type the command below in the game chat.",
+    "backup": "Back up your account",
+    "backupText": "Download a backup of your account with the (blue) download button. Without it, your prices may be lost."
+  },
+  "usefulCommands": "Useful in-game commands",
+  "commands": {
+    "join": "Opens Eco Gnome and joins this server directly.",
+    "open": "Opens Eco Gnome in your browser.",
+    "syncRoom": "Updates the prices of items for sale in the room you are in.",
+    "syncDeed": "Same thing, for the whole property you are on."
+  },
+  "shopTab1": "On your stores, an",
+  "shopTab2": "tab also lets you sync prices and offers. Shortcut:",
+  "shortcut": "Shift + right-click",
+  "shopTab3": "on a store to update its prices.",
+  "admin": {
+    "title": "Server side (administrators)",
+    "intro1": "The commands",
+    "intro2": "… only exist if the",
+    "modName": "Eco Gnome server mod",
+    "intro3": "is installed. Without it, players will get an unknown command.",
+    "install1": "Put",
+    "install2": "and",
+    "install3": "(mod releases page) in",
+    "install4": ", then restart the server.",
+    "register": "Once only, in game:",
+    "registerEnd": ".",
+    "config1": "The configuration is in",
+    "config2": "; the default values are fine.",
+    "storeObjectNote": "replaces the game’s store definition: remember to update it with every new version of Eco.",
+    "releases": "Mod releases"
+  }
+}

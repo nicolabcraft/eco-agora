@@ -1,0 +1,73 @@
+{
+  "titre": "Configuration",
+  "hint": "Identité du serveur, visibilité et réglages des greffons. Toute écriture demande une confirmation.",
+  "lecture": "Lecture des réglages",
+  "acces": {
+    "public": "Public",
+    "publicAide": "Visible dans le navigateur de serveurs",
+    "masque": "Masqué",
+    "masqueAide": "Accessible mais non listé",
+    "prive": "Privé",
+    "priveAide": "Accès restreint"
+  },
+  "resume": {
+    "nom": "nom : {valeur}",
+    "description": "description : {valeur}",
+    "vide": "(vide)"
+  },
+  "erreurs": {
+    "nomIllisible": "Nom illisible",
+    "accesIllisible": "Accès illisible",
+    "configIllisible": "Configuration illisible",
+    "jsonInvalide": "JSON invalide",
+    "echec": "Échec"
+  },
+  "toasts": {
+    "nomMaj": "Nom du serveur mis à jour",
+    "descReserve": "Description enregistrée avec une réserve",
+    "descMaj": "Description mise à jour",
+    "accesMaj": "Niveau d’accès mis à jour",
+    "configEnregistree": "Configuration enregistrée",
+    "refusee": "Modification refusée"
+  },
+  "identite": {
+    "titre": "Identité du serveur",
+    "sub": "Nom et description affichés dans le navigateur de serveurs.",
+    "nom": "Nom",
+    "nomAide": "N’entourez pas le nom de guillemets : le panel les ajoute si besoin. Un nom vide est refusé, car il empêcherait le serveur de redémarrer.",
+    "description": "Description",
+    "descPlaceholder": "Quelques lignes de présentation pour le navigateur de serveurs.",
+    "descAvant": "Eco n’expose aucune route pour la description : elle passe par le mod",
+    "descMilieu": ", injoignable pour le moment. La valeur ci-dessus est celle que publie",
+    "descApres": ", en lecture seule. Redémarrez le serveur pour activer l’édition.",
+    "enregistrer": "Enregistrer"
+  },
+  "visibilite": {
+    "titre": "Visibilité",
+    "actuel": "Niveau d’accès actuel :",
+    "repli": "(valeur reprise de /info)",
+    "motDePasse": "Mot de passe (optionnel)",
+    "motDePassePlaceholder": "Laisser vide pour ne pas changer",
+    "appliquer": "Appliquer"
+  },
+  "greffons": {
+    "titre": "Greffons configurables",
+    "compte": "{n} greffon sur {total} expose une configuration. | {n} greffons sur {total} exposent une configuration.",
+    "recherche": "Rechercher un greffon",
+    "sub": "Configuration au format JSON, telle que le serveur la stocke.",
+    "fermer": "Fermer",
+    "lecture": "Lecture de la configuration",
+    "formulaire": "Formulaire",
+    "jsonAvance": "JSON avancé",
+    "pasObjet": "Ce greffon n’expose pas un objet : seul l’éditeur JSON s’applique.",
+    "json": "JSON",
+    "enregistrer": "Enregistrer la configuration"
+  },
+  "confirmation": {
+    "identite": "Modifier l’identité du serveur",
+    "acces": "Changer la visibilité",
+    "greffon": "Écrire la configuration du greffon",
+    "texte": "Cette modification est appliquée immédiatement sur le serveur en cours d'exécution.",
+    "appliquer": "Appliquer"
+  }
+}

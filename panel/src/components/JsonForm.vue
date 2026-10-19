@@ -89,7 +89,7 @@ function setList(key: string, raw: string): void {
 
       <!-- Liste de valeurs simples -->
       <label v-else-if="f.kind === 'list'" class="field jf__row">
-        <span class="field__label">{{ f.label }} &mdash; une valeur par ligne</span>
+        <span class="field__label">{{ f.label }} {{ $t('jsonForm.uneValeurParLigne') }}</span>
         <textarea
           class="textarea"
           rows="3"
@@ -124,12 +124,12 @@ function setList(key: string, raw: string): void {
       <div v-else class="jf__row jf__opaque">
         <span class="field__label">{{ f.label }}</span>
         <p class="u-faint">
-          Structure complexe : modifiable uniquement dans l’éditeur JSON avancé.
+          {{ $t('jsonForm.structureComplexe') }}
         </p>
       </div>
     </template>
 
-    <p v-if="fields.length === 0" class="u-faint">Aucun réglage exposé par ce greffon.</p>
+    <p v-if="fields.length === 0" class="u-faint">{{ $t('jsonForm.aucunReglage') }}</p>
   </div>
 </template>
 

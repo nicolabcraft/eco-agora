@@ -16,9 +16,9 @@ const ancre = (i: number): string => `section-${i + 1}`;
 
 <template>
   <div class="rules">
-    <SectionTitle :level="1" :title="reglement.titre || 'Règlement'" :hint="reglement.intro" />
+    <SectionTitle :level="1" :title="reglement.titre || $t('rules.title')" :hint="reglement.intro" />
 
-    <nav class="card rules__sommaire" aria-label="Sommaire">
+    <nav class="card rules__sommaire" :aria-label="$t('rules.summary')">
       <a v-for="(s, i) in reglement.sections" :key="i" :href="`#${ancre(i)}`">
         <span class="rules__num">{{ i + 1 }}</span>
         <span>{{ s.emoji }} {{ s.titre }}</span>

@@ -1,0 +1,27 @@
+{
+  "periode24h": "24 h",
+  "periode7j": "7 d",
+  "periodeTout": "All",
+  "indisponibles": "Sales unavailable",
+  "transactions": "{n} transaction | {n} transactions",
+  "releveDepuis": "recorded since {date}",
+  "lecture": "Loading sales",
+  "erreurTexte": "{erreur}. Sales are recorded by the Eco Agora mod, from the time it was installed.",
+  "aucuneVente": "No sales in this period",
+  "aucuneVenteTexte": "Transactions appear here as soon as a player buys or sells in a shop.",
+  "boutique": "Shop",
+  "tenuePar": "Run by {nom}",
+  "encaisse": "takings:",
+  "col": {
+    "client": "Customer",
+    "depense": "Spent",
+    "achats": "Purchases",
+    "articles": "Items",
+    "dernierAchat": "Last purchase",
+    "joueur": "Player",
+    "recu": "Received",
+    "ventes": "Sales"
+  },
+  "aucunAchat": "No customer purchases in this period.",
+  "boutiqueAAchete": "The shop bought from"
+}

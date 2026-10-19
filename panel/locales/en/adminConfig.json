@@ -1,0 +1,73 @@
+{
+  "titre": "Configuration",
+  "hint": "Server identity, visibility and plugin settings. Every write requires confirmation.",
+  "lecture": "Reading settings",
+  "acces": {
+    "public": "Public",
+    "publicAide": "Visible in the server browser",
+    "masque": "Hidden",
+    "masqueAide": "Reachable but not listed",
+    "prive": "Private",
+    "priveAide": "Restricted access"
+  },
+  "resume": {
+    "nom": "name: {valeur}",
+    "description": "description: {valeur}",
+    "vide": "(empty)"
+  },
+  "erreurs": {
+    "nomIllisible": "Unreadable name",
+    "accesIllisible": "Unreadable access level",
+    "configIllisible": "Unreadable configuration",
+    "jsonInvalide": "Invalid JSON",
+    "echec": "Failed"
+  },
+  "toasts": {
+    "nomMaj": "Server name updated",
+    "descReserve": "Description saved with a warning",
+    "descMaj": "Description updated",
+    "accesMaj": "Access level updated",
+    "configEnregistree": "Configuration saved",
+    "refusee": "Change rejected"
+  },
+  "identite": {
+    "titre": "Server identity",
+    "sub": "Name and description shown in the server browser.",
+    "nom": "Name",
+    "nomAide": "Do not wrap the name in quotes: the panel adds them if needed. An empty name is rejected, as it would prevent the server from restarting.",
+    "description": "Description",
+    "descPlaceholder": "A few lines introducing the server in the server browser.",
+    "descAvant": "Eco has no route for the description: it goes through the mod",
+    "descMilieu": ", which cannot be reached at the moment. The value above is the one published by",
+    "descApres": ", read-only. Restart the server to enable editing.",
+    "enregistrer": "Save"
+  },
+  "visibilite": {
+    "titre": "Visibility",
+    "actuel": "Current access level:",
+    "repli": "(value taken from /info)",
+    "motDePasse": "Password (optional)",
+    "motDePassePlaceholder": "Leave empty to keep unchanged",
+    "appliquer": "Apply"
+  },
+  "greffons": {
+    "titre": "Configurable plugins",
+    "compte": "{n} plugin out of {total} exposes a configuration. | {n} plugins out of {total} expose a configuration.",
+    "recherche": "Search for a plugin",
+    "sub": "Configuration in JSON format, as stored by the server.",
+    "fermer": "Close",
+    "lecture": "Reading configuration",
+    "formulaire": "Form",
+    "jsonAvance": "Advanced JSON",
+    "pasObjet": "This plugin does not expose an object: only the JSON editor applies.",
+    "json": "JSON",
+    "enregistrer": "Save configuration"
+  },
+  "confirmation": {
+    "identite": "Change the server identity",
+    "acces": "Change visibility",
+    "greffon": "Write the plugin configuration",
+    "texte": "This change is applied immediately to the running server.",
+    "appliquer": "Apply"
+  }
+}

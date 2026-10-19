@@ -1,0 +1,19 @@
+{
+  "titre": "Logs",
+  "hint": "Server log files, by category. Read-only.",
+  "racine": "Root",
+  "indisponible": "Logs unavailable",
+  "illisible": "Unreadable file",
+  "nomFichier": "log",
+  "lecture": "Reading logs",
+  "serveur": "Server logs",
+  "aucunFichier": "No files",
+  "aucunOuvert": "No file open",
+  "lignes": "{n} line | {n} lines",
+  "lignesFiltre": "{n} matching line | {n} matching lines",
+  "filtrer": "Filter lines",
+  "telecharger": "Download",
+  "lectureFichier": "Reading file",
+  "selection": "Select a log",
+  "selectionTexte": "Choose a category, then a file in the left-hand column."
+}

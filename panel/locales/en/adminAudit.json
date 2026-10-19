@@ -1,0 +1,63 @@
+{
+  "titre": "Activity log",
+  "hint": "Who did what, where and when. Repetitive actions are grouped by player, type, minute and area.",
+  "indisponible": "Log unavailable",
+  "csv": {
+    "bouton": "CSV",
+    "horodatage": "timestamp",
+    "type": "type",
+    "joueur": "player",
+    "cible": "target",
+    "outil": "tool",
+    "quantite": "quantity",
+    "actions": "actions"
+  },
+  "actualiser": "Refresh",
+  "tuiles": {
+    "evenements": "Stored events",
+    "retention": "{n} day of retention | {n} days of retention",
+    "taille": "Database size",
+    "octets": "B",
+    "file": "Write queue",
+    "ecrits": "{n} written",
+    "perdus": "Dropped / errors",
+    "archives": "Archived",
+    "journalisation": "Logging",
+    "active": "Active",
+    "desactivee": "Disabled",
+    "fenetre": "Window {n} s"
+  },
+  "filtres": {
+    "type": "Type",
+    "tous": "All",
+    "joueur": "Player",
+    "cible": "Target",
+    "ciblePlaceholder": "Item, species",
+    "outil": "Tool",
+    "outilPlaceholder": "Pickaxe…",
+    "depuis": "From",
+    "jusqua": "Until",
+    "filtrer": "Filter",
+    "reinitialiser": "Reset"
+  },
+  "evenements": {
+    "titre": "Events",
+    "resultats": "{n} result · page {page} of {pages} | {n} results · page {page} of {pages}",
+    "precedent": "Previous",
+    "suivant": "Next",
+    "interrogation": "Querying the log",
+    "aucun": "No events",
+    "aucunTexte": "No activity matches these filters. The log fills up as soon as players act in the world."
+  },
+  "colonnes": {
+    "quand": "When",
+    "type": "Type",
+    "joueur": "Player",
+    "cible": "Target",
+    "outil": "Tool",
+    "quantite": "Quantity",
+    "actions": "Actions",
+    "position": "Position"
+  },
+  "activite24h": "Activity over the last 24 hours"
+}

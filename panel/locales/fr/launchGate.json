@@ -1,0 +1,12 @@
+{
+  "jours": "jours",
+  "heures": "heures",
+  "minutes": "minutes",
+  "secondes": "secondes",
+  "accesAnticipe": "Accès anticipé (testeurs)",
+  "motDePasse": "Mot de passe",
+  "entrer": "Entrer",
+  "erreur": "Mot de passe incorrect.",
+  "ouvert": "C’est ouvert !",
+  "bienvenue": "Bienvenue sur le panel de {nom}."
+}

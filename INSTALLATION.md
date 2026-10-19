@@ -19,10 +19,14 @@ cette version ; sur une autre version d'Eco, recompilez-le (voir DEVELOPPEMENT.m
 
 Serveur **arrêté** :
 
-1. **Sauvegardez `WebClient/WebBin/index.html`** : c'est le site d'origine
-   d'Eco, que le panel remplace.
+1. **Rangez le site d'origine d'Eco dans `legacy/`** : le panel remplace
+   `WebClient/WebBin/index.html`. Déplacé dans `legacy/`, l'ancien site reste
+   une sauvegarde et reste accessible à l'adresse `/legacy/` : les mods qui
+   s'intègrent à l'interface d'origine continuent de fonctionner, et le panel
+   affiche un lien « Interface d'origine d'Eco » aux administrateurs.
    ```
-   copy WebClient\WebBin\index.html WebClient\WebBin\index.html.eco-origine
+   mkdir WebClient\WebBin\legacy
+   move WebClient\WebBin\index.html WebClient\WebBin\legacy\index.html
    ```
 2. Copiez le contenu du paquet à la racine du serveur, en fusionnant les
    dossiers : `WebClient/` et `Mods/` vont par-dessus ceux du serveur.
@@ -75,7 +79,32 @@ mot de passe d'Eco ou la salle d'attente ci-dessous.
 Le nom du serveur, sa description et son lien Discord restent ceux de la
 configuration d'Eco (Administration › Configuration).
 
-## 4. Réglages du mod
+## 4. Langues
+
+Le panel est livré en **français** et en **anglais**. Chaque visiteur choisit
+sa langue en haut de la page ; la langue par défaut se règle dans
+*Personnalisation › Identité*.
+
+Les textes sont dans `WebClient/WebBin/lang/`, modifiables sans recompiler :
+
+- **corriger ou changer un texte** : éditez `lang/fr.json` (ou `en.json`), puis
+  rechargez la page ;
+- **ajouter une langue** : copiez `en.json` en `de.json` par exemple, traduisez
+  les valeurs, puis ajoutez `{ "code": "de", "nom": "Deutsch", "intl": "de-DE" }`
+  dans `lang/langues.json`. Une clé absente s'affiche en français.
+
+Pensez à garder une copie de vos fichiers modifiés : une mise à jour du panel
+remplace le dossier `lang/`.
+
+## 5. Mods qui utilisent l'interface d'origine
+
+Eco Agora ne remplace que `index.html` : les mods qui ont leurs propres pages
+ou leur propre API continuent de fonctionner, et les réglages des greffons
+restent dans *Administration › Configuration*. Les mods qui ajoutent des
+éléments **dans** l'interface d'origine d'Eco restent utilisables par
+`/legacy/` (étape 1).
+
+## 6. Réglages du mod
 
 Dans l'interface d'administration du serveur Eco, catégorie **Eco Agora**, ou
 dans `Configs/EcoAgora.eco` :
@@ -89,7 +118,7 @@ dans `Configs/EcoAgora.eco` :
 | OuvertureDate | vide | date d'ouverture avec fuseau, ex. `2026-12-24T20:00:00+01:00` |
 | RecalerAsteroideAOuverture | oui | avec la salle d’attente : à l’ouverture, l’impact de l’astéroïde est recalé sur la date d’ouverture |
 
-## 5. Pages facultatives
+## 7. Pages facultatives
 
 - **Marché** : lit le mod tiers EcoMarketApi (`/api/v1/ecomarket/snapshot`).
   Sans lui, la page l'indique et le reste fonctionne.
@@ -99,5 +128,5 @@ dans `Configs/EcoAgora.eco` :
 
 1. Arrêtez le serveur.
 2. Supprimez `Mods/EcoAgora/` (avec `data/` : base, personnalisation, archives).
-3. Remettez `index.html.eco-origine` à la place de `WebClient/WebBin/index.html`
-   et supprimez `WebClient/WebBin/assets/` et `brand/`.
+3. Remettez `legacy/index.html` à la place de `WebClient/WebBin/index.html`
+   et supprimez `WebClient/WebBin/assets/`, `brand/` et `lang/`.

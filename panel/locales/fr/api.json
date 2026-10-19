@@ -1,0 +1,10 @@
+{
+  "e401": "Authentification requise (HTTP 401)",
+  "e403": "Droits insuffisants (HTTP 403)",
+  "e404": "Ressource introuvable (HTTP 404)",
+  "injoignable": "Serveur injoignable",
+  "erreurHttp": "Erreur HTTP {status}",
+  "pointAbsent": "Point d’accès absent sur ce serveur",
+  "magasin": "Magasin",
+  "inconnu": "(inconnu)"
+}

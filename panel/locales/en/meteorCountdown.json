@@ -1,0 +1,25 @@
+{
+  "jours": "day | days",
+  "unite": {
+    "jours": "days",
+    "heures": "hours",
+    "minutes": "minutes",
+    "secondes": "seconds"
+  },
+  "resume": {
+    "approx": "≈ {j} d",
+    "jhm": "{j} d {h} h {m} min",
+    "hms": "{h} h {m} min {s} s"
+  },
+  "detruitAide": "The meteor has been destroyed",
+  "restantAide": "Time left before the meteor impact",
+  "detruit": "Destroyed",
+  "impact": "Impact",
+  "detruitTitre": "The meteor has been destroyed!",
+  "detruitSous": "The planet is saved. Well done, everyone.",
+  "frappeTitre": "The meteor has struck",
+  "frappeSous": "The impact has happened. What comes next is up to your civilisation.",
+  "impactTitre": "Meteor impact",
+  "enAttente": "The countdown will start when the server opens.",
+  "pause": "The world is paused: the countdown is frozen until it resumes."
+}

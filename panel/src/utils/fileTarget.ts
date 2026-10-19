@@ -11,6 +11,8 @@
  * Chrome et Edge la redemandent d'un clic après un redémarrage du navigateur.
  */
 
+import { t } from '@/i18n';
+
 const DB_NAME = 'agora';
 const STORE = 'poignees';
 
@@ -80,7 +82,7 @@ export async function chooseFile(suggestedName: string): Promise<FileSystemFileH
   try {
     return await picker({
       suggestedName,
-      types: [{ description: 'Fichier JSON', accept: { 'application/json': ['.json'] } }],
+      types: [{ description: t('utils.fichierJson'), accept: { 'application/json': ['.json'] } }],
     });
   } catch {
     // L'utilisateur a annulé le sélecteur.

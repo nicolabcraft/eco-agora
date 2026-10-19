@@ -1,4 +1,5 @@
 import { apiGet } from './http';
+import { t } from '@/i18n';
 
 /**
  * Client du mod EcoMarketApi (installé dans Mods/EcoMarketApi).
@@ -142,7 +143,7 @@ function toPosition(raw: unknown): MarketPosition | null {
 function toStore(raw: unknown, index: number): MarketStore {
   return {
     storeId: asText(raw, 'storeId') ?? `magasin-${index}`,
-    name: asText(raw, 'name') ?? 'Magasin',
+    name: asText(raw, 'name') ?? t('api.magasin'),
     objectType: asText(raw, 'objectType'),
     owners: asList(pick(raw, 'owners')).map((o) => (typeof o === 'string' ? o : String(o))),
     position: toPosition(raw),
@@ -242,7 +243,7 @@ export function flatten(snapshot: MarketSnapshot): FlatOffer[] {
         currency: store.currency ?? '',
         isBarter: store.isBarter,
         storeEnabled: store.enabled,
-        label: offer.itemName ?? offer.tagName ?? offer.itemType ?? '(inconnu)',
+        label: offer.itemName ?? offer.tagName ?? offer.itemType ?? t('api.inconnu'),
       });
     }
   }

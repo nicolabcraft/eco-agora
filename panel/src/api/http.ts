@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
+import { t } from '@/i18n';
 
 /**
  * Le serveur de jeu sert a la fois le panel et son API.
@@ -76,14 +77,14 @@ function toApiError(err: unknown, url: string): ApiError {
   // et l’administrateur doit pouvoir le lire sans ouvrir la console.
   const msg =
     status === 401
-      ? 'Authentification requise (HTTP 401)'
+      ? t('api.e401')
       : status === 403
-        ? 'Droits insuffisants (HTTP 403)'
+        ? t('api.e403')
         : status === 404
-          ? 'Ressource introuvable (HTTP 404)'
+          ? t('api.e404')
           : status === 0
-            ? 'Serveur injoignable'
-            : `Erreur HTTP ${status}`;
+            ? t('api.injoignable')
+            : t('api.erreurHttp', { status });
   return new ApiError(msg, status, url);
 }
 
@@ -146,7 +147,7 @@ async function lireMaintenant<T>(url: string, config?: AxiosRequestConfig): Prom
   try {
     const res = await http.get<T>(url, config);
     if (looksLikeSpaFallback(res.data)) {
-      throw new ApiError('Point d’accès absent sur ce serveur', 404, url);
+      throw new ApiError(t('api.pointAbsent'), 404, url);
     }
     return res.data;
   } catch (err) {

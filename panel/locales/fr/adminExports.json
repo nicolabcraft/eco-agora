@@ -1,0 +1,48 @@
+{
+  "titre": "Exports de données",
+  "hint": "Consultation des jeux de données exportables et déclenchement des exports côté serveur.",
+  "push": {
+    "all": "Tout exporter",
+    "allAide": "Actions, chat, environnement et espèces",
+    "chat": "Chat",
+    "chatAide": "Historique complet du chat",
+    "actions": "Actions",
+    "actionsAide": "Journal des actions des joueurs",
+    "env": "Environnement",
+    "envAide": "Séries environnementales",
+    "species": "Espèces",
+    "speciesAide": "Populations par espèce",
+    "game": "Sauvegarde de partie (S3)",
+    "gameAide": "Nécessite une URI S3 configurée côté serveur"
+  },
+  "listeIndisponible": "Liste indisponible",
+  "toasts": {
+    "illisible": "Export illisible",
+    "lance": "Export lancé",
+    "refuse": "Export refusé"
+  },
+  "lancer": "Lancer un export",
+  "lancerSub": "Le serveur écrit les fichiers dans son propre dossier ; le panel ne fait que déclencher l'opération.",
+  "chargement": "Chargement des jeux de données",
+  "actions": "Actions",
+  "aucuneAction": "Aucune action listée",
+  "especes": "Espèces",
+  "aucuneEspece": "Aucune espèce listée",
+  "environnement": "Environnement",
+  "aucuneCategorie": "Aucune catégorie listée",
+  "prefixes": {
+    "action": "action",
+    "espece": "espece",
+    "environnement": "environnement"
+  },
+  "apercu": "Aperçu · {titre}",
+  "reponseBrute": "Réponse brute du serveur.",
+  "json": "JSON",
+  "fermer": "Fermer",
+  "recuperation": "Récupération",
+  "vide": "Réponse vide",
+  "confirmation": {
+    "texte": "L'export est réalisé par le serveur de jeu et peut solliciter ses ressources pendant quelques instants.",
+    "confirmer": "Lancer l'export"
+  }
+}

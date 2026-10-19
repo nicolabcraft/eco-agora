@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import StateBlock from './StateBlock.vue';
+import { t } from '@/i18n';
 
 const props = defineProps<{ error: string | null }>();
 
@@ -8,18 +9,19 @@ const props = defineProps<{ error: string | null }>();
 const detail = computed(() => {
   const e = props.error ?? '';
   if (e.includes('401')) {
-    return 'Le serveur ne reconnaît pas votre session pour cet appel. Rouvrez le panel depuis le jeu pour obtenir un jeton frais.';
+    return t('adminGuardNotice.e401');
   }
   if (e.includes('403')) {
-    return 'Votre compte est authentifié mais n’a pas les droits requis. Certains points d’accès d’Eco (exports, configuration des greffons) exigent un compte de niveau développeur, ou l’option AllowDebugCalls activée dans Configs/Users.eco.';
+    return t('adminGuardNotice.e403');
   }
   if (e.includes('404')) {
-    return 'Ce point d’accès n’existe pas sur cette version du serveur.';
+    return t('adminGuardNotice.e404');
   }
-  if (e.includes('injoignable')) {
-    return 'Le serveur de jeu ne répond pas. Vérifiez qu’il tourne toujours.';
+  // Message de http.ts (« Serveur injoignable »), dans la langue affichee.
+  if (e.includes('injoignable') || e.includes(t('api.injoignable'))) {
+    return t('adminGuardNotice.injoignable');
   }
-  return 'Le serveur a refusé cet appel. Le code exact est indiqué ci-dessus.';
+  return t('adminGuardNotice.refuse');
 });
 </script>
 

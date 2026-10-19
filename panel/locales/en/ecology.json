@@ -1,0 +1,28 @@
+{
+  "title": "Ecology and climate",
+  "hint": "Eco’s simulation tracks carbon, temperature and pollution. These curves show the real health of the world.",
+  "livingPlants": "Living plants",
+  "livingAnimals": "Living animals",
+  "daysToMeteor": "Days until the meteor",
+  "none": "None",
+  "charts": {
+    "co2": "Carbon dioxide",
+    "co2Hint": "Total CO2 and cumulative sources",
+    "temperature": "Average global temperature",
+    "temperatureHint": "A direct consequence of accumulated CO2",
+    "pollution": "Pollution",
+    "pollutionHint": "Ground, chemicals, heavy metals and acid rain",
+    "populations": "Global populations",
+    "populationsHint": "Plants, trees and animals",
+    "citizens": "Citizens",
+    "citizensHint": "Total population and active citizens"
+  },
+  "species": {
+    "title": "Populations by species",
+    "hint": "Choose up to six species among the {n} tracked by the server.",
+    "loading": "Loading species",
+    "chart": "Trend of the selected species",
+    "none": "No species selected",
+    "noneText": "Click a species above to plot its population."
+  }
+}

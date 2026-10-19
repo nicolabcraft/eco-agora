@@ -1,0 +1,39 @@
+{
+  "titre": "Santé du serveur",
+  "hint": "Rapport de performance produit par le serveur, état de la simulation et fichiers de profilage.",
+  "actualiser": "Actualiser",
+  "erreurs": {
+    "rapport": "Rapport indisponible",
+    "profilage": "Profiling indisponible"
+  },
+  "tuiles": {
+    "simulation": "Simulation",
+    "enPause": "En pause",
+    "active": "Active",
+    "vitesse": "Vitesse {vitesse}",
+    "joueurs": "Joueurs",
+    "adminConnecte": "Admin connecté",
+    "aucunAdmin": "Aucun admin en jeu",
+    "objetsVivants": "Objets vivants",
+    "version": "Version",
+    "acces": "Accès",
+    "niveauSimulation": "Niveau de simulation"
+  },
+  "rapport": {
+    "titre": "Rapport de performance",
+    "sub": "Texte brut renvoyé par le moteur du serveur.",
+    "interrogation": "Interrogation du serveur",
+    "vide": "Rapport vide",
+    "videTexte": "Le serveur n'a rien à signaler pour le moment."
+  },
+  "profilage": {
+    "titre": "Résultats de profilage",
+    "sub": "Fichiers déposés dans le dossier ProfilingResults du serveur.",
+    "aucun": "Aucun profilage",
+    "aucunTexte": "Lancez une capture depuis l'interface du serveur pour obtenir des fichiers ici.",
+    "fichier": "Fichier",
+    "taille": "Taille",
+    "cree": "Créé le",
+    "octets": "{taille} o"
+  }
+}

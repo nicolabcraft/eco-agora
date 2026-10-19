@@ -1,0 +1,9 @@
+{
+  "server": {
+    "nomDefaut": "Eco server",
+    "injoignable": "Server unreachable"
+  },
+  "session": {
+    "administrateur": "Administrator"
+  }
+}

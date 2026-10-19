@@ -1,0 +1,63 @@
+{
+  "titre": "Journal d’activité",
+  "hint": "Qui a fait quoi, où et quand. Les actions répétitives sont regroupées par joueur, type, minute et zone.",
+  "indisponible": "Journal indisponible",
+  "csv": {
+    "bouton": "CSV",
+    "horodatage": "horodatage",
+    "type": "type",
+    "joueur": "joueur",
+    "cible": "cible",
+    "outil": "outil",
+    "quantite": "quantite",
+    "actions": "actions"
+  },
+  "actualiser": "Actualiser",
+  "tuiles": {
+    "evenements": "Événements conservés",
+    "retention": "{n} jour de rétention | {n} jours de rétention",
+    "taille": "Taille de la base",
+    "octets": "o",
+    "file": "File d’écriture",
+    "ecrits": "{n} écrits",
+    "perdus": "Perdus / erreurs",
+    "archives": "Archivés",
+    "journalisation": "Journalisation",
+    "active": "Active",
+    "desactivee": "Désactivée",
+    "fenetre": "Fenêtre {n} s"
+  },
+  "filtres": {
+    "type": "Type",
+    "tous": "Tous",
+    "joueur": "Joueur",
+    "cible": "Cible",
+    "ciblePlaceholder": "Objet, espèce",
+    "outil": "Outil",
+    "outilPlaceholder": "Pioche…",
+    "depuis": "Depuis",
+    "jusqua": "Jusqu’à",
+    "filtrer": "Filtrer",
+    "reinitialiser": "Réinitialiser"
+  },
+  "evenements": {
+    "titre": "Événements",
+    "resultats": "{n} résultat · page {page} sur {pages} | {n} résultats · page {page} sur {pages}",
+    "precedent": "Précédent",
+    "suivant": "Suivant",
+    "interrogation": "Interrogation du journal",
+    "aucun": "Aucun événement",
+    "aucunTexte": "Aucune activité ne correspond à ces filtres. Le journal se remplit dès que des joueurs agissent dans le monde."
+  },
+  "colonnes": {
+    "quand": "Quand",
+    "type": "Type",
+    "joueur": "Joueur",
+    "cible": "Cible",
+    "outil": "Outil",
+    "quantite": "Quantité",
+    "actions": "Actions",
+    "position": "Position"
+  },
+  "activite24h": "Activité des 24 dernières heures"
+}

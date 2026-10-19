@@ -6,10 +6,10 @@ import StateBlock from '@/components/StateBlock.vue';
   <div class="card">
     <StateBlock
       kind="error"
-      title="Page introuvable"
-      text="Cette adresse ne correspond à aucune page du panel."
+      :title="$t('notFound.title')"
+      :text="$t('notFound.text')"
     >
-      <RouterLink to="/" class="btn btn--primary btn--sm">Tableau de bord</RouterLink>
+      <RouterLink to="/" class="btn btn--primary btn--sm">{{ $t('notFound.dashboard') }}</RouterLink>
     </StateBlock>
   </div>
 </template>

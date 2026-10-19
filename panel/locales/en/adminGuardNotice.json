@@ -1,0 +1,7 @@
+{
+  "e401": "The server does not recognise your session for this call. Reopen the panel from the game to get a fresh token.",
+  "e403": "Your account is authenticated but lacks the required rights. Some Eco endpoints (exports, plugin configuration) require a developer-level account, or the AllowDebugCalls option enabled in Configs/Users.eco.",
+  "e404": "This endpoint does not exist on this server version.",
+  "injoignable": "The game server is not responding. Check that it is still running.",
+  "refuse": "The server refused this call. The exact code is shown above."
+}

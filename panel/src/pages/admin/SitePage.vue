@@ -6,8 +6,8 @@ import StateBlock from '@/components/StateBlock.vue';
 import Icon from '@/components/Icon.vue';
 import { useSiteStore } from '@/stores/site';
 import { useToastStore } from '@/stores/toasts';
-import { langues } from '@/i18n';
-import { COULEUR_DEFAUT, SITE_DEFAUT, cloner, couleurRgb, fusionner, sectionVide, type SiteConfig } from '@/site/schema';
+import { langues, t } from '@/i18n';
+import { COULEUR_DEFAUT, siteDefaut, cloner, couleurRgb, fusionner, sectionVide, type SiteConfig } from '@/site/schema';
 
 /**
  * Personnalisation du panel : tout ce qu'un autre serveur doit changer pour en
@@ -74,9 +74,9 @@ const dateValide = computed(() => !brouillon.value.ouverture.actif || !Number.is
 
 const erreurs = computed(() => {
   const e: string[] = [];
-  if (!couleurValide.value) e.push('La couleur doit être au format #rrggbb.');
-  if (!portValide.value) e.push('Le port doit être un nombre entre 0 et 65535.');
-  if (!dateValide.value) e.push('Le rideau d’ouverture est actif mais sa date est vide.');
+  if (!couleurValide.value) e.push(t('adminSite.erreurs.couleur'));
+  if (!portValide.value) e.push(t('adminSite.erreurs.port'));
+  if (!dateValide.value) e.push(t('adminSite.erreurs.date'));
   return e;
 });
 
@@ -95,7 +95,7 @@ function retirer(i: number): void {
   brouillon.value.reglement.sections.splice(i, 1);
 }
 function reglesExemple(): void {
-  brouillon.value.reglement.sections = cloner(SITE_DEFAUT.reglement.sections);
+  brouillon.value.reglement.sections = siteDefaut().reglement.sections;
 }
 
 // --- Actions ------------------------------------------------------------------
@@ -106,9 +106,9 @@ async function enregistrer(): Promise<void> {
   try {
     await site.enregistrer(brouillon.value);
     brouillon.value = cloner(site.config);
-    toasts.ok('Personnalisation enregistrée', 'Visible par tous les visiteurs au prochain chargement.');
+    toasts.ok(t('adminSite.toasts.enregistre'), t('adminSite.toasts.enregistreTexte'));
   } catch (err) {
-    toasts.fail('Enregistrement refusé', err instanceof Error ? err.message : '');
+    toasts.fail(t('adminSite.toasts.refuse'), err instanceof Error ? err.message : '');
   } finally {
     enregistrement.value = false;
   }
@@ -131,10 +131,10 @@ async function importer(evt: Event): Promise<void> {
   const f = (evt.target as HTMLInputElement).files?.[0];
   if (!f) return;
   try {
-    brouillon.value = fusionner(SITE_DEFAUT, JSON.parse(await f.text()));
-    toasts.ok('Fichier chargé', 'Vérifiez puis enregistrez pour publier.');
+    brouillon.value = fusionner(siteDefaut(), JSON.parse(await f.text()));
+    toasts.ok(t('adminSite.toasts.charge'), t('adminSite.toasts.chargeTexte'));
   } catch {
-    toasts.fail('Fichier illisible', 'Un fichier site.json exporté depuis cette page est attendu.');
+    toasts.fail(t('adminSite.toasts.illisible'), t('adminSite.toasts.illisibleTexte'));
   } finally {
     if (fichier.value) fichier.value.value = '';
   }
@@ -146,134 +146,134 @@ function retenir(e: BeforeUnloadEvent): void {
 }
 onMounted(() => window.addEventListener('beforeunload', retenir));
 onBeforeUnmount(() => window.removeEventListener('beforeunload', retenir));
-onBeforeRouteLeave(() => !modifie.value || window.confirm('Des modifications ne sont pas enregistrées. Quitter quand même ?'));
+onBeforeRouteLeave(() => !modifie.value || window.confirm(t('adminSite.confirmQuitter')));
 </script>
 
 <template>
   <div class="perso">
     <SectionTitle
       :level="1"
-      title="Personnalisation"
-      hint="Nom, couleurs, liens, règlement et rideau d’ouverture : tout ce qui rend ce panel propre à votre serveur."
+      :title="$t('adminSite.titre')"
+      :hint="$t('adminSite.hint')"
     >
       <template #actions>
         <input ref="fichier" type="file" accept="application/json,.json" hidden @change="importer" />
-        <button class="btn btn--ghost btn--sm" @click="fichier?.click()"><Icon name="upload" :size="15" /><span>Importer</span></button>
-        <button class="btn btn--ghost btn--sm" @click="exporter"><Icon name="download" :size="15" /><span>Exporter</span></button>
+        <button class="btn btn--ghost btn--sm" @click="fichier?.click()"><Icon name="upload" :size="15" /><span>{{ $t('adminSite.importer') }}</span></button>
+        <button class="btn btn--ghost btn--sm" @click="exporter"><Icon name="download" :size="15" /><span>{{ $t('adminSite.exporter') }}</span></button>
       </template>
     </SectionTitle>
 
     <StateBlock
       v-if="!site.modDisponible"
       kind="locked"
-      title="Mod Eco Agora absent"
-      text="La personnalisation est enregistrée par le mod serveur Eco Agora (Mods/EcoAgora/). Installez-le puis redémarrez le serveur : en attendant, le panel utilise ses valeurs par défaut."
+      :title="$t('adminSite.modAbsentTitre')"
+      :text="$t('adminSite.modAbsentTexte')"
     />
-    <p v-else-if="site.erreur" class="perso__alerte">⚠️ {{ site.erreur }} — les valeurs par défaut sont affichées.</p>
+    <p v-else-if="site.erreur" class="perso__alerte">{{ $t('adminSite.erreurSite', { erreur: site.erreur }) }}</p>
 
     <!-- Identite -->
     <section class="card perso__bloc">
-      <h2 class="card__title">Identité</h2>
+      <h2 class="card__title">{{ $t('adminSite.identite.titre') }}</h2>
       <div class="perso__grille">
         <label class="field">
-          <span class="field__label">Nom de la communauté</span>
-          <input v-model.trim="brouillon.identite.nom" class="input" maxlength="60" :placeholder="site.nomServeur || 'Nom du serveur Eco'" />
-          <small class="u-faint">Vide : le nom du serveur Eco.</small>
+          <span class="field__label">{{ $t('adminSite.identite.nom') }}</span>
+          <input v-model.trim="brouillon.identite.nom" class="input" maxlength="60" :placeholder="site.nomServeur || $t('adminSite.identite.nomPlaceholder')" />
+          <small class="u-faint">{{ $t('adminSite.identite.nomAide') }}</small>
         </label>
         <label class="field">
-          <span class="field__label">Couleur d’accent</span>
+          <span class="field__label">{{ $t('adminSite.identite.couleur') }}</span>
           <span class="perso__couleur">
             <input type="color" :value="couleurApercu" @input="brouillon.identite.couleur = ($event.target as HTMLInputElement).value" />
             <input v-model.trim="brouillon.identite.couleur" class="input" placeholder="#ff6b0d" maxlength="7" />
-            <button v-if="brouillon.identite.couleur" class="btn btn--ghost btn--sm" title="Couleur par défaut" @click="brouillon.identite.couleur = ''">
+            <button v-if="brouillon.identite.couleur" class="btn btn--ghost btn--sm" :title="$t('adminSite.identite.couleurDefaut')" @click="brouillon.identite.couleur = ''">
               <Icon name="close" :size="14" />
             </button>
           </span>
         </label>
         <label class="field">
-          <span class="field__label">Langue par défaut</span>
+          <span class="field__label">{{ $t('adminSite.identite.langue') }}</span>
           <select v-model="brouillon.identite.langue" class="select">
             <option v-for="l in langues" :key="l.code" :value="l.code">{{ l.nom }}</option>
           </select>
-          <small class="u-faint">Chaque visiteur peut en changer. Textes : WebClient/WebBin/lang/.</small>
+          <small class="u-faint">{{ $t('adminSite.identite.langueAide') }}</small>
         </label>
         <label class="field perso__large">
-          <span class="field__label">Phrase d’accueil</span>
-          <input v-model="brouillon.identite.baseline" class="input" maxlength="200" placeholder="Affichée quand le serveur n’a pas de description." />
+          <span class="field__label">{{ $t('adminSite.identite.baseline') }}</span>
+          <input v-model="brouillon.identite.baseline" class="input" maxlength="200" :placeholder="$t('adminSite.identite.baselinePlaceholder')" />
         </label>
         <label class="field perso__large">
-          <span class="field__label">Logo</span>
+          <span class="field__label">{{ $t('adminSite.identite.logo') }}</span>
           <span class="perso__logo">
             <img :src="brouillon.identite.logo || '/brand/logo-192.png'" alt="" width="40" height="40" />
-            <input v-model.trim="brouillon.identite.logo" class="input" placeholder="https://… ou /brand/mon-logo.png" />
+            <input v-model.trim="brouillon.identite.logo" class="input" :placeholder="$t('adminSite.identite.logoPlaceholder')" />
           </span>
-          <small class="u-faint">Image carrée. Vide : logo Eco Agora. Un fichier déposé dans WebClient/WebBin/ s’écrit /nom-du-fichier.png.</small>
+          <small class="u-faint">{{ $t('adminSite.identite.logoAide') }}</small>
         </label>
       </div>
     </section>
 
     <!-- Rejoindre -->
     <section class="card perso__bloc">
-      <h2 class="card__title">Bouton « Rejoindre le serveur »</h2>
+      <h2 class="card__title">{{ $t('adminSite.jeu.titre') }}</h2>
       <div class="perso__grille">
         <label class="field">
-          <span class="field__label">Adresse du jeu</span>
+          <span class="field__label">{{ $t('adminSite.jeu.hote') }}</span>
           <input v-model.trim="brouillon.jeu.hote" class="input" :placeholder="site.hote" />
-          <small class="u-faint">IP ou nom de domaine. Vide : l’adresse de ce site.</small>
+          <small class="u-faint">{{ $t('adminSite.jeu.hoteAide') }}</small>
         </label>
         <label class="field">
-          <span class="field__label">Port de jeu</span>
+          <span class="field__label">{{ $t('adminSite.jeu.port') }}</span>
           <input v-model.number="brouillon.jeu.port" class="input" type="number" min="0" max="65535" />
-          <small class="u-faint">0 : celui du serveur{{ site.portServeur ? ` (${site.portServeur})` : '' }}.</small>
+          <small class="u-faint">{{ site.portServeur ? $t('adminSite.jeu.portAideConnu', { port: site.portServeur }) : $t('adminSite.jeu.portAide') }}</small>
         </label>
         <label class="field perso__large">
-          <span class="field__label">Seconde adresse (facultatif)</span>
-          <input v-model.trim="brouillon.jeu.hoteSecours" class="input" placeholder="jeu.exemple.fr" />
-          <small class="u-faint">Proposée au survol du bouton, par exemple un nom de domaine en plus de l’IP.</small>
+          <span class="field__label">{{ $t('adminSite.jeu.secours') }}</span>
+          <input v-model.trim="brouillon.jeu.hoteSecours" class="input" :placeholder="$t('adminSite.jeu.secoursPlaceholder')" />
+          <small class="u-faint">{{ $t('adminSite.jeu.secoursAide') }}</small>
         </label>
       </div>
     </section>
 
     <!-- Liens -->
     <section class="card perso__bloc">
-      <h2 class="card__title">Liens</h2>
+      <h2 class="card__title">{{ $t('adminSite.liens.titre') }}</h2>
       <div class="perso__grille">
         <label class="field">
-          <span class="field__label">Site de la communauté</span>
-          <input v-model.trim="brouillon.liens.site" class="input" placeholder="https://exemple.fr" />
+          <span class="field__label">{{ $t('adminSite.liens.site') }}</span>
+          <input v-model.trim="brouillon.liens.site" class="input" :placeholder="$t('adminSite.liens.sitePlaceholder')" />
         </label>
         <label class="field">
-          <span class="field__label">Texte du lien</span>
-          <input v-model.trim="brouillon.liens.siteLibelle" class="input" placeholder="exemple.fr" />
+          <span class="field__label">{{ $t('adminSite.liens.libelle') }}</span>
+          <input v-model.trim="brouillon.liens.siteLibelle" class="input" :placeholder="$t('adminSite.liens.libellePlaceholder')" />
         </label>
         <label class="field">
-          <span class="field__label">Crédit d’hébergement</span>
-          <input v-model.trim="brouillon.liens.hebergeurMention" class="input" placeholder="Hébergé par …" />
+          <span class="field__label">{{ $t('adminSite.liens.hebergeur') }}</span>
+          <input v-model.trim="brouillon.liens.hebergeurMention" class="input" :placeholder="$t('adminSite.liens.hebergeurPlaceholder')" />
         </label>
         <label class="field">
-          <span class="field__label">Lien de l’hébergeur</span>
+          <span class="field__label">{{ $t('adminSite.liens.hebergeurUrl') }}</span>
           <input v-model.trim="brouillon.liens.hebergeurUrl" class="input" placeholder="https://…" />
         </label>
       </div>
-      <p class="u-faint perso__note">Le lien Discord vient de la configuration du serveur Eco (Administration › Configuration).</p>
+      <p class="u-faint perso__note">{{ $t('adminSite.liens.noteDiscord') }}</p>
     </section>
 
     <!-- Guides -->
     <section class="card perso__bloc">
-      <h2 class="card__title">Guides</h2>
+      <h2 class="card__title">{{ $t('adminSite.guides.titre') }}</h2>
       <div class="perso__grille">
         <label class="field">
-          <span class="field__label">Langue du wiki</span>
+          <span class="field__label">{{ $t('adminSite.guides.langueWiki') }}</span>
           <select v-model="brouillon.wiki.langue" class="select">
             <option v-for="l in LANGUES" :key="l.code" :value="l.code">{{ l.nom }}</option>
           </select>
         </label>
         <div class="field">
           <span class="field__label">Eco Gnome</span>
-          <label class="checkbox"><input v-model="brouillon.ecoGnome.actif" type="checkbox" /> Afficher la page Eco Gnome</label>
+          <label class="checkbox"><input v-model="brouillon.ecoGnome.actif" type="checkbox" /> {{ $t('adminSite.guides.afficherEcoGnome') }}</label>
         </div>
         <label v-if="brouillon.ecoGnome.actif" class="field perso__large">
-          <span class="field__label">Code de participation Eco Gnome</span>
+          <span class="field__label">{{ $t('adminSite.guides.codeEcoGnome') }}</span>
           <input v-model.trim="brouillon.ecoGnome.codeParticipation" class="input" maxlength="40" />
         </label>
       </div>
@@ -282,20 +282,20 @@ onBeforeRouteLeave(() => !modifie.value || window.confirm('Des modifications ne 
     <!-- Reglement -->
     <section class="card perso__bloc">
       <div class="perso__entete">
-        <h2 class="card__title">Règlement</h2>
-        <label class="checkbox"><input v-model="brouillon.reglement.actif" type="checkbox" /> Publier la page Règlement</label>
+        <h2 class="card__title">{{ $t('adminSite.reglement.titre') }}</h2>
+        <label class="checkbox"><input v-model="brouillon.reglement.actif" type="checkbox" /> {{ $t('adminSite.reglement.publier') }}</label>
       </div>
       <div class="perso__grille">
         <label class="field">
-          <span class="field__label">Titre</span>
+          <span class="field__label">{{ $t('adminSite.reglement.champTitre') }}</span>
           <input v-model="brouillon.reglement.titre" class="input" maxlength="80" />
         </label>
         <label class="field">
-          <span class="field__label">Signature</span>
+          <span class="field__label">{{ $t('adminSite.reglement.signature') }}</span>
           <input v-model="brouillon.reglement.signature" class="input" maxlength="120" />
         </label>
         <label class="field perso__large">
-          <span class="field__label">Introduction</span>
+          <span class="field__label">{{ $t('adminSite.reglement.intro') }}</span>
           <textarea v-model="brouillon.reglement.intro" class="textarea perso__texte" rows="2" />
         </label>
       </div>
@@ -303,70 +303,66 @@ onBeforeRouteLeave(() => !modifie.value || window.confirm('Des modifications ne 
       <div v-for="(s, i) in brouillon.reglement.sections" :key="i" class="perso__section">
         <div class="perso__section-tete">
           <span class="perso__num">{{ i + 1 }}</span>
-          <input v-model="s.emoji" class="input perso__emoji" maxlength="8" aria-label="Emoji" />
-          <input v-model="s.titre" class="input" maxlength="80" aria-label="Titre de la section" />
-          <button class="btn btn--ghost btn--icon btn--sm" title="Monter" :disabled="i === 0" @click="deplacer(i, -1)"><Icon name="up" :size="15" /></button>
-          <button class="btn btn--ghost btn--icon btn--sm" title="Descendre" :disabled="i === brouillon.reglement.sections.length - 1" @click="deplacer(i, 1)"><Icon name="down" :size="15" /></button>
-          <button class="btn btn--ghost btn--icon btn--sm" title="Supprimer la section" @click="retirer(i)"><Icon name="delete" :size="15" /></button>
+          <input v-model="s.emoji" class="input perso__emoji" maxlength="8" :aria-label="$t('adminSite.reglement.emoji')" />
+          <input v-model="s.titre" class="input" maxlength="80" :aria-label="$t('adminSite.reglement.titreSection')" />
+          <button class="btn btn--ghost btn--icon btn--sm" :title="$t('adminSite.reglement.monter')" :disabled="i === 0" @click="deplacer(i, -1)"><Icon name="up" :size="15" /></button>
+          <button class="btn btn--ghost btn--icon btn--sm" :title="$t('adminSite.reglement.descendre')" :disabled="i === brouillon.reglement.sections.length - 1" @click="deplacer(i, 1)"><Icon name="down" :size="15" /></button>
+          <button class="btn btn--ghost btn--icon btn--sm" :title="$t('adminSite.reglement.supprimerSection')" @click="retirer(i)"><Icon name="delete" :size="15" /></button>
         </div>
         <div class="perso__grille">
           <label class="field perso__large">
-            <span class="field__label">Introduction de la section</span>
+            <span class="field__label">{{ $t('adminSite.reglement.introSection') }}</span>
             <input v-model="s.intro" class="input" />
           </label>
           <label class="field perso__large">
-            <span class="field__label">Règles — une par ligne</span>
+            <span class="field__label">{{ $t('adminSite.reglement.regles') }}</span>
             <textarea class="textarea perso__texte" rows="4" :value="versTexte(s.regles)" @change="s.regles = depuisTexte(($event.target as HTMLTextAreaElement).value)" />
           </label>
           <label class="field perso__large">
-            <span class="field__label">Avertissement (facultatif)</span>
+            <span class="field__label">{{ $t('adminSite.reglement.alerte') }}</span>
             <input v-model="s.alerte" class="input" />
           </label>
           <label class="checkbox perso__large">
-            <input v-model="s.finale" type="checkbox" /> Section finale : pleine largeur, avec le compte à rebours de l’astéroïde
+            <input v-model="s.finale" type="checkbox" /> {{ $t('adminSite.reglement.finale') }}
           </label>
           <label v-if="s.finale" class="field perso__large">
-            <span class="field__label">Lignes de conclusion — une par ligne</span>
+            <span class="field__label">{{ $t('adminSite.reglement.fin') }}</span>
             <textarea class="textarea perso__texte" rows="3" :value="versTexte(s.fin)" @change="s.fin = depuisTexte(($event.target as HTMLTextAreaElement).value)" />
           </label>
         </div>
       </div>
 
       <div class="perso__actions-section">
-        <button class="btn btn--ghost btn--sm" @click="ajouterSection"><Icon name="add" :size="15" /><span>Ajouter une section</span></button>
-        <button class="btn btn--ghost btn--sm" @click="reglesExemple"><Icon name="refresh" :size="15" /><span>Remettre les règles d’exemple</span></button>
+        <button class="btn btn--ghost btn--sm" @click="ajouterSection"><Icon name="add" :size="15" /><span>{{ $t('adminSite.reglement.ajouterSection') }}</span></button>
+        <button class="btn btn--ghost btn--sm" @click="reglesExemple"><Icon name="refresh" :size="15" /><span>{{ $t('adminSite.reglement.reglesExemple') }}</span></button>
       </div>
     </section>
 
     <!-- Rideau d'ouverture -->
     <section class="card perso__bloc">
       <div class="perso__entete">
-        <h2 class="card__title">Rideau d’ouverture</h2>
-        <label class="checkbox"><input v-model="brouillon.ouverture.actif" type="checkbox" /> Activer le rideau</label>
+        <h2 class="card__title">{{ $t('adminSite.ouverture.titre') }}</h2>
+        <label class="checkbox"><input v-model="brouillon.ouverture.actif" type="checkbox" /> {{ $t('adminSite.ouverture.activer') }}</label>
       </div>
-      <p class="u-faint perso__note">
-        Avant la date, tout le panel est caché derrière un compte à rebours. Le jour J, une animation
-        l’ouvre, puis le rideau ne revient plus. Pour bloquer réellement l’accès au jeu, utilisez la salle
-        d’attente du mod (Configs/EcoAgora.eco) ou le mot de passe du serveur.
-      </p>
+      <p class="u-faint perso__note">{{ $t('adminSite.ouverture.note') }}</p>
       <div class="perso__grille">
         <label class="field">
-          <span class="field__label">Date et heure d’ouverture</span>
+          <span class="field__label">{{ $t('adminSite.ouverture.date') }}</span>
           <input v-model="dateLocale" class="input" type="datetime-local" />
-          <small class="u-faint">Heure de votre navigateur, enregistrée avec son fuseau.</small>
+          <small class="u-faint">{{ $t('adminSite.ouverture.dateAide') }}</small>
         </label>
         <label class="field">
-          <span class="field__label">Mot de passe testeurs (facultatif)</span>
+          <span class="field__label">{{ $t('adminSite.ouverture.motDePasse') }}</span>
           <input v-model.trim="brouillon.ouverture.motDePasse" class="input" autocomplete="off" />
-          <small class="perso__attention">Pas une sécurité : il est lisible par tous dans la page.</small>
+          <small class="perso__attention">{{ $t('adminSite.ouverture.motDePasseAide') }}</small>
         </label>
         <label class="field">
-          <span class="field__label">Titre</span>
+          <span class="field__label">{{ $t('adminSite.ouverture.champTitre') }}</span>
           <input v-model="brouillon.ouverture.titre" class="input" maxlength="80" />
         </label>
         <label class="field">
-          <span class="field__label">Sous-titre</span>
-          <input v-model="brouillon.ouverture.sousTitre" class="input" maxlength="160" placeholder="Le serveur ouvre samedi à 20 h." />
+          <span class="field__label">{{ $t('adminSite.ouverture.sousTitre') }}</span>
+          <input v-model="brouillon.ouverture.sousTitre" class="input" maxlength="160" :placeholder="$t('adminSite.ouverture.sousTitrePlaceholder')" />
         </label>
       </div>
     </section>
@@ -376,11 +372,11 @@ onBeforeRouteLeave(() => !modifie.value || window.confirm('Des modifications ne 
       <ul v-if="erreurs.length" class="perso__erreurs">
         <li v-for="e in erreurs" :key="e">{{ e }}</li>
       </ul>
-      <span v-else class="u-muted">Modifications non enregistrées.</span>
+      <span v-else class="u-muted">{{ $t('adminSite.barre.nonEnregistre') }}</span>
       <div class="perso__barre-boutons">
-        <button class="btn btn--ghost btn--sm" @click="annuler">Annuler</button>
+        <button class="btn btn--ghost btn--sm" @click="annuler">{{ $t('adminSite.barre.annuler') }}</button>
         <button class="btn btn--primary btn--sm" :disabled="enregistrement || !!erreurs.length || !site.modDisponible" @click="enregistrer">
-          <Icon name="check" :size="15" /><span>{{ enregistrement ? 'Enregistrement…' : 'Enregistrer' }}</span>
+          <Icon name="check" :size="15" /><span>{{ enregistrement ? $t('adminSite.barre.enregistrement') : $t('adminSite.barre.enregistrer') }}</span>
         </button>
       </div>
     </div>

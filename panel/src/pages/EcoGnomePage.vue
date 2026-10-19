@@ -4,6 +4,7 @@ import Icon from '@/components/Icon.vue';
 import { useSiteStore } from '@/stores/site';
 import { useSessionStore } from '@/stores/session';
 import { useToastStore } from '@/stores/toasts';
+import { t } from '@/i18n';
 
 /**
  * Eco Gnome : calculateur de prix communautaire (eco-gnome.com).
@@ -23,37 +24,35 @@ const URL_ECO_GNOME = 'https://eco-gnome.com/';
 function copier(texte: string, libelle: string): void {
   void navigator.clipboard
     .writeText(texte)
-    .then(() => toasts.ok(`${libelle} copié`, texte))
-    .catch(() => toasts.fail('Copie impossible', 'Le navigateur a refusé l’accès au presse-papiers.'));
+    .then(() => toasts.ok(t('ecoGnome.copied', { libelle }), texte))
+    .catch(() => toasts.fail(t('ecoGnome.copyFailed'), t('ecoGnome.clipboardRefused')));
 }
 
 const ETAPES = [
   {
-    titre: 'Créez votre compte',
-    texte: 'Rendez-vous sur Eco Gnome et connectez-vous.',
+    titre: t('ecoGnome.steps.account'),
+    texte: t('ecoGnome.steps.accountText'),
   },
   {
-    titre: 'Rejoignez le serveur',
-    texte: 'Sur Eco Gnome, rejoignez notre serveur avec le code de participation ci-dessus.',
+    titre: t('ecoGnome.steps.join'),
+    texte: t('ecoGnome.steps.joinText'),
   },
   {
-    titre: 'Liez votre compte en jeu',
-    texte:
-      'Récupérez votre secretid : cliquez sur votre pseudo, en haut à droite sur Eco Gnome. Puis tapez la commande ci-dessous dans le chat du jeu.',
+    titre: t('ecoGnome.steps.link'),
+    texte: t('ecoGnome.steps.linkText'),
     commande: '/eguser {secretid}',
   },
   {
-    titre: 'Sauvegardez votre compte',
-    texte:
-      'Téléchargez une sauvegarde de votre compte avec le bouton de téléchargement (bleu). Sans elle, vos prix peuvent être perdus.',
+    titre: t('ecoGnome.steps.backup'),
+    texte: t('ecoGnome.steps.backupText'),
   },
 ];
 
 const COMMANDES = [
-  { cmd: '/egjoin', aide: 'Ouvre Eco Gnome et rejoint directement ce serveur.' },
-  { cmd: '/egopen', aide: 'Ouvre Eco Gnome dans votre navigateur.' },
-  { cmd: '/egsyncroom', aide: 'Met à jour les prix des objets en vente dans la pièce où vous êtes.' },
-  { cmd: '/egsyncdeed', aide: 'Même chose, sur toute la propriété où vous vous trouvez.' },
+  { cmd: '/egjoin', aide: t('ecoGnome.commands.join') },
+  { cmd: '/egopen', aide: t('ecoGnome.commands.open') },
+  { cmd: '/egsyncroom', aide: t('ecoGnome.commands.syncRoom') },
+  { cmd: '/egsyncdeed', aide: t('ecoGnome.commands.syncDeed') },
 ];
 </script>
 
@@ -62,27 +61,27 @@ const COMMANDES = [
     <SectionTitle
       :level="1"
       title="Eco Gnome"
-      hint="L’outil pour calculer vos prix en jeu. Pratique pour fixer des prix justes et rentables."
+      :hint="$t('ecoGnome.hint')"
     >
       <template #actions>
         <a :href="URL_ECO_GNOME" target="_blank" rel="noopener" class="btn btn--primary btn--sm">
-          <Icon name="calculate" :size="15" /><span>Ouvrir Eco Gnome</span>
+          <Icon name="calculate" :size="15" /><span>{{ $t('ecoGnome.open') }}</span>
         </a>
       </template>
     </SectionTitle>
 
     <section v-if="CODE" class="card gnome__code">
       <div>
-        <p class="gnome__code-label">Code de participation du serveur</p>
+        <p class="gnome__code-label">{{ $t('ecoGnome.codeLabel') }}</p>
         <p class="gnome__code-valeur">{{ CODE }}</p>
       </div>
-      <button class="btn btn--ghost btn--sm" @click="copier(CODE, 'Code')">
-        <Icon name="copy" :size="15" /><span>Copier le code</span>
+      <button class="btn btn--ghost btn--sm" @click="copier(CODE, $t('ecoGnome.code'))">
+        <Icon name="copy" :size="15" /><span>{{ $t('ecoGnome.copyCode') }}</span>
       </button>
     </section>
 
     <section class="card">
-      <h3 class="card__title gnome__h">Configurer Eco Gnome en 4 étapes</h3>
+      <h3 class="card__title gnome__h">{{ $t('ecoGnome.setupTitle') }}</h3>
       <ol class="gnome__etapes">
         <li v-for="(e, i) in ETAPES" :key="e.titre">
           <span class="gnome__num">{{ i + 1 }}</span>
@@ -91,12 +90,12 @@ const COMMANDES = [
             <p>{{ e.texte }}</p>
             <div v-if="e.commande" class="gnome__cmd">
               <code>{{ e.commande }}</code>
-              <button class="btn btn--ghost btn--sm" @click="copier('/eguser ', 'Début de commande')">
-                <Icon name="copy" :size="14" /><span>Copier</span>
+              <button class="btn btn--ghost btn--sm" @click="copier('/eguser ', $t('ecoGnome.commandStart'))">
+                <Icon name="copy" :size="14" /><span>{{ $t('ecoGnome.copy') }}</span>
               </button>
             </div>
             <p v-if="e.commande" class="u-faint gnome__petit">
-              Remplacez <code>{secretid}</code> par votre identifiant, sans les accolades.
+              {{ $t('ecoGnome.replace1') }} <code>{secretid}</code> {{ $t('ecoGnome.replace2') }}
             </p>
           </div>
         </li>
@@ -104,7 +103,7 @@ const COMMANDES = [
     </section>
 
     <section class="card">
-      <h3 class="card__title gnome__h">Commandes utiles en jeu</h3>
+      <h3 class="card__title gnome__h">{{ $t('ecoGnome.usefulCommands') }}</h3>
       <ul class="gnome__commandes">
         <li v-for="c in COMMANDES" :key="c.cmd">
           <code>{{ c.cmd }}</code>
@@ -112,37 +111,33 @@ const COMMANDES = [
         </li>
       </ul>
       <p class="u-muted gnome__petit">
-        Sur vos boutiques, un onglet <strong>Eco Gnome</strong> permet aussi de synchroniser prix et
-        offres. Raccourci : <strong>Maj + clic droit</strong> sur une boutique pour mettre ses prix à
-        jour.
+        {{ $t('ecoGnome.shopTab1') }} <strong>Eco Gnome</strong> {{ $t('ecoGnome.shopTab2') }}
+        <strong>{{ $t('ecoGnome.shortcut') }}</strong> {{ $t('ecoGnome.shopTab3') }}
       </p>
     </section>
 
     <section v-if="session.isAdmin" class="card gnome__admin">
       <h3 class="card__title gnome__h">
-        <Icon name="shield" :size="16" /> Côté serveur (administrateurs)
+        <Icon name="shield" :size="16" /> {{ $t('ecoGnome.admin.title') }}
       </h3>
       <p>
-        Les commandes <code>/eguser</code>, <code>/egjoin</code>… n’existent que si le
-        <strong>mod serveur Eco Gnome</strong> est installé. Sans lui, les joueurs obtiendront
-        une commande inconnue.
+        {{ $t('ecoGnome.admin.intro1') }} <code>/eguser</code>, <code>/egjoin</code>{{ $t('ecoGnome.admin.intro2') }}
+        <strong>{{ $t('ecoGnome.admin.modName') }}</strong> {{ $t('ecoGnome.admin.intro3') }}
       </p>
       <ol class="gnome__admin-liste">
         <li>
-          Déposer <code>EcoGnomeMod.dll</code> et <code>StoreObject.cs</code> (page des versions du
-          mod) dans <code>Mods/UserCode</code>, puis redémarrer le serveur.
+          {{ $t('ecoGnome.admin.install1') }} <code>EcoGnomeMod.dll</code> {{ $t('ecoGnome.admin.install2') }} <code>StoreObject.cs</code>
+          {{ $t('ecoGnome.admin.install3') }} <code>Mods/UserCode</code>{{ $t('ecoGnome.admin.install4') }}
         </li>
         <li>
-          Une seule fois, en jeu : <code>/EcoGnome registerserver {{ CODE || "<code>" }}</code>.
+          {{ $t('ecoGnome.admin.register') }} <code>/EcoGnome registerserver {{ CODE || "<code>" }}</code>{{ $t('ecoGnome.admin.registerEnd') }}
         </li>
         <li>
-          La configuration est dans <code>Configs/EcoGnome.eco</code> ; les valeurs par défaut
-          conviennent.
+          {{ $t('ecoGnome.admin.config1') }} <code>Configs/EcoGnome.eco</code>{{ $t('ecoGnome.admin.config2') }}
         </li>
       </ol>
       <p class="u-faint gnome__petit">
-        <code>StoreObject.cs</code> remplace la définition des boutiques du jeu : pensez à le mettre à
-        jour à chaque nouvelle version d’Eco.
+        <code>StoreObject.cs</code> {{ $t('ecoGnome.admin.storeObjectNote') }}
       </p>
       <a
         href="https://github.com/Eco-Gnome/eco-gnome-mod/releases"
@@ -150,7 +145,7 @@ const COMMANDES = [
         rel="noopener"
         class="btn btn--ghost btn--sm"
       >
-        <Icon name="link" :size="14" /><span>Versions du mod</span>
+        <Icon name="link" :size="14" /><span>{{ $t('ecoGnome.admin.releases') }}</span>
       </a>
     </section>
   </div>

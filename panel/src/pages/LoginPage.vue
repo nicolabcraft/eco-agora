@@ -5,6 +5,7 @@ import SectionTitle from '@/components/SectionTitle.vue';
 import Icon from '@/components/Icon.vue';
 import { useServerStore } from '@/stores/server';
 import { useSessionStore } from '@/stores/session';
+import { t } from '@/i18n';
 
 const route = useRoute();
 const router = useRouter();
@@ -31,9 +32,9 @@ async function entrerAvecCle(): Promise<void> {
         : '/admin';
       await router.push(suite);
     } else if (r === 'injoignable') {
-      erreurCle.value = 'Le serveur ne répond pas : impossible de vérifier la clé pour le moment.';
+      erreurCle.value = t('login.keyUnreachable');
     } else {
-      erreurCle.value = 'Clé refusée par le serveur.';
+      erreurCle.value = t('login.keyRefused');
     }
   } finally {
     envoi.value = false;
@@ -45,36 +46,33 @@ async function entrerAvecCle(): Promise<void> {
   <div class="login">
     <SectionTitle
       :level="1"
-      title="Connexion"
-      hint="Les joueurs se connectent depuis le jeu. Les administrateurs peuvent aussi entrer avec la clé d’administration du serveur."
+      :title="$t('login.title')"
+      :hint="$t('login.hint')"
     />
 
     <div class="card login__card">
       <div v-if="needsAdmin" class="login__notice">
         <Icon name="shield" :size="18" />
         <div>
-          <strong>Cette page est réservée aux administrateurs.</strong>
+          <strong>{{ $t('login.adminOnly') }}</strong>
           <p class="u-muted">
-            Votre statut est vérifié par le serveur de jeu, pas par le navigateur.
+            {{ $t('login.adminOnlyText') }}
           </p>
         </div>
       </div>
 
-      <h3 class="card__title">Comment se connecter</h3>
+      <h3 class="card__title">{{ $t('login.howTo') }}</h3>
       <ol class="login__steps">
-        <li>Lancez Eco et rejoignez le serveur <strong>{{ srv.name }}</strong>.</li>
-        <li>Dans le jeu, ouvrez le menu et cliquez sur le lien du site du monde.</li>
+        <li>{{ $t('login.step1') }} <strong>{{ srv.name }}</strong>{{ $t('login.step1End') }}</li>
+        <li>{{ $t('login.step2') }}</li>
         <li>
-          Le jeu ouvre ce panel avec un jeton temporaire : vous êtes alors identifié
-          pendant 24 heures.
+          {{ $t('login.step3') }}
         </li>
       </ol>
 
       <div class="login__foot">
         <p class="u-muted">
-          Sans connexion, tout ce qui est public reste accessible : carte, statistiques,
-          écologie, économie et gouvernance. La connexion sert à voter, commenter et,
-          pour les administrateurs, à accéder à l’espace d’administration.
+          {{ $t('login.publicText') }}
         </p>
         <div class="u-row-tight u-wrap">
           <a
@@ -85,38 +83,36 @@ async function entrerAvecCle(): Promise<void> {
             class="btn btn--discord btn--sm"
           >
             <Icon name="discord" :size="15" />
-            <span>Demander de l’aide sur Discord</span>
+            <span>{{ $t('login.discordHelp') }}</span>
           </a>
-          <RouterLink to="/" class="btn btn--ghost btn--sm">Retour au tableau de bord</RouterLink>
+          <RouterLink to="/" class="btn btn--ghost btn--sm">{{ $t('login.backToDashboard') }}</RouterLink>
         </div>
       </div>
 
       <div v-if="session.hasSession" class="login__state">
         <span class="dot dot--on" />
-        Connecté en tant que <strong>{{ session.username }}</strong>
-        <span v-if="session.isAdmin" class="badge badge--primary">Administrateur</span>
-        <span v-if="session.viaCle" class="u-faint">(clé d’administration)</span>
-        <button class="btn btn--ghost btn--sm" @click="session.signOut()">Se déconnecter</button>
+        {{ $t('login.loggedInAs') }} <strong>{{ session.username }}</strong>
+        <span v-if="session.isAdmin" class="badge badge--primary">{{ $t('login.admin') }}</span>
+        <span v-if="session.viaCle" class="u-faint">{{ $t('login.viaKey') }}</span>
+        <button class="btn btn--ghost btn--sm" @click="session.signOut()">{{ $t('login.signOut') }}</button>
       </div>
     </div>
 
     <form v-if="!session.viaCle" class="card login__card login__cle" @submit.prevent="entrerAvecCle">
       <h3 class="card__title">
-        <Icon name="lock" :size="16" /> Accès administrateur sans le jeu
+        <Icon name="lock" :size="16" /> {{ $t('login.keyTitle') }}
       </h3>
       <p class="u-muted login__cle-texte">
-        Entrez la clé d’administration du serveur (<code>APIAdminAuthToken</code> dans
-        <code>Configs/Users.eco</code>). Elle donne les droits d’administration du panel :
-        ne la partagez qu’avec le staff.
+        {{ $t('login.keyText1') }}<code>APIAdminAuthToken</code>{{ $t('login.keyText2') }}<code>Configs/Users.eco</code>{{ $t('login.keyText3') }}
       </p>
       <div class="login__cle-ligne">
         <input
           v-model="cle"
           class="input"
           type="password"
-          placeholder="Clé d’administration"
+          :placeholder="$t('login.keyPlaceholder')"
           autocomplete="off"
-          aria-label="Clé d’administration"
+          :aria-label="$t('login.keyPlaceholder')"
           data-1p-ignore
           data-lpignore="true"
           @input="erreurCle = null"
@@ -124,12 +120,12 @@ async function entrerAvecCle(): Promise<void> {
         <button class="btn btn--primary" type="submit" :disabled="!cle.trim() || envoi">
           <span v-if="envoi" class="spinner" />
           <Icon v-else name="check" :size="15" />
-          <span>Entrer</span>
+          <span>{{ $t('login.enter') }}</span>
         </button>
       </div>
       <label class="checkbox">
         <input v-model="seSouvenir" type="checkbox" />
-        <span>Se souvenir de cet appareil (30 jours). Sinon, jusqu’à la fermeture de l’onglet.</span>
+        <span>{{ $t('login.remember') }}</span>
       </label>
       <p v-if="erreurCle" class="login__cle-erreur">{{ erreurCle }}</p>
     </form>

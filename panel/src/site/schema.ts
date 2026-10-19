@@ -7,6 +7,8 @@
  * migration.
  */
 
+import { t } from '@/i18n';
+
 export interface RegleSection {
   emoji: string;
   titre: string;
@@ -82,71 +84,83 @@ export interface SiteConfig {
 }
 
 export function sectionVide(): RegleSection {
-  return { emoji: '📌', titre: 'Nouvelle section', intro: '', regles: [], alerte: '', finale: false, fin: [] };
+  return { emoji: '📌', titre: t('site.nouvelleSection'), intro: '', regles: [], alerte: '', finale: false, fin: [] };
 }
 
-/** Regles d'exemple, proposees desactivees : a relire avant de les publier. */
-const REGLES_EXEMPLE: RegleSection[] = [
-  {
-    emoji: '🤝', titre: 'Respect et coopération', intro: 'Eco est avant tout une aventure communautaire et coopérative.',
-    regles: [
-      'Respectez les autres joueurs et le staff.',
-      'Les insultes, le harcèlement et les comportements toxiques ne sont pas tolérés.',
-      'Privilégiez la communication et l’entraide : une question posée évite souvent un conflit.',
-      'Respectez le travail, les constructions et les ressources des autres joueurs.',
-    ],
-    alerte: '', finale: false, fin: [],
-  },
-  {
-    emoji: '🌱', titre: 'Protégez l’environnement', intro: 'Vos actions ont des conséquences durables sur l’écosystème.',
-    regles: [
-      'Évitez la surexploitation des ressources : replantez ce que vous abattez.',
-      'Ne cherchez pas volontairement à faire disparaître une espèce.',
-      'Limitez la pollution de l’air, de l’eau et des sols.',
-    ],
-    alerte: 'La destruction volontaire de l’écosystème pourra entraîner une intervention du staff.', finale: false, fin: [],
-  },
-  {
-    emoji: '🏛️', titre: 'Gouvernement et lois', intro: 'Dans Eco, ce sont les joueurs qui écrivent les lois et élisent leurs représentants.',
-    regles: [
-      'Respectez les lois votées par la communauté, même celles que vous n’avez pas soutenues.',
-      'Proposez vos idées par les voies prévues (propositions, votes, élections) plutôt que de les imposer.',
-    ],
-    alerte: '', finale: false, fin: [],
-  },
-  {
-    emoji: '🛠️', titre: 'Bugs et triche', intro: 'Logiciels, exploits ou bugs donnant un avantage injuste sont interdits.',
-    regles: ['Si vous découvrez un problème important, prévenez le staff.'],
-    alerte: '', finale: false, fin: [],
-  },
-  {
-    emoji: '☄️', titre: 'L’objectif', intro: 'Un astéroïde menace la planète : coopérez pour le détruire à temps.',
-    regles: [], alerte: '', finale: true,
-    fin: ['🌍 Construisez ensemble.', '🤝 Entraidez-vous.', '🌱 Protégez votre planète.'],
-  },
-];
+/**
+ * Regles d'exemple, proposees desactivees : a relire avant de les publier.
+ * Une fonction et non une constante : les textes suivent la langue, chargee
+ * apres l'import des modules.
+ */
+function reglesExemple(): RegleSection[] {
+  return [
+    {
+      emoji: '🤝', titre: t('site.exemple.respectTitre'), intro: t('site.exemple.respectIntro'),
+      regles: [
+        t('site.exemple.respectR1'),
+        t('site.exemple.respectR2'),
+        t('site.exemple.respectR3'),
+        t('site.exemple.respectR4'),
+      ],
+      alerte: '', finale: false, fin: [],
+    },
+    {
+      emoji: '🌱', titre: t('site.exemple.environnementTitre'), intro: t('site.exemple.environnementIntro'),
+      regles: [
+        t('site.exemple.environnementR1'),
+        t('site.exemple.environnementR2'),
+        t('site.exemple.environnementR3'),
+      ],
+      alerte: t('site.exemple.environnementAlerte'), finale: false, fin: [],
+    },
+    {
+      emoji: '🏛️', titre: t('site.exemple.loisTitre'), intro: t('site.exemple.loisIntro'),
+      regles: [
+        t('site.exemple.loisR1'),
+        t('site.exemple.loisR2'),
+      ],
+      alerte: '', finale: false, fin: [],
+    },
+    {
+      emoji: '🛠️', titre: t('site.exemple.bugsTitre'), intro: t('site.exemple.bugsIntro'),
+      regles: [t('site.exemple.bugsR1')],
+      alerte: '', finale: false, fin: [],
+    },
+    {
+      emoji: '☄️', titre: t('site.exemple.objectifTitre'), intro: t('site.exemple.objectifIntro'),
+      regles: [], alerte: '', finale: true,
+      fin: [t('site.exemple.objectifFin1'), t('site.exemple.objectifFin2'), t('site.exemple.objectifFin3')],
+    },
+  ];
+}
 
-export const SITE_DEFAUT: SiteConfig = {
-  identite: { nom: '', baseline: '', logo: '', couleur: '', langue: 'fr' },
-  liens: { site: '', siteLibelle: '', hebergeurMention: '', hebergeurUrl: '' },
-  jeu: { hote: '', hoteSecours: '', port: 0 },
-  wiki: { langue: 'fr' },
-  ecoGnome: { actif: false, codeParticipation: '' },
-  reglement: {
-    actif: false,
-    titre: 'Règlement',
-    intro: 'Bienvenue sur le serveur ! Avant de commencer l’aventure, merci de prendre connaissance des règles suivantes.',
-    sections: REGLES_EXEMPLE,
-    signature: 'Bon jeu à tous !',
-  },
-  ouverture: {
-    actif: false,
-    date: '',
-    motDePasse: '',
-    titre: 'Ouverture prochaine',
-    sousTitre: '',
-  },
-};
+/**
+ * Valeurs par defaut, dans la langue courante. A appeler apres le chargement
+ * de la langue (jamais au niveau d'un module).
+ */
+export function siteDefaut(): SiteConfig {
+  return {
+    identite: { nom: '', baseline: '', logo: '', couleur: '', langue: 'fr' },
+    liens: { site: '', siteLibelle: '', hebergeurMention: '', hebergeurUrl: '' },
+    jeu: { hote: '', hoteSecours: '', port: 0 },
+    wiki: { langue: 'fr' },
+    ecoGnome: { actif: false, codeParticipation: '' },
+    reglement: {
+      actif: false,
+      titre: t('site.reglementTitre'),
+      intro: t('site.reglementIntro'),
+      sections: reglesExemple(),
+      signature: t('site.reglementSignature'),
+    },
+    ouverture: {
+      actif: false,
+      date: '',
+      motDePasse: '',
+      titre: t('site.ouvertureTitre'),
+      sousTitre: '',
+    },
+  };
+}
 
 export const COULEUR_DEFAUT = '#ff6b0d';
 

@@ -7,6 +7,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import Icon from '@/components/Icon.vue';
 import { exporter } from '@/api/eco';
 import { useToastStore } from '@/stores/toasts';
+import { t } from '@/i18n';
 
 interface PushAction { key: string; label: string; hint: string; run: () => Promise<unknown>; danger: boolean; }
 
@@ -27,12 +28,12 @@ const busy = ref(false);
 const pending = ref<PushAction | null>(null);
 
 const PUSH: PushAction[] = [
-  { key: 'all', label: 'Tout exporter', hint: 'Actions, chat, environnement et espèces', run: () => exporter.pushAll(), danger: true },
-  { key: 'chat', label: 'Chat', hint: 'Historique complet du chat', run: () => exporter.pushChat(), danger: false },
-  { key: 'actions', label: 'Actions', hint: 'Journal des actions des joueurs', run: () => exporter.pushActions(), danger: false },
-  { key: 'env', label: 'Environnement', hint: 'Séries environnementales', run: () => exporter.pushEnvironment(), danger: false },
-  { key: 'species', label: 'Espèces', hint: 'Populations par espèce', run: () => exporter.pushSpecies(), danger: false },
-  { key: 'game', label: 'Sauvegarde de partie (S3)', hint: 'Nécessite une URI S3 configurée côté serveur', run: () => exporter.gameExport(), danger: true },
+  { key: 'all', label: t('adminExports.push.all'), hint: t('adminExports.push.allAide'), run: () => exporter.pushAll(), danger: true },
+  { key: 'chat', label: t('adminExports.push.chat'), hint: t('adminExports.push.chatAide'), run: () => exporter.pushChat(), danger: false },
+  { key: 'actions', label: t('adminExports.push.actions'), hint: t('adminExports.push.actionsAide'), run: () => exporter.pushActions(), danger: false },
+  { key: 'env', label: t('adminExports.push.env'), hint: t('adminExports.push.envAide'), run: () => exporter.pushEnvironment(), danger: false },
+  { key: 'species', label: t('adminExports.push.species'), hint: t('adminExports.push.speciesAide'), run: () => exporter.pushSpecies(), danger: false },
+  { key: 'game', label: t('adminExports.push.game'), hint: t('adminExports.push.gameAide'), run: () => exporter.gameExport(), danger: true },
 ];
 
 /**
@@ -105,7 +106,7 @@ function parseEnvEntry(line: string): EnvEntry {
 
 function reason(r: PromiseSettledResult<unknown>): string | null {
   if (r.status === 'fulfilled') return null;
-  return r.reason instanceof Error ? r.reason.message : 'Liste indisponible';
+  return r.reason instanceof Error ? r.reason.message : t('adminExports.listeIndisponible');
 }
 
 async function loadLists(): Promise<void> {
@@ -130,7 +131,7 @@ async function show(title: string, fetcher: () => Promise<unknown>): Promise<voi
     preview.value = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
   } catch (err) {
     preview.value = '';
-    toasts.fail('Export illisible', err instanceof Error ? err.message : '');
+    toasts.fail(t('adminExports.toasts.illisible'), err instanceof Error ? err.message : '');
   } finally {
     busy.value = false;
   }
@@ -153,9 +154,9 @@ async function runPush(): Promise<void> {
   busy.value = true;
   try {
     const res = await action.run();
-    toasts.ok('Export lancé', typeof res === 'string' && res ? res : action.label);
+    toasts.ok(t('adminExports.toasts.lance'), typeof res === 'string' && res ? res : action.label);
   } catch (err) {
-    toasts.fail('Export refusé', err instanceof Error ? err.message : action.label);
+    toasts.fail(t('adminExports.toasts.refuse'), err instanceof Error ? err.message : action.label);
   } finally {
     busy.value = false;
   }
@@ -168,17 +169,16 @@ onMounted(() => void loadLists());
   <div class="exp">
     <SectionTitle
       :level="1"
-      title="Exports de données"
-      hint="Consultation des jeux de données exportables et déclenchement des exports côté serveur."
+      :title="$t('adminExports.titre')"
+      :hint="$t('adminExports.hint')"
     />
 
     <section class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Lancer un export</h3>
+          <h3 class="card__title">{{ $t('adminExports.lancer') }}</h3>
           <p class="card__sub">
-            Le serveur écrit les fichiers dans son propre dossier ; le panel ne fait que déclencher
-            l'opération.
+            {{ $t('adminExports.lancerSub') }}
           </p>
         </div>
       </div>
@@ -200,57 +200,57 @@ onMounted(() => void loadLists());
       </div>
     </section>
 
-    <StateBlock v-if="loading" kind="loading" title="Chargement des jeux de données" />
+    <StateBlock v-if="loading" kind="loading" :title="$t('adminExports.chargement')" />
 
     <div v-else class="exp__grid">
       <section class="card">
         <div class="card__head">
-          <h3 class="card__title">Actions</h3>
+          <h3 class="card__title">{{ $t('adminExports.actions') }}</h3>
           <span class="badge">{{ actions.length }}</span>
         </div>
         <AdminGuardNotice v-if="errors.actions" :error="errors.actions" />
-        <StateBlock v-else-if="actions.length === 0" kind="empty" title="Aucune action listée" />
+        <StateBlock v-else-if="actions.length === 0" kind="empty" :title="$t('adminExports.aucuneAction')" />
         <div v-else class="exp__chips">
           <button
             v-for="a in actions"
             :key="a"
             class="exp__chip"
-            @click="show('action-' + a, () => exporter.actions(a))"
+            @click="show($t('adminExports.prefixes.action') + '-' + a, () => exporter.actions(a))"
           >{{ a }}</button>
         </div>
       </section>
 
       <section class="card">
         <div class="card__head">
-          <h3 class="card__title">Espèces</h3>
+          <h3 class="card__title">{{ $t('adminExports.especes') }}</h3>
           <span class="badge">{{ species.length }}</span>
         </div>
         <AdminGuardNotice v-if="errors.species" :error="errors.species" />
-        <StateBlock v-else-if="species.length === 0" kind="empty" title="Aucune espèce listée" />
+        <StateBlock v-else-if="species.length === 0" kind="empty" :title="$t('adminExports.aucuneEspece')" />
         <div v-else class="exp__chips">
           <button
             v-for="s in species"
             :key="s"
             class="exp__chip"
-            @click="show('espece-' + s, () => exporter.species(s))"
+            @click="show($t('adminExports.prefixes.espece') + '-' + s, () => exporter.species(s))"
           >{{ s }}</button>
         </div>
       </section>
 
       <section class="card">
         <div class="card__head">
-          <h3 class="card__title">Environnement</h3>
+          <h3 class="card__title">{{ $t('adminExports.environnement') }}</h3>
           <span class="badge">{{ environment.length }}</span>
         </div>
         <AdminGuardNotice v-if="errors.environment" :error="errors.environment" />
-        <StateBlock v-else-if="environment.length === 0" kind="empty" title="Aucune catégorie listée" />
+        <StateBlock v-else-if="environment.length === 0" kind="empty" :title="$t('adminExports.aucuneCategorie')" />
         <div v-else class="exp__chips">
           <button
             v-for="e in environment"
             :key="e.label"
             class="exp__chip"
             :title="e.label"
-            @click="show('environnement-' + e.category, () => exporter.environment(e.category, e.units, e.column))"
+            @click="show($t('adminExports.prefixes.environnement') + '-' + e.category, () => exporter.environment(e.category, e.units, e.column))"
           >{{ e.category }}<span v-if="e.units" class="u-faint"> &middot; {{ e.units }}</span></button>
         </div>
       </section>
@@ -259,27 +259,27 @@ onMounted(() => void loadLists());
     <section v-if="previewTitle" class="card">
       <div class="card__head">
         <div>
-          <h3 class="card__title">Aperçu &middot; {{ previewTitle }}</h3>
-          <p class="card__sub">Réponse brute du serveur.</p>
+          <h3 class="card__title">{{ $t('adminExports.apercu', { titre: previewTitle }) }}</h3>
+          <p class="card__sub">{{ $t('adminExports.reponseBrute') }}</p>
         </div>
         <div class="u-row-tight">
           <button class="btn btn--ghost btn--sm" :disabled="!preview" @click="downloadPreview">
-            <Icon name="download" :size="14" /><span>JSON</span>
+            <Icon name="download" :size="14" /><span>{{ $t('adminExports.json') }}</span>
           </button>
-          <button class="btn btn--ghost btn--sm" @click="previewTitle = ''; preview = ''">Fermer</button>
+          <button class="btn btn--ghost btn--sm" @click="previewTitle = ''; preview = ''">{{ $t('adminExports.fermer') }}</button>
         </div>
       </div>
-      <StateBlock v-if="busy" kind="loading" title="Récupération" />
+      <StateBlock v-if="busy" kind="loading" :title="$t('adminExports.recuperation')" />
       <pre v-else-if="preview" class="pre-log">{{ preview }}</pre>
-      <StateBlock v-else kind="empty" title="Réponse vide" />
+      <StateBlock v-else kind="empty" :title="$t('adminExports.vide')" />
     </section>
 
     <ConfirmDialog
       :open="pending !== null"
       :title="pending?.label ?? ''"
-      text="L'export est réalisé par le serveur de jeu et peut solliciter ses ressources pendant quelques instants."
+      :text="$t('adminExports.confirmation.texte')"
       :detail="pending?.hint ?? ''"
-      confirm-label="Lancer l'export"
+      :confirm-label="$t('adminExports.confirmation.confirmer')"
       :danger="pending?.danger ?? false"
       @confirm="runPush"
       @cancel="pending = null"

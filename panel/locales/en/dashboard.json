@@ -1,0 +1,50 @@
+{
+  "addressCopied": "Address copied",
+  "copyFailed": "Copy failed",
+  "clipboardRefused": "The browser denied access to the clipboard.",
+  "joinDiscord": "Join the Discord",
+  "openEco": "Opens Eco on {lien}",
+  "openEcoBackup": "Opens Eco on {lien}. Alternative address: {secours}",
+  "joinServer": "Join the server",
+  "copyAddressTitle": "Copy {adresse} for a direct connection",
+  "copyAddress": "Copy address",
+  "unreachable": "Server unreachable",
+  "retry": "Retry",
+  "tiles": {
+    "onlinePlayers": "Players online",
+    "registered": "/ {n} registered",
+    "adminOnline": "An administrator is online",
+    "daysElapsed": "Days elapsed",
+    "paused": "Simulation paused",
+    "plants": "Plants",
+    "animals": "Animals",
+    "activeLaws": "Active laws",
+    "totalCulture": "Total culture"
+  },
+  "charts": {
+    "population": "Citizen population",
+    "populationHint": "Total, active and online citizens",
+    "climate": "Climate",
+    "climateHint": "Atmospheric CO2 and average temperature",
+    "ecosystem": "Ecosystem",
+    "ecosystemHint": "Plants, trees and animals of the world",
+    "economy": "Economy",
+    "economyHint": "Citizens’ wealth and public treasury"
+  },
+  "connectedCitizens": "Online citizens",
+  "nobodyOnline": "Nobody online",
+  "nobodyOnlineText": "Online citizens will appear here in real time.",
+  "world": {
+    "title": "World status",
+    "version": "Server version",
+    "category": "Category",
+    "collaboration": "Collaboration",
+    "simulation": "Simulation",
+    "peakPlayers": "Peak active players",
+    "economy": "Economy",
+    "exhaustion": "Exhaustion",
+    "hours": "{n} h",
+    "disabled": "Disabled",
+    "shelfLife": "Food shelf life"
+  }
+}

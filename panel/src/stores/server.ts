@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { server } from '@/api/eco';
 import type { ServerInfo } from '@/api/types';
 import { useSiteStore } from './site';
+import { t } from '@/i18n';
 
 const POLL_MS = 15000;
 let timer: number | undefined;
@@ -20,7 +21,7 @@ export const useServerStore = defineStore('server', {
      * en octets et coupe un caractere de trop par lettre accentuee) : on prefere
      * le nom complet lu par le mod.
      */
-    name: (s): string => useSiteStore().nomServeur || s.info?.Description || 'Serveur Eco',
+    name: (s): string => useSiteStore().nomServeur || s.info?.Description || t('stores.server.nomDefaut'),
     online: (s) => s.info?.OnlinePlayers ?? 0,
     reachable: (s) => s.info !== null,
     joinUrl: (s) => s.info?.JoinUrl ?? null,
@@ -33,7 +34,7 @@ export const useServerStore = defineStore('server', {
         this.error = null;
         this.lastUpdate = Date.now();
       } catch (err) {
-        this.error = err instanceof Error ? err.message : 'Serveur injoignable';
+        this.error = err instanceof Error ? err.message : t('stores.server.injoignable');
       } finally {
         this.loading = false;
       }

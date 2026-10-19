@@ -3,7 +3,7 @@
 # Eco Agora
 
 **Le panel web complet pour votre serveur Eco.** Eco Agora remplace le site web
-de votre serveur Eco (Strange Loop Games) par un panel moderne, en français,
+de votre serveur Eco (Strange Loop Games) par un panel moderne, en français et en anglais (traduisible),
 que vous personnalisez depuis le panel lui-même.
 
 *[English below](#english)* · [Installation](INSTALLATION.md) · [Install guide (EN)](INSTALL.en.md) · [Développement](DEVELOPPEMENT.md)
@@ -33,6 +33,11 @@ que vous personnalisez depuis le panel lui-même.
 - **Rideau d'ouverture** : compte à rebours devant le panel jusqu'au jour J, accès anticipé pour les testeurs.
 - **Salle d'attente** en jeu (facultative) : avant l'ouverture, les joueurs se connectent mais ne peuvent ni bouger ni agir.
 
+## Langues et compatibilité
+
+- Panel en **français** et en **anglais**, au choix de chaque visiteur. Tous les textes sont dans `WebClient/WebBin/lang/*.json` : corrigez-les ou ajoutez une langue sans recompiler (voir [INSTALLATION.md](INSTALLATION.md#4-langues)).
+- Les mods qui ont leurs propres pages continuent de fonctionner ; l'interface d'origine d'Eco reste accessible à `/legacy/` pour ceux qui s'y intègrent.
+
 ## Aperçu
 
 | | |
@@ -43,8 +48,8 @@ que vous personnalisez depuis le panel lui-même.
 
 ## Installation
 
-1. Téléchargez `eco-agora-1.0.0.zip` dans les [Releases](../../releases).
-2. Serveur arrêté, sauvegardez `WebClient/WebBin/index.html`.
+1. Téléchargez `eco-agora-1.1.0.zip` dans les [Releases](../../releases).
+2. Serveur arrêté, déplacez `WebClient/WebBin/index.html` dans `WebClient/WebBin/legacy/index.html` (l'interface d'origine reste accessible à `/legacy/`).
 3. Copiez le contenu de l'archive à la racine du serveur (dossiers `WebClient/` et `Mods/`).
 4. Démarrez le serveur, ouvrez son site web, puis *Administration › Personnalisation*.
 
@@ -69,7 +74,7 @@ pour louer ses véhicules et bateaux.
 ## English
 
 **Eco Agora** replaces your Eco server's website with a complete, modern panel
-(French interface) that you customise from the panel itself.
+in French and English, that you customise from the panel itself.
 
 **Citizen area**: dashboard with meteor countdown, players, population and
 climate; 3D world map with environment layers, animated history, districts and
@@ -88,8 +93,13 @@ by section rules editor, wiki language, Eco Gnome page, an opening countdown
 curtain with tester access, and an optional in-game waiting room that keeps
 players frozen until opening time.
 
-**Install**: download `eco-agora-1.0.0.zip` from the [Releases](../../releases),
-stop the server, back up `WebClient/WebBin/index.html`, copy the archive
+**Languages and compatibility**: French and English, chosen by each visitor;
+every text lives in `WebClient/WebBin/lang/*.json`, so you can fix wording or
+add a language without rebuilding. Mods with their own pages keep working, and
+Eco's original interface stays reachable at `/legacy/`.
+
+**Install**: download `eco-agora-1.1.0.zip` from the [Releases](../../releases),
+stop the server, move `WebClient/WebBin/index.html` to `WebClient/WebBin/legacy/index.html`, copy the archive
 content to the server root and start it. Full guide:
 [INSTALL.en.md](INSTALL.en.md). Compatibility: Eco 0.14.2.1.
 

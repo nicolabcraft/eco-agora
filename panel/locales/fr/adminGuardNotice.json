@@ -1,0 +1,7 @@
+{
+  "e401": "Le serveur ne reconnaît pas votre session pour cet appel. Rouvrez le panel depuis le jeu pour obtenir un jeton frais.",
+  "e403": "Votre compte est authentifié mais n’a pas les droits requis. Certains points d’accès d’Eco (exports, configuration des greffons) exigent un compte de niveau développeur, ou l’option AllowDebugCalls activée dans Configs/Users.eco.",
+  "e404": "Ce point d’accès n’existe pas sur cette version du serveur.",
+  "injoignable": "Le serveur de jeu ne répond pas. Vérifiez qu’il tourne toujours.",
+  "refuse": "Le serveur a refusé cet appel. Le code exact est indiqué ci-dessus."
+}

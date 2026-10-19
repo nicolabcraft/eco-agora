@@ -1,4 +1,4 @@
-<p><strong>Eco Agora</strong> remplace le site web de votre serveur Eco par un panel complet, moderne et en français, que vous personnalisez depuis le panel lui-même.</p>
+<p><strong>Eco Agora</strong> remplace le site web de votre serveur Eco par un panel complet et moderne, en français et en anglais, que vous personnalisez depuis le panel lui-même.</p>
 
 <h3>Espace citoyen</h3>
 <ul>
@@ -26,9 +26,15 @@
 <li><strong>Salle d’attente</strong> en jeu (facultative) : avant l’ouverture, les joueurs se connectent mais ne peuvent ni bouger ni agir.</li>
 </ul>
 
+<h3>Langues et compatibilité</h3>
+<ul>
+<li>Panel en <strong>français</strong> et en <strong>anglais</strong>, au choix de chaque visiteur. Tous les textes sont dans des fichiers <code>lang/*.json</code> : corrigez-les ou ajoutez une langue sans rien recompiler.</li>
+<li>Les mods qui ont leurs propres pages continuent de fonctionner. L’interface d’origine d’Eco reste accessible à <code>/legacy/</code> pour les mods qui s’y intègrent.</li>
+</ul>
+
 <h3>Installation</h3>
 <ol>
-<li>Serveur arrêté, sauvegardez <code>WebClient/WebBin/index.html</code>.</li>
+<li>Serveur arrêté, déplacez <code>WebClient/WebBin/index.html</code> dans <code>WebClient/WebBin/legacy/index.html</code>.</li>
 <li>Copiez le contenu de l’archive à la racine du serveur (dossiers <code>WebClient/</code> et <code>Mods/</code>).</li>
 <li>Démarrez le serveur, ouvrez son site web, puis <em>Administration › Personnalisation</em>.</li>
 </ol>
@@ -42,7 +48,7 @@
 
 <h2>English</h2>
 
-<p><strong>Eco Agora</strong> replaces your Eco server’s website with a complete, modern panel (French interface) that you customise from the panel itself.</p>
+<p><strong>Eco Agora</strong> replaces your Eco server’s website with a complete, modern panel in French and English, that you customise from the panel itself.</p>
 
 <h3>Citizen area</h3>
 <ul>
@@ -70,9 +76,15 @@
 <li>In-game <strong>waiting room</strong> (optional): before opening, players can join but can neither move nor act.</li>
 </ul>
 
+<h3>Languages and compatibility</h3>
+<ul>
+<li>Panel in <strong>French</strong> and <strong>English</strong>, chosen by each visitor. Every text lives in <code>lang/*.json</code> files: fix them or add a language without rebuilding anything.</li>
+<li>Mods with their own pages keep working. Eco’s original interface stays reachable at <code>/legacy/</code> for mods that integrate into it.</li>
+</ul>
+
 <h3>Installation</h3>
 <ol>
-<li>With the server stopped, back up <code>WebClient/WebBin/index.html</code>.</li>
+<li>With the server stopped, move <code>WebClient/WebBin/index.html</code> to <code>WebClient/WebBin/legacy/index.html</code>.</li>
 <li>Copy the archive content to the server root (<code>WebClient/</code> and <code>Mods/</code> folders).</li>
 <li>Start the server, open its website, then <em>Administration › Personnalisation</em>.</li>
 </ol>

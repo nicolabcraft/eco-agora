@@ -11,7 +11,7 @@ const toasts = useToastStore();
           <div class="toast__title">{{ t.title }}</div>
           <div v-if="t.text" class="u-muted">{{ t.text }}</div>
         </div>
-        <button class="toast__close" title="Fermer" @click="toasts.dismiss(t.id)">x</button>
+        <button class="toast__close" :title="$t('commun.fermer')" @click="toasts.dismiss(t.id)">x</button>
       </div>
     </TransitionGroup>
   </div>

@@ -1,0 +1,23 @@
+{
+  "title": "My profile",
+  "hint": "Your citizen identity as the server knows it.",
+  "notLoggedIn": "You are not signed in",
+  "notLoggedInText": "Open this panel from the game to see your profile, your pending votes and, if you are an administrator, the administration area.",
+  "howToSignIn": "How to sign in",
+  "identity": "Identity",
+  "inGame": "In game",
+  "offline": "Offline",
+  "admin": "Administrator",
+  "server": "Server",
+  "sessionUntil": "Session valid until",
+  "signOut": "Sign out",
+  "pendingVotes": "Pending votes",
+  "pendingVotesHint": "Ongoing elections you have not voted in yet.",
+  "loading": "Loading",
+  "nothingToVote": "Nothing to vote on",
+  "nothingToVoteText": "You are up to date on all ongoing elections.",
+  "electionFallback": "Election {id}",
+  "adminRights": "You have administration rights",
+  "adminRightsText": "The administration area gives access to logs, moderation, the command console and exports. Every sensitive action asks for confirmation.",
+  "openAdmin": "Open administration"
+}

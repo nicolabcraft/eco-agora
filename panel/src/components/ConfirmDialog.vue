@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue';
 import Icon from './Icon.vue';
+import { t } from '@/i18n';
 
 const props = withDefaults(
   defineProps<{
@@ -13,12 +14,13 @@ const props = withDefaults(
     /** Mot à saisir pour débloquer la confirmation (actions irréversibles). */
     requirePhrase?: string;
   }>(),
-  { confirmLabel: 'Confirmer', danger: false },
+  { danger: false },
 );
 
 const emit = defineEmits<{ confirm: []; cancel: [] }>();
 
 const typed = ref('');
+const libelle = computed(() => props.confirmLabel ?? t('confirmDialog.confirmer'));
 const phraseInput = ref<HTMLInputElement | null>(null);
 
 /** Comparaison tolérante : espaces, casse et accents ne doivent pas bloquer. */
@@ -62,7 +64,7 @@ function confirm(): void {
 
         <label v-if="requirePhrase" class="field confirm__phrase">
           <span class="field__label">
-            Confirmation &mdash; recopiez
+            {{ $t('confirmDialog.recopiez') }}
             <code class="confirm__word">{{ requirePhrase }}</code>
           </span>
           <div class="confirm__input">
@@ -84,21 +86,20 @@ function confirm(): void {
             <Icon v-if="matches" name="check" :size="18" class="confirm__ok" />
           </div>
           <span class="u-faint confirm__note">
-            La casse et les accents n’ont pas d’importance. Le bouton s’active dès que le mot
-            correspond.
+            {{ $t('confirmDialog.note') }}
           </span>
         </label>
 
         <div class="modal__actions">
-          <button class="btn btn--ghost btn--sm" @click="emit('cancel')">Annuler</button>
+          <button class="btn btn--ghost btn--sm" @click="emit('cancel')">{{ $t('commun.annuler') }}</button>
           <button
             class="btn btn--sm"
             :class="danger ? 'btn--danger' : 'btn--primary'"
             :disabled="!matches"
-            :title="matches ? confirmLabel : `Recopiez « ${requirePhrase} » pour activer ce bouton`"
+            :title="matches ? libelle : $t('confirmDialog.recopiezAide', { mot: requirePhrase ?? '' })"
             @click="confirm"
           >
-            {{ confirmLabel }}
+            {{ libelle }}
           </button>
         </div>
       </div>

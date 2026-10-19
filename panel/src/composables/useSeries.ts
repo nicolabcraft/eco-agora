@@ -1,6 +1,7 @@
 import { ref, shallowRef, watch, type Ref } from 'vue';
 import { stats } from '@/api/eco';
 import { apiGet } from '@/api/http';
+import { t } from '@/i18n';
 
 /** L API renvoie les abscisses en secondes de jeu. */
 const SECONDS_PER_DAY = 86400;
@@ -74,8 +75,9 @@ export async function loadCatalog(): Promise<StatInfo[]> {
  * les joueurs connectes : le mod les releve, au meme format que /datasets.
  */
 export const SERIE_CONNECTES = 'agora:connectes';
+// `label` est une cle de traduction : ce tableau est lu avant le chargement de la langue.
 const SERIES_MOD: Record<string, { label: string; route: string; step?: boolean }> = {
-  [SERIE_CONNECTES]: { label: 'Citoyens connectés', route: '/api/agora/connectes', step: true },
+  [SERIE_CONNECTES]: { label: 'series.connectes', route: '/api/agora/connectes', step: true },
 };
 
 interface SerieBrute { Times?: number[]; Values?: number[]; Unit?: string }
@@ -92,7 +94,7 @@ async function serieMod(name: string, debut: number, fin: number): Promise<Serie
 }
 
 export function statLabel(name: string): string {
-  if (SERIES_MOD[name]) return SERIES_MOD[name].label;
+  if (SERIES_MOD[name]) return t(SERIES_MOD[name].label);
   const found = catalog.value?.find((s) => s.Name === name);
   return found?.DisplayName ?? name;
 }
@@ -136,7 +138,7 @@ export function useSeriesGroup(
     try {
       await loadCatalog().catch(() => []);
       const bounds = options.window?.value ?? (await loadTimeRange());
-      if (!bounds) throw new Error('Plage temporelle indisponible');
+      if (!bounds) throw new Error(t('series.plageIndisponible'));
       const [start, end] = bounds;
 
       const ecoNames = wanted.filter((n) => !SERIES_MOD[n]);
@@ -164,7 +166,7 @@ export function useSeriesGroup(
         });
       hasData.value = series.value.some((s) => s.values.length > 1);
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Chargement impossible';
+      error.value = err instanceof Error ? err.message : t('series.chargementImpossible');
       series.value = [];
       hasData.value = false;
     } finally {

@@ -56,10 +56,10 @@ function exportCsv(): void {
         <p v-if="hint" class="card__sub">{{ hint }}</p>
       </div>
       <div class="u-row-tight">
-        <button v-if="hasData" class="btn btn--ghost btn--sm" title="Exporter en CSV" @click="exportCsv">
+        <button v-if="hasData" class="btn btn--ghost btn--sm" :title="$t('chartCard.exporterCsv')" @click="exportCsv">
           <Icon name="download" :size="14" />
         </button>
-        <button class="btn btn--ghost btn--sm" title="Recharger" @click="reload()">
+        <button class="btn btn--ghost btn--sm" :title="$t('chartCard.recharger')" @click="reload()">
           <Icon name="refresh" :size="14" />
         </button>
       </div>
@@ -68,14 +68,14 @@ function exportCsv(): void {
     <StateBlock
       v-if="error"
       kind="error"
-      title="Données indisponibles"
+      :title="$t('chartCard.indisponibles')"
       :text="error"
     />
     <StateBlock
       v-else-if="!loading && !hasData"
       kind="empty"
-      title="Pas encore d’historique"
-      text="Le serveur enregistre un point par heure de jeu. Cette courbe se remplira au fil de la partie."
+      :title="$t('chartCard.pasHistorique')"
+      :text="$t('chartCard.pasHistoriqueTexte')"
     />
     <EChart v-else ref="chart" :option="option" :height="height" :loading="loading" />
   </section>

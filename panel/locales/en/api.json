@@ -1,0 +1,10 @@
+{
+  "e401": "Authentication required (HTTP 401)",
+  "e403": "Insufficient rights (HTTP 403)",
+  "e404": "Resource not found (HTTP 404)",
+  "injoignable": "Server unreachable",
+  "erreurHttp": "HTTP error {status}",
+  "pointAbsent": "Endpoint missing on this server",
+  "magasin": "Shop",
+  "inconnu": "(unknown)"
+}

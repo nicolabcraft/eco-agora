@@ -30,42 +30,42 @@ onMounted(async () => {
 
 <template>
   <div class="prof">
-    <SectionTitle :level="1" title="Mon profil" hint="Votre identité de citoyen telle que le serveur la connaît." />
+    <SectionTitle :level="1" :title="$t('profile.title')" :hint="$t('profile.hint')" />
 
     <StateBlock
       v-if="!session.isLoggedIn"
       kind="locked"
-      title="Vous n'êtes pas connecté"
-      text="Ouvrez ce panel depuis le jeu pour voir votre profil, vos votes en attente et, si vous êtes administrateur, l'espace d'administration."
+      :title="$t('profile.notLoggedIn')"
+      :text="$t('profile.notLoggedInText')"
     >
-      <RouterLink to="/connexion" class="btn btn--primary btn--sm">Comment se connecter</RouterLink>
+      <RouterLink to="/connexion" class="btn btn--primary btn--sm">{{ $t('profile.howToSignIn') }}</RouterLink>
     </StateBlock>
 
     <template v-else>
       <div class="prof__grid">
         <section class="card">
-          <div class="card__head"><h3 class="card__title">Identité</h3></div>
+          <div class="card__head"><h3 class="card__title">{{ $t('profile.identity') }}</h3></div>
           <div class="prof__id">
             <div class="prof__avatar">{{ (session.username ?? '?').slice(0, 2).toUpperCase() }}</div>
             <div>
               <div class="prof__name">{{ session.username }}</div>
               <div class="u-row-tight u-wrap prof__badges">
                 <span class="badge" :class="isOnline ? 'badge--success' : ''">
-                  {{ isOnline ? 'En jeu' : 'Hors ligne' }}
+                  {{ isOnline ? $t('profile.inGame') : $t('profile.offline') }}
                 </span>
-                <span v-if="session.isAdmin" class="badge badge--primary">Administrateur</span>
+                <span v-if="session.isAdmin" class="badge badge--primary">{{ $t('profile.admin') }}</span>
               </div>
             </div>
           </div>
           <dl class="kv prof__kv">
-            <dt>Serveur</dt>
+            <dt>{{ $t('profile.server') }}</dt>
             <dd>{{ srv.name }}</dd>
-            <dt>Session valable jusqu'au</dt>
+            <dt>{{ $t('profile.sessionUntil') }}</dt>
             <dd>{{ dateTime(session.expiration) }}</dd>
           </dl>
           <div class="card__foot">
             <button class="btn btn--ghost btn--sm" @click="session.signOut()">
-              <Icon name="close" :size="14" /><span>Se déconnecter</span>
+              <Icon name="close" :size="14" /><span>{{ $t('profile.signOut') }}</span>
             </button>
           </div>
         </section>
@@ -73,26 +73,26 @@ onMounted(async () => {
         <section class="card">
           <div class="card__head">
             <div>
-              <h3 class="card__title">Votes en attente</h3>
-              <p class="card__sub">Élections en cours sur lesquelles vous ne vous êtes pas exprimé.</p>
+              <h3 class="card__title">{{ $t('profile.pendingVotes') }}</h3>
+              <p class="card__sub">{{ $t('profile.pendingVotesHint') }}</p>
             </div>
             <span class="badge" :class="pending.length ? 'badge--warning' : 'badge--success'">
               {{ pending.length }}
             </span>
           </div>
 
-          <StateBlock v-if="loading" kind="loading" title="Chargement" />
+          <StateBlock v-if="loading" kind="loading" :title="$t('profile.loading')" />
           <StateBlock
             v-else-if="pending.length === 0"
             kind="empty"
-            title="Rien à voter"
-            text="Vous êtes à jour sur toutes les élections en cours."
+            :title="$t('profile.nothingToVote')"
+            :text="$t('profile.nothingToVoteText')"
           />
           <ul v-else class="prof__list">
             <li v-for="e in pending" :key="e.Id">
               <RouterLink :to="`/gouvernance/election/${e.Id}`" class="prof__link">
                 <Icon name="landmark" :size="15" />
-                <span class="u-fill u-ellipsis">{{ stripMarkup(e.Name) || 'Élection ' + e.Id }}</span>
+                <span class="u-fill u-ellipsis">{{ stripMarkup(e.Name) || $t('profile.electionFallback', { id: e.Id }) }}</span>
                 <Icon name="chevron" :size="14" />
               </RouterLink>
             </li>
@@ -103,13 +103,12 @@ onMounted(async () => {
       <div v-if="session.isAdmin" class="card card--warm prof__admin">
         <Icon name="shield" :size="18" />
         <div class="u-fill">
-          <strong>Vous disposez des droits d'administration</strong>
+          <strong>{{ $t('profile.adminRights') }}</strong>
           <p class="u-muted">
-            L'espace d'administration donne accès aux journaux, à la modération, à la console de
-            commandes et aux exports. Chaque action sensible demande une confirmation.
+            {{ $t('profile.adminRightsText') }}
           </p>
         </div>
-        <RouterLink to="/admin" class="btn btn--primary btn--sm">Ouvrir l'administration</RouterLink>
+        <RouterLink to="/admin" class="btn btn--primary btn--sm">{{ $t('profile.openAdmin') }}</RouterLink>
       </div>
     </template>
   </div>

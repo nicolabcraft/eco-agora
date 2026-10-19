@@ -15,6 +15,7 @@ import {
 } from '@/api/annonces';
 import { useAnnoncesStore } from '@/stores/annonces';
 import { useToastStore } from '@/stores/toasts';
+import { t } from '@/i18n';
 import { dateTime } from '@/utils/format';
 import {
   chooseFile,
@@ -29,9 +30,9 @@ import {
 const DRAFT_KEY = 'agora.annonces.brouillon';
 
 const LEVELS: Array<{ value: AnnonceLevel; label: string }> = [
-  { value: 'info', label: 'Information' },
-  { value: 'important', label: 'Important' },
-  { value: 'alerte', label: 'Alerte' },
+  { value: 'info', label: t('adminAnnonces.niveaux.info') },
+  { value: 'important', label: t('adminAnnonces.niveaux.important') },
+  { value: 'alerte', label: t('adminAnnonces.niveaux.alerte') },
 ];
 
 const store = useAnnoncesStore();
@@ -64,7 +65,7 @@ const confirmEmpty = ref(false);
  */
 async function publishToServer(force = false): Promise<void> {
   if (!Array.isArray(items.value)) {
-    toasts.fail('Brouillon illisible', 'Rechargez la page avant de publier.');
+    toasts.fail(t('adminAnnonces.toasts.brouillonIllisible'), t('adminAnnonces.toasts.brouillonIllisibleTexte'));
     return;
   }
   if (!force && items.value.length === 0) {
@@ -82,9 +83,9 @@ async function publishToServer(force = false): Promise<void> {
     dirty.value = false;
     try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
     await store.load();
-    toasts.ok('Annonces publiées', 'Enregistrées sur le serveur.');
+    toasts.ok(t('adminAnnonces.toasts.publiees'), t('adminAnnonces.toasts.publieesServeur'));
   } catch (err) {
-    toasts.fail('Publication refusée', err instanceof Error ? err.message : '');
+    toasts.fail(t('adminAnnonces.toasts.publicationRefusee'), err instanceof Error ? err.message : '');
   } finally {
     publishing.value = false;
   }
@@ -100,7 +101,7 @@ async function publishDirect(): Promise<void> {
       if (!target) return;
     }
     if (!(await ensureWritable(target))) {
-      toasts.warn('Autorisation refusée', 'Le navigateur n’a pas accordé l’accès en écriture.');
+      toasts.warn(t('adminAnnonces.toasts.autorisationRefusee'), t('adminAnnonces.toasts.autorisationRefuseeTexte'));
       return;
     }
     await writeToHandle(target, json.value);
@@ -111,9 +112,9 @@ async function publishDirect(): Promise<void> {
     try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
     await store.load();
     publishedAt.value = new Date().toISOString();
-    toasts.ok('Annonces publiées', `Écrites dans ${target.name}`);
+    toasts.ok(t('adminAnnonces.toasts.publiees'), t('adminAnnonces.toasts.publieesFichier', { fichier: target.name }));
   } catch (err) {
-    toasts.fail('Écriture impossible', err instanceof Error ? err.message : '');
+    toasts.fail(t('adminAnnonces.toasts.ecritureImpossible'), err instanceof Error ? err.message : '');
   } finally {
     publishing.value = false;
   }
@@ -125,14 +126,14 @@ async function chooseTarget(): Promise<void> {
   handle.value = target;
   handleName.value = target.name;
   await saveHandle(HANDLE_KEY, target);
-  toasts.ok('Fichier cible enregistré', target.name);
+  toasts.ok(t('adminAnnonces.toasts.cibleEnregistree'), target.name);
 }
 
 async function clearTarget(): Promise<void> {
   handle.value = null;
   handleName.value = null;
   await forgetHandle(HANDLE_KEY);
-  toasts.info('Fichier cible oublié');
+  toasts.info(t('adminAnnonces.toasts.cibleOubliee'));
 }
 
 const json = computed(() =>
@@ -153,7 +154,7 @@ function add(): void {
   items.value = [
     {
       id: newId(),
-      titre: 'Nouvelle annonce',
+      titre: t('adminAnnonces.nouvelleAnnonce'),
       message: '',
       niveau: 'info',
       epinglee: false,
@@ -191,15 +192,15 @@ function download(): void {
   a.download = 'annonces.json';
   a.click();
   URL.revokeObjectURL(a.href);
-  toasts.ok('Fichier annonces.json généré', 'Déposez-le dans WebClient/WebBin du serveur.');
+  toasts.ok(t('adminAnnonces.toasts.genere'), t('adminAnnonces.toasts.genereTexte'));
 }
 
 async function copy(): Promise<void> {
   try {
     await navigator.clipboard.writeText(json.value);
-    toasts.ok('JSON copié dans le presse-papiers');
+    toasts.ok(t('adminAnnonces.toasts.copie'));
   } catch {
-    toasts.fail('Copie impossible', 'Le navigateur a refusé l’accès au presse-papiers.');
+    toasts.fail(t('adminAnnonces.toasts.copieImpossible'), t('adminAnnonces.toasts.copieImpossibleTexte'));
   }
 }
 
@@ -212,11 +213,11 @@ async function reload(): Promise<void> {
     dirty.value = false;
     try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
     await store.load();
-    toasts.ok('Annonces rechargées depuis le serveur');
+    toasts.ok(t('adminAnnonces.toasts.rechargees'));
   } catch {
     items.value = [];
     publishedAt.value = null;
-    toasts.warn('Aucun fichier publié', 'annonces.json est absent du serveur : commencez par en créer un.');
+    toasts.warn(t('adminAnnonces.toasts.aucunFichier'), t('adminAnnonces.toasts.aucunFichierTexte'));
   } finally {
     loading.value = false;
   }
@@ -258,19 +259,19 @@ onMounted(async () => {
   <div class="ann">
     <SectionTitle
       :level="1"
-      title="Annonces du site"
-      hint="Messages affichés en haut de toutes les pages du panel, pour tous les visiteurs."
+      :title="$t('adminAnnonces.titre')"
+      :hint="$t('adminAnnonces.hint')"
     >
       <template #actions>
         <div class="u-row-tight u-wrap">
           <button class="btn btn--ghost btn--sm" @click="reload">
-            <Icon name="refresh" :size="15" /><span>Recharger</span>
+            <Icon name="refresh" :size="15" /><span>{{ $t('adminAnnonces.recharger') }}</span>
           </button>
           <button class="btn btn--ghost btn--sm" @click="copy">
-            <Icon name="copy" :size="15" /><span>Copier le JSON</span>
+            <Icon name="copy" :size="15" /><span>{{ $t('adminAnnonces.copierJson') }}</span>
           </button>
           <button class="btn btn--ghost btn--sm" @click="download">
-            <Icon name="download" :size="15" /><span>Télécharger</span>
+            <Icon name="download" :size="15" /><span>{{ $t('adminAnnonces.telecharger') }}</span>
           </button>
           <button
             v-if="modReady === true"
@@ -280,7 +281,7 @@ onMounted(async () => {
           >
             <span v-if="publishing" class="spinner" />
             <Icon v-else name="save" :size="15" />
-            <span>Publier</span>
+            <span>{{ $t('adminAnnonces.publier') }}</span>
           </button>
           <button
             v-else-if="modReady === false && directSupported"
@@ -290,7 +291,7 @@ onMounted(async () => {
           >
             <span v-if="publishing" class="spinner" />
             <Icon v-else name="save" :size="15" />
-            <span>Publier</span>
+            <span>{{ $t('adminAnnonces.publier') }}</span>
           </button>
         </div>
       </template>
@@ -299,67 +300,67 @@ onMounted(async () => {
     <section class="card card--warm ann__howto">
       <Icon name="info" :size="18" />
       <div class="u-fill">
-        <strong>Comment une annonce devient publique</strong>
+        <strong>{{ $t('adminAnnonces.howto.titre') }}</strong>
         <p v-if="modReady === null" class="u-muted">
-          Vérification de la présence du mod serveur…
+          {{ $t('adminAnnonces.howto.verification') }}
         </p>
         <p v-else-if="modReady" class="u-muted">
-          Le mod serveur Eco Agora est installé : <strong>Publier</strong> enregistre les
-          annonces directement en base côté serveur. Plus aucun fichier à déposer, et elles sont
-          visibles immédiatement par tous les visiteurs.
+          {{ $t('adminAnnonces.howto.modAvant') }} <strong>{{ $t('adminAnnonces.publier') }}</strong>
+          {{ $t('adminAnnonces.howto.modApres') }}
         </p>
         <p v-else-if="modReady === false && directSupported" class="u-muted">
-          Le mod serveur n’est pas installé (ou pas encore chargé). En attendant, les annonces
-          vivent dans <code>WebBinnnonces.json</code> : au premier <strong>Publier</strong>,
-          désignez ce fichier et autorisez l’écriture.
+          {{ $t('adminAnnonces.howto.directAvant') }}
+          <code>WebBin\annonces.json</code>{{ $t('adminAnnonces.howto.directMilieu') }}
+          <strong>{{ $t('adminAnnonces.publier') }}</strong>{{ $t('adminAnnonces.howto.directApres') }}
         </p>
         <p v-else class="u-muted">
-          Ni le mod serveur ni l’écriture directe ne sont disponibles ici : utilisez
-          <strong>Télécharger</strong> puis déposez le fichier dans <code>WebClient\WebBin\</code>.
+          {{ $t('adminAnnonces.howto.aucunAvant') }}
+          <strong>{{ $t('adminAnnonces.telecharger') }}</strong> {{ $t('adminAnnonces.howto.aucunApres') }}
+          <code>WebClient\WebBin\</code>.
         </p>
         <p v-if="modReady === false && handleName" class="u-faint ann__meta">
-          Cible d’écriture : <strong>{{ handleName }}</strong>
-          <button class="ann__link" @click="chooseTarget">changer</button>
-          <button class="ann__link" @click="clearTarget">oublier</button>
+          {{ $t('adminAnnonces.howto.cible') }} <strong>{{ handleName }}</strong>
+          <button class="ann__link" @click="chooseTarget">{{ $t('adminAnnonces.howto.changer') }}</button>
+          <button class="ann__link" @click="clearTarget">{{ $t('adminAnnonces.howto.oublier') }}</button>
         </p>
         <p class="u-faint ann__meta">
-          Fichier actuellement publié :
-          <template v-if="publishedAt">mis à jour le {{ dateTime(Date.parse(publishedAt) / 1000) }}</template>
-          <template v-else>aucun</template>
-          &middot; {{ active }} annonce(s) active(s) sur {{ items.length }}
-          <template v-if="dirty"> &middot; <span class="u-primary">modifications non publiées</span></template>
+          {{ $t('adminAnnonces.howto.publie') }}
+          <template v-if="publishedAt">{{ $t('adminAnnonces.howto.misAJour', { date: dateTime(Date.parse(publishedAt) / 1000) }) }}</template>
+          <template v-else>{{ $t('adminAnnonces.howto.aucun') }}</template>
+          &middot; {{ $t('adminAnnonces.howto.actives', { n: active, total: items.length }, active) }}
+          <template v-if="dirty"> &middot; <span class="u-primary">{{ $t('adminAnnonces.howto.nonPubliees') }}</span></template>
         </p>
       </div>
     </section>
 
     <div class="u-row u-spread u-wrap">
       <button class="btn btn--primary btn--sm" @click="add">
-        <Icon name="add" :size="15" /><span>Nouvelle annonce</span>
+        <Icon name="add" :size="15" /><span>{{ $t('adminAnnonces.nouvelleAnnonce') }}</span>
       </button>
       <span class="u-faint">{{ ANNONCES_PATH }}</span>
     </div>
 
-    <StateBlock v-if="loading" kind="loading" title="Lecture des annonces" />
+    <StateBlock v-if="loading" kind="loading" :title="$t('adminAnnonces.lecture')" />
     <StateBlock
       v-else-if="items.length === 0"
       kind="empty"
-      title="Aucune annonce"
-      text="Créez une annonce, publiez le fichier, et elle apparaîtra en haut de toutes les pages."
+      :title="$t('adminAnnonces.aucune')"
+      :text="$t('adminAnnonces.aucuneTexte')"
     />
 
     <section v-for="(a, i) in items" v-else :key="a.id" class="card ann__item">
       <div class="card__head">
         <div class="u-row-tight u-wrap">
           <span class="badge" :class="isActive(a) ? 'badge--success' : ''">
-            {{ isActive(a) ? 'Active' : 'Hors période' }}
+            {{ isActive(a) ? $t('adminAnnonces.active') : $t('adminAnnonces.horsPeriode') }}
           </span>
-          <span v-if="a.epinglee" class="badge badge--primary">Épinglée</span>
+          <span v-if="a.epinglee" class="badge badge--primary">{{ $t('adminAnnonces.epinglee') }}</span>
         </div>
         <div class="u-row-tight">
-          <button class="btn btn--ghost btn--sm" title="Monter" :disabled="i === 0" @click="move(i, -1)">
+          <button class="btn btn--ghost btn--sm" :title="$t('adminAnnonces.monter')" :disabled="i === 0" @click="move(i, -1)">
             <Icon name="sort" :size="14" />
           </button>
-          <button class="btn btn--danger btn--sm" title="Supprimer" @click="toDelete = a">
+          <button class="btn btn--danger btn--sm" :title="$t('adminAnnonces.supprimer')" @click="toDelete = a">
             <Icon name="delete" :size="14" />
           </button>
         </div>
@@ -367,12 +368,12 @@ onMounted(async () => {
 
       <div class="ann__grid">
         <label class="field ann__span2">
-          <span class="field__label">Titre</span>
+          <span class="field__label">{{ $t('adminAnnonces.champs.titre') }}</span>
           <input v-model="a.titre" class="input" type="text" @input="saveDraft" />
         </label>
 
         <label class="field">
-          <span class="field__label">Niveau</span>
+          <span class="field__label">{{ $t('adminAnnonces.champs.niveau') }}</span>
           <div class="select-wrap">
             <select v-model="a.niveau" class="select" @change="saveDraft">
               <option v-for="l in LEVELS" :key="l.value" :value="l.value">{{ l.label }}</option>
@@ -382,16 +383,16 @@ onMounted(async () => {
 
         <label class="checkbox ann__pin">
           <input v-model="a.epinglee" type="checkbox" @change="saveDraft" />
-          <span>Épingler en haut</span>
+          <span>{{ $t('adminAnnonces.champs.epingler') }}</span>
         </label>
 
         <label class="field ann__span3">
-          <span class="field__label">Message</span>
+          <span class="field__label">{{ $t('adminAnnonces.champs.message') }}</span>
           <textarea v-model="a.message" class="textarea ann__text" rows="3" @input="saveDraft" />
         </label>
 
         <label class="field">
-          <span class="field__label">Début (facultatif)</span>
+          <span class="field__label">{{ $t('adminAnnonces.champs.debut') }}</span>
           <input
             class="input"
             type="datetime-local"
@@ -400,7 +401,7 @@ onMounted(async () => {
           />
         </label>
         <label class="field">
-          <span class="field__label">Fin (facultatif)</span>
+          <span class="field__label">{{ $t('adminAnnonces.champs.fin') }}</span>
           <input
             class="input"
             type="datetime-local"
@@ -409,21 +410,21 @@ onMounted(async () => {
           />
         </label>
         <label class="field">
-          <span class="field__label">Lien (facultatif)</span>
+          <span class="field__label">{{ $t('adminAnnonces.champs.lien') }}</span>
           <input
             class="input"
             type="url"
-            placeholder="https://exemple.fr/..."
+            :placeholder="$t('adminAnnonces.champs.lienPlaceholder')"
             :value="a.lienUrl ?? ''"
             @input="a.lienUrl = ($event.target as HTMLInputElement).value || null; saveDraft()"
           />
         </label>
         <label class="field">
-          <span class="field__label">Texte du lien</span>
+          <span class="field__label">{{ $t('adminAnnonces.champs.texteLien') }}</span>
           <input
             class="input"
             type="text"
-            placeholder="En savoir plus"
+            :placeholder="$t('adminAnnonces.champs.texteLienPlaceholder')"
             :value="a.lienTexte ?? ''"
             @input="a.lienTexte = ($event.target as HTMLInputElement).value || null; saveDraft()"
           />
@@ -433,22 +434,22 @@ onMounted(async () => {
 
     <ConfirmDialog
       :open="confirmEmpty"
-      title="Publier une liste vide"
-      text="Toutes les annonces actuellement publiées seront retirées du site."
-      detail="0 annonce publiée"
-      confirm-label="Tout retirer"
+      :title="$t('adminAnnonces.vide.titre')"
+      :text="$t('adminAnnonces.vide.texte')"
+      :detail="$t('adminAnnonces.vide.detail')"
+      :confirm-label="$t('adminAnnonces.vide.confirmer')"
       danger
-      require-phrase="vider"
+      :require-phrase="$t('adminAnnonces.vide.phrase')"
       @confirm="confirmEmpty = false; publishToServer(true)"
       @cancel="confirmEmpty = false"
     />
 
     <ConfirmDialog
       :open="toDelete !== null"
-      title="Supprimer cette annonce"
-      text="Elle disparaîtra du site à la prochaine publication du fichier."
+      :title="$t('adminAnnonces.suppression.titre')"
+      :text="$t('adminAnnonces.suppression.texte')"
       :detail="toDelete?.titre ?? ''"
-      confirm-label="Supprimer"
+      :confirm-label="$t('adminAnnonces.suppression.confirmer')"
       danger
       @confirm="remove"
       @cancel="toDelete = null"

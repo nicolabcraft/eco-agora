@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { apiGet, apiPut } from '@/api/http';
 import { agoraServer } from '@/api/agoraServer';
-import { SITE_DEFAUT, cloner, couleurRgb, fusionner, lienSur, type SiteConfig } from '@/site/schema';
+import { siteDefaut, cloner, couleurRgb, fusionner, lienSur, type SiteConfig } from '@/site/schema';
 
 /** Route du mod Eco Agora qui garde la personnalisation. */
 export const SITE_API = '/api/agora/site';
@@ -22,7 +22,7 @@ interface SiteApi {
  */
 export const useSiteStore = defineStore('site', {
   state: () => ({
-    config: cloner(SITE_DEFAUT) as SiteConfig,
+    config: siteDefaut(),
     /** Vrai quand le mod repond (la personnalisation est alors modifiable). */
     modDisponible: false,
     miseAJour: null as string | null,
@@ -76,7 +76,7 @@ export const useSiteStore = defineStore('site', {
       ]);
       if (site.status === 'fulfilled' && site.value && 'config' in site.value) {
         this.modDisponible = true;
-        this.config = fusionner(SITE_DEFAUT, site.value.config);
+        this.config = fusionner(siteDefaut(), site.value.config);
         this.miseAJour = site.value.miseAJour;
         this.erreur = site.value.erreur ?? null;
       }
@@ -90,7 +90,7 @@ export const useSiteStore = defineStore('site', {
     /** Enregistre la personnalisation (administrateurs). */
     async enregistrer(config: SiteConfig): Promise<void> {
       const r = await apiPut<SiteApi>(SITE_API, config);
-      this.config = fusionner(SITE_DEFAUT, r.config);
+      this.config = fusionner(siteDefaut(), r.config);
       this.miseAJour = r.miseAJour;
       this.erreur = null;
       this.appliquer();

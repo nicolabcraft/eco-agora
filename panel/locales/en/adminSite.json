@@ -1,0 +1,104 @@
+{
+  "titre": "Customisation",
+  "hint": "Name, colours, links, rules and opening curtain: everything that makes this panel your server’s own.",
+  "importer": "Import",
+  "exporter": "Export",
+  "modAbsentTitre": "Eco Agora mod missing",
+  "modAbsentTexte": "Customisation is saved by the Eco Agora server mod (Mods/EcoAgora/). Install it and restart the server: in the meantime, the panel uses its default values.",
+  "erreurSite": "⚠️ {erreur} — default values are shown.",
+  "erreurs": {
+    "couleur": "The colour must be in #rrggbb format.",
+    "port": "The port must be a number between 0 and 65535.",
+    "date": "The opening curtain is enabled but its date is empty."
+  },
+  "toasts": {
+    "enregistre": "Customisation saved",
+    "enregistreTexte": "Visible to all visitors on their next page load.",
+    "refuse": "Save rejected",
+    "charge": "File loaded",
+    "chargeTexte": "Review it, then save to publish.",
+    "illisible": "Unreadable file",
+    "illisibleTexte": "A site.json file exported from this page is expected."
+  },
+  "confirmQuitter": "Some changes have not been saved. Leave anyway?",
+  "identite": {
+    "titre": "Identity",
+    "nom": "Community name",
+    "nomPlaceholder": "Eco server name",
+    "nomAide": "Empty: the Eco server name.",
+    "couleur": "Accent colour",
+    "couleurDefaut": "Default colour",
+    "langue": "Default language",
+    "langueAide": "Each visitor can change it. Texts: WebClient/WebBin/lang/.",
+    "baseline": "Welcome line",
+    "baselinePlaceholder": "Shown when the server has no description.",
+    "logo": "Logo",
+    "logoPlaceholder": "https://… or /brand/my-logo.png",
+    "logoAide": "Square image. Empty: Eco Agora logo. A file placed in WebClient/WebBin/ is referenced as /file-name.png."
+  },
+  "jeu": {
+    "titre": "“Join the server” button",
+    "hote": "Game address",
+    "hoteAide": "IP or domain name. Empty: this site’s address.",
+    "port": "Game port",
+    "portAide": "0: the server’s own port.",
+    "portAideConnu": "0: the server’s own port ({port}).",
+    "secours": "Second address (optional)",
+    "secoursPlaceholder": "game.example.com",
+    "secoursAide": "Offered when hovering over the button, for example a domain name in addition to the IP."
+  },
+  "liens": {
+    "titre": "Links",
+    "site": "Community website",
+    "sitePlaceholder": "https://example.com",
+    "libelle": "Link text",
+    "libellePlaceholder": "example.com",
+    "hebergeur": "Hosting credit",
+    "hebergeurPlaceholder": "Hosted by …",
+    "hebergeurUrl": "Host link",
+    "noteDiscord": "The Discord link comes from the Eco server configuration (Administration › Configuration)."
+  },
+  "guides": {
+    "titre": "Guides",
+    "langueWiki": "Wiki language",
+    "afficherEcoGnome": "Show the Eco Gnome page",
+    "codeEcoGnome": "Eco Gnome participation code"
+  },
+  "reglement": {
+    "titre": "Rules",
+    "publier": "Publish the Rules page",
+    "champTitre": "Title",
+    "signature": "Signature",
+    "intro": "Introduction",
+    "emoji": "Emoji",
+    "titreSection": "Section title",
+    "monter": "Move up",
+    "descendre": "Move down",
+    "supprimerSection": "Delete section",
+    "introSection": "Section introduction",
+    "regles": "Rules — one per line",
+    "alerte": "Warning (optional)",
+    "finale": "Final section: full width, with the meteor countdown",
+    "fin": "Closing lines — one per line",
+    "ajouterSection": "Add a section",
+    "reglesExemple": "Restore the example rules"
+  },
+  "ouverture": {
+    "titre": "Opening curtain",
+    "activer": "Enable the curtain",
+    "note": "Before the date, the whole panel is hidden behind a countdown. On the day, an animation opens it, and the curtain never comes back. To actually block access to the game, use the mod’s waiting room (Configs/EcoAgora.eco) or the server password.",
+    "date": "Opening date and time",
+    "dateAide": "Your browser’s time, saved with its time zone.",
+    "motDePasse": "Tester password (optional)",
+    "motDePasseAide": "Not a security measure: anyone can read it in the page.",
+    "champTitre": "Title",
+    "sousTitre": "Subtitle",
+    "sousTitrePlaceholder": "The server opens on Saturday at 8 pm."
+  },
+  "barre": {
+    "nonEnregistre": "Unsaved changes.",
+    "annuler": "Cancel",
+    "enregistrement": "Saving…",
+    "enregistrer": "Save"
+  }
+}

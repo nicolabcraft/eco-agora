@@ -1,0 +1,7 @@
+{
+  "exporterCsv": "Export as CSV",
+  "recharger": "Reload",
+  "indisponibles": "Data unavailable",
+  "pasHistorique": "No history yet",
+  "pasHistoriqueTexte": "The server records one point per game hour. This chart will fill up as the game goes on."
+}

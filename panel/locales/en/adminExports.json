@@ -1,0 +1,48 @@
+{
+  "titre": "Data exports",
+  "hint": "Browse the exportable datasets and trigger exports on the server.",
+  "push": {
+    "all": "Export everything",
+    "allAide": "Actions, chat, environment and species",
+    "chat": "Chat",
+    "chatAide": "Full chat history",
+    "actions": "Actions",
+    "actionsAide": "Player action log",
+    "env": "Environment",
+    "envAide": "Environmental series",
+    "species": "Species",
+    "speciesAide": "Populations by species",
+    "game": "Game save (S3)",
+    "gameAide": "Requires an S3 URI configured on the server"
+  },
+  "listeIndisponible": "List unavailable",
+  "toasts": {
+    "illisible": "Unreadable export",
+    "lance": "Export started",
+    "refuse": "Export rejected"
+  },
+  "lancer": "Start an export",
+  "lancerSub": "The server writes the files to its own folder; the panel only triggers the operation.",
+  "chargement": "Loading datasets",
+  "actions": "Actions",
+  "aucuneAction": "No actions listed",
+  "especes": "Species",
+  "aucuneEspece": "No species listed",
+  "environnement": "Environment",
+  "aucuneCategorie": "No categories listed",
+  "prefixes": {
+    "action": "action",
+    "espece": "species",
+    "environnement": "environment"
+  },
+  "apercu": "Preview · {titre}",
+  "reponseBrute": "Raw server response.",
+  "json": "JSON",
+  "fermer": "Close",
+  "recuperation": "Fetching",
+  "vide": "Empty response",
+  "confirmation": {
+    "texte": "The export is performed by the game server and may use its resources for a few moments.",
+    "confirmer": "Start the export"
+  }
+}

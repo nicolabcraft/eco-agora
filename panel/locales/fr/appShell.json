@@ -1,0 +1,53 @@
+{
+  "panelEco": "Panel Eco",
+  "nav": {
+    "tableauDeBord": "Tableau de bord",
+    "carte": "Carte du monde",
+    "statistiques": "Statistiques",
+    "ecologie": "Écologie et climat",
+    "marche": "Marché",
+    "economie": "Économie",
+    "gouvernance": "Gouvernance",
+    "reglement": "Règlement",
+    "wiki": "Wiki",
+    "sante": "Santé du serveur",
+    "joueurs": "Joueurs et modération",
+    "console": "Console",
+    "chat": "Chat",
+    "annonces": "Annonces du site",
+    "journal": "Journal d’activité",
+    "journaux": "Journaux techniques",
+    "exports": "Exports",
+    "personnalisation": "Personnalisation",
+    "configuration": "Configuration"
+  },
+  "groupe": {
+    "citoyen": "Espace citoyen",
+    "guides": "Guides",
+    "administration": "Administration",
+    "communaute": "Communauté"
+  },
+  "admin": "Admin",
+  "interfaceOrigine": "Interface d’origine d’Eco",
+  "rejoindre": "Rejoindre le serveur",
+  "acces": {
+    "public": "Public",
+    "publicAide": "Le serveur est listé publiquement dans le navigateur de serveurs d’Eco.",
+    "prive": "Privé",
+    "priveAide": "Accès restreint : le serveur n’accepte que les joueurs autorisés.",
+    "masque": "Masqué",
+    "masqueAide": "Le serveur est accessible mais n’apparaît pas dans le navigateur de serveurs d’Eco."
+  },
+  "pied": {
+    "serveur": "Serveur",
+    "enLigne": "En ligne",
+    "injoignable": "Injoignable",
+    "visibilite": "Visibilité",
+    "version": "Version"
+  },
+  "menu": "Menu",
+  "enLigne": "en ligne",
+  "jour": "Jour",
+  "seConnecter": "Se connecter",
+  "fermerMenu": "Fermer le menu"
+}

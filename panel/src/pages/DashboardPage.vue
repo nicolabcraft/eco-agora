@@ -11,6 +11,7 @@ import { compact, num, stripMarkup } from '@/utils/format';
 import { useSiteStore } from '@/stores/site';
 import MeteorCountdown from '@/components/MeteorCountdown.vue';
 import { SERIE_CONNECTES } from '@/composables/useSeries';
+import { t } from '@/i18n';
 
 const srv = useServerStore();
 const toasts = useToastStore();
@@ -25,8 +26,8 @@ function copyJoin(): void {
   const url = site.adresseJeu();
   void navigator.clipboard
     .writeText(url)
-    .then(() => toasts.ok('Adresse copiée', url))
-    .catch(() => toasts.fail('Copie impossible', 'Le navigateur a refusé l’accès au presse-papiers.'));
+    .then(() => toasts.ok(t('dashboard.addressCopied'), url))
+    .catch(() => toasts.fail(t('dashboard.copyFailed'), t('dashboard.clipboardRefused')));
 }
 </script>
 
@@ -48,27 +49,27 @@ function copyJoin(): void {
             class="btn btn--discord btn--sm"
           >
             <Icon name="discord" :size="15" />
-            <span>Rejoindre le Discord</span>
+            <span>{{ $t('dashboard.joinDiscord') }}</span>
           </a>
           <a
             v-if="site.rejoindrePossible"
             :href="LIEN_JEU"
             class="btn btn--primary btn--sm"
-            :title="LIEN_JEU_SECOURS ? `Ouvre Eco sur ${LIEN_JEU}. Autre adresse : ${LIEN_JEU_SECOURS}` : `Ouvre Eco sur ${LIEN_JEU}`"
+            :title="LIEN_JEU_SECOURS ? $t('dashboard.openEcoBackup', { lien: LIEN_JEU, secours: LIEN_JEU_SECOURS }) : $t('dashboard.openEco', { lien: LIEN_JEU })"
           >
             <Icon name="play" :size="15" />
-            <span>Rejoindre le serveur</span>
+            <span>{{ $t('dashboard.joinServer') }}</span>
           </a>
-          <button v-if="site.rejoindrePossible" class="btn btn--ghost btn--sm" :title="`Copier ${site.adresseJeu()} pour la connexion directe`" @click="copyJoin">
+          <button v-if="site.rejoindrePossible" class="btn btn--ghost btn--sm" :title="$t('dashboard.copyAddressTitle', { adresse: site.adresseJeu() })" @click="copyJoin">
             <Icon name="copy" :size="15" />
-            <span>Copier l’adresse</span>
+            <span>{{ $t('dashboard.copyAddress') }}</span>
           </button>
         </div>
       </template>
     </SectionTitle>
 
-    <StateBlock v-if="srv.error && !info" kind="error" title="Serveur injoignable" :text="srv.error">
-      <button class="btn btn--primary btn--sm" @click="srv.refresh()">Réessayer</button>
+    <StateBlock v-if="srv.error && !info" kind="error" :title="$t('dashboard.unreachable')" :text="srv.error">
+      <button class="btn btn--primary btn--sm" @click="srv.refresh()">{{ $t('dashboard.retry') }}</button>
     </StateBlock>
 
     <template v-else>
@@ -77,33 +78,33 @@ function copyJoin(): void {
 
       <div class="grid-tiles">
         <StatTile
-          label="Joueurs en ligne"
+          :label="$t('dashboard.tiles.onlinePlayers')"
           :value="num(info?.OnlinePlayers ?? 0)"
-          :suffix="'/ ' + num(info?.TotalPlayers ?? 0) + ' inscrits'"
+          :suffix="$t('dashboard.tiles.registered', { n: num(info?.TotalPlayers ?? 0) })"
           :tone="(info?.OnlinePlayers ?? 0) > 0 ? 'success' : 'muted'"
-          :hint="info?.AdminOnline ? 'Un administrateur est connecté' : undefined"
+          :hint="info?.AdminOnline ? $t('dashboard.tiles.adminOnline') : undefined"
         />
         <StatTile
-          label="Jours écoulés"
+          :label="$t('dashboard.tiles.daysElapsed')"
           :value="num(info?.DaysRunning ?? 0)"
-          :hint="info?.IsPaused ? 'Simulation en pause' : undefined"
+          :hint="info?.IsPaused ? $t('dashboard.tiles.paused') : undefined"
         />
-        <StatTile label="Plantes" :value="compact(info?.Plants ?? 0)" tone="success" />
-        <StatTile label="Animaux" :value="compact(info?.Animals ?? 0)" tone="info" />
-        <StatTile label="Lois actives" :value="num(info?.Laws ?? 0)" tone="warning" />
-        <StatTile label="Culture totale" :value="compact(info?.TotalCulture ?? 0)" tone="muted" />
+        <StatTile :label="$t('dashboard.tiles.plants')" :value="compact(info?.Plants ?? 0)" tone="success" />
+        <StatTile :label="$t('dashboard.tiles.animals')" :value="compact(info?.Animals ?? 0)" tone="info" />
+        <StatTile :label="$t('dashboard.tiles.activeLaws')" :value="num(info?.Laws ?? 0)" tone="warning" />
+        <StatTile :label="$t('dashboard.tiles.totalCulture')" :value="compact(info?.TotalCulture ?? 0)" tone="muted" />
       </div>
 
       <div class="dash__split">
         <ChartCard
-          title="Population citoyenne"
-          hint="Citoyens totaux, actifs et connectés"
+          :title="$t('dashboard.charts.population')"
+          :hint="$t('dashboard.charts.populationHint')"
           :names="['CitizenPopulation', 'ActiveCitizenPopulation', SERIE_CONNECTES]"
           height="240px"
         />
         <ChartCard
-          title="Climat"
-          hint="CO2 atmosphérique et température moyenne"
+          :title="$t('dashboard.charts.climate')"
+          :hint="$t('dashboard.charts.climateHint')"
           :names="['TotalCO2', 'AverageGlobalTemperature']"
           height="240px"
         />
@@ -111,14 +112,14 @@ function copyJoin(): void {
 
       <div class="dash__split">
         <ChartCard
-          title="Écosystème"
-          hint="Plantes, arbres et animaux du monde"
+          :title="$t('dashboard.charts.ecosystem')"
+          :hint="$t('dashboard.charts.ecosystemHint')"
           :names="['PlantPopulation', 'TreePopulation', 'AnimalPopulation']"
           height="240px"
         />
         <ChartCard
-          title="Économie"
-          hint="Richesse des citoyens et trésor public"
+          :title="$t('dashboard.charts.economy')"
+          :hint="$t('dashboard.charts.economyHint')"
           :names="['PersonalWealthInDefaultCurrency', 'GovernmentHoldingsInDefaultCurrency']"
           height="240px"
         />
@@ -127,7 +128,7 @@ function copyJoin(): void {
       <div class="dash__split dash__split--aside">
         <section class="card">
           <div class="card__head">
-            <h3 class="card__title">Citoyens connectés</h3>
+            <h3 class="card__title">{{ $t('dashboard.connectedCitizens') }}</h3>
             <span class="badge badge--primary">{{ num(info?.OnlinePlayers ?? 0) }}</span>
           </div>
           <ul v-if="(info?.OnlinePlayersNames?.length ?? 0) > 0" class="dash__players">
@@ -139,31 +140,31 @@ function copyJoin(): void {
           <StateBlock
             v-else
             kind="empty"
-            title="Personne en ligne"
-            text="Les citoyens connectés apparaîtront ici en temps réel."
+            :title="$t('dashboard.nobodyOnline')"
+            :text="$t('dashboard.nobodyOnlineText')"
           />
         </section>
 
         <section class="card">
           <div class="card__head">
-            <h3 class="card__title">État du monde</h3>
+            <h3 class="card__title">{{ $t('dashboard.world.title') }}</h3>
           </div>
           <dl class="kv">
-            <dt>Version du serveur</dt>
+            <dt>{{ $t('dashboard.world.version') }}</dt>
             <dd>{{ info?.Version ?? '--' }}</dd>
-            <dt>Catégorie</dt>
+            <dt>{{ $t('dashboard.world.category') }}</dt>
             <dd>{{ info?.Category ?? '--' }}</dd>
-            <dt>Collaboration</dt>
+            <dt>{{ $t('dashboard.world.collaboration') }}</dt>
             <dd>{{ info?.CollaborationLevel ?? '--' }}</dd>
-            <dt>Simulation</dt>
+            <dt>{{ $t('dashboard.world.simulation') }}</dt>
             <dd>{{ info?.SimulationLevel ?? '--' }}</dd>
-            <dt>Pic de joueurs actifs</dt>
+            <dt>{{ $t('dashboard.world.peakPlayers') }}</dt>
             <dd>{{ num(info?.PeakActivePlayers ?? 0) }}</dd>
-            <dt>Économie</dt>
+            <dt>{{ $t('dashboard.world.economy') }}</dt>
             <dd>{{ info?.EconomyDesc ?? '--' }}</dd>
-            <dt>Épuisement</dt>
-            <dd>{{ info?.ExhaustionActive ? num(info?.ExhaustionAfterHours ?? 0) + ' h' : 'Désactivé' }}</dd>
-            <dt>Durée de vie des aliments</dt>
+            <dt>{{ $t('dashboard.world.exhaustion') }}</dt>
+            <dd>{{ info?.ExhaustionActive ? $t('dashboard.world.hours', { n: num(info?.ExhaustionAfterHours ?? 0) }) : $t('dashboard.world.disabled') }}</dd>
+            <dt>{{ $t('dashboard.world.shelfLife') }}</dt>
             <dd>x{{ num(info?.ShelfLifeMultiplier ?? 1, 1) }}</dd>
           </dl>
         </section>

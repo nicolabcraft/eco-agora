@@ -1,0 +1,43 @@
+{
+  "title": "Economy",
+  "hint": "Currencies, wealth, debt and trade in the world.",
+  "stores": "Stores",
+  "contracts": "Contracts",
+  "unlimited": "unlimited",
+  "unlimitedHolders": "+{n} unlim.",
+  "realHoldings": "Real account holdings",
+  "realHoldingsHint": "Recorded by the mod, all currencies combined. Last reading: {date}.",
+  "totalHoldings": "Total holdings",
+  "treasury": "Public treasury",
+  "citizenHoldings": "Citizen holdings",
+  "accounts": "Accounts",
+  "currencies": "Currencies",
+  "hidePersonal": "Hide personal currencies",
+  "hiddenCount": "{n} personal currency(ies) hidden",
+  "cols": {
+    "currency": "Currency",
+    "holders": "Holders"
+  },
+  "noBacked": "No backed currency",
+  "noBackedText": "All of the server’s currencies are personal. Untick the filter to show them.",
+  "history": "Holdings over time",
+  "historyHint": "Hourly readings over fourteen days.",
+  "modUnavailable": "Economic readings unavailable",
+  "modUnavailableText": "The Eco Agora mod provides real account holdings. It is only loaded when the server starts: restart it to enable these readings.",
+  "charts": {
+    "wealth": "Wealth and public treasury",
+    "wealthHint": "Citizens’ wealth compared with government holdings",
+    "gdp": "Gross domestic product",
+    "gdpHint": "Wealth produced by the world",
+    "debt": "Debt",
+    "debtHint": "Total debt and average debt per active citizen",
+    "trades": "Trade",
+    "tradesHint": "Volume traded over seven days and taxed transactions",
+    "currencies": "Currencies in circulation",
+    "currenciesHint": "Number of active currencies",
+    "activity": "Commercial activity",
+    "activityHint": "Currency trade, barter and minting",
+    "contracts": "Contracts",
+    "contractsHint": "Contracts posted, joined, completed and failed"
+  }
+}

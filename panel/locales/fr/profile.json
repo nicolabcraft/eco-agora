@@ -1,0 +1,23 @@
+{
+  "title": "Mon profil",
+  "hint": "Votre identité de citoyen telle que le serveur la connaît.",
+  "notLoggedIn": "Vous n'êtes pas connecté",
+  "notLoggedInText": "Ouvrez ce panel depuis le jeu pour voir votre profil, vos votes en attente et, si vous êtes administrateur, l'espace d'administration.",
+  "howToSignIn": "Comment se connecter",
+  "identity": "Identité",
+  "inGame": "En jeu",
+  "offline": "Hors ligne",
+  "admin": "Administrateur",
+  "server": "Serveur",
+  "sessionUntil": "Session valable jusqu'au",
+  "signOut": "Se déconnecter",
+  "pendingVotes": "Votes en attente",
+  "pendingVotesHint": "Élections en cours sur lesquelles vous ne vous êtes pas exprimé.",
+  "loading": "Chargement",
+  "nothingToVote": "Rien à voter",
+  "nothingToVoteText": "Vous êtes à jour sur toutes les élections en cours.",
+  "electionFallback": "Élection {id}",
+  "adminRights": "Vous disposez des droits d'administration",
+  "adminRightsText": "L'espace d'administration donne accès aux journaux, à la modération, à la console de commandes et aux exports. Chaque action sensible demande une confirmation.",
+  "openAdmin": "Ouvrir l'administration"
+}

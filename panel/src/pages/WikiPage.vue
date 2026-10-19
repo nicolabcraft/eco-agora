@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import SectionTitle from '@/components/SectionTitle.vue';
 import Icon from '@/components/Icon.vue';
 import { useSiteStore } from '@/stores/site';
+import { t } from '@/i18n';
 
 /**
  * Acces au wiki officiel, dans la langue choisie dans la personnalisation.
@@ -24,53 +25,53 @@ interface Groupe { titre: string; icone: string; liens: Lien[] }
 
 const GROUPES: Groupe[] = [
   {
-    titre: 'Bien débuter',
+    titre: t('wiki.groups.start'),
     icone: 'play',
     liens: [
-      { titre: 'Premiers pas', page: 'Premiers_Pas', aide: 'Le guide pour vos premières heures' },
-      { titre: 'Foire aux questions', page: 'Foire_aux_questions' },
-      { titre: 'Commandes de chat', page: 'Commandes_de_chat', aide: 'Toutes les commandes /…' },
-      { titre: 'Serveur', page: 'Serveur' },
+      { titre: t('wiki.links.firstSteps'), page: 'Premiers_Pas', aide: t('wiki.links.firstStepsHelp') },
+      { titre: t('wiki.links.faq'), page: 'Foire_aux_questions' },
+      { titre: t('wiki.links.chatCommands'), page: 'Commandes_de_chat', aide: t('wiki.links.chatCommandsHelp') },
+      { titre: t('wiki.links.server'), page: 'Serveur' },
     ],
   },
   {
-    titre: 'Métiers et compétences',
+    titre: t('wiki.groups.skills'),
     icone: 'user',
     liens: [
-      { titre: 'Compétences', page: 'Compétences', aide: 'Comment les spécialités fonctionnent' },
-      { titre: 'Artisanat', page: 'Artisanat' },
-      { titre: 'Agriculteur', page: 'Agriculteur' },
-      { titre: 'Chasseur', page: 'Chasseur' },
-      { titre: 'Cuisinier', page: 'Cuisinier' },
-      { titre: 'Forgeron', page: 'Forgeron' },
-      { titre: 'Ingénieur', page: 'Ingénieur' },
-      { titre: 'Maçon', page: 'Maçon' },
-      { titre: 'Menuisier', page: 'Menuisier' },
-      { titre: 'Scientifique', page: 'Scientifique' },
-      { titre: 'Survivaliste', page: 'Survivaliste' },
-      { titre: 'Tailleur', page: 'Tailleur' },
-      { titre: 'Minage', page: 'Minage' },
+      { titre: t('wiki.links.skills'), page: 'Compétences', aide: t('wiki.links.skillsHelp') },
+      { titre: t('wiki.links.crafting'), page: 'Artisanat' },
+      { titre: t('wiki.links.farmer'), page: 'Agriculteur' },
+      { titre: t('wiki.links.hunter'), page: 'Chasseur' },
+      { titre: t('wiki.links.cook'), page: 'Cuisinier' },
+      { titre: t('wiki.links.smith'), page: 'Forgeron' },
+      { titre: t('wiki.links.engineer'), page: 'Ingénieur' },
+      { titre: t('wiki.links.mason'), page: 'Maçon' },
+      { titre: t('wiki.links.carpenter'), page: 'Menuisier' },
+      { titre: t('wiki.links.scientist'), page: 'Scientifique' },
+      { titre: t('wiki.links.survivalist'), page: 'Survivaliste' },
+      { titre: t('wiki.links.tailor'), page: 'Tailleur' },
+      { titre: t('wiki.links.mining'), page: 'Minage' },
     ],
   },
   {
-    titre: 'Vivre ensemble',
+    titre: t('wiki.groups.together'),
     icone: 'landmark',
     liens: [
-      { titre: 'Gouvernement', page: 'Gouvernement', aide: 'Élections, titres, fonctionnement' },
-      { titre: 'Lois', page: 'Lois' },
-      { titre: 'Économie', page: 'Économie' },
-      { titre: 'Marché', page: 'Marché' },
-      { titre: 'Colonies', page: 'Colonies' },
+      { titre: t('wiki.links.government'), page: 'Gouvernement', aide: t('wiki.links.governmentHelp') },
+      { titre: t('wiki.links.laws'), page: 'Lois' },
+      { titre: t('wiki.links.economy'), page: 'Économie' },
+      { titre: t('wiki.links.market'), page: 'Marché' },
+      { titre: t('wiki.links.colonies'), page: 'Colonies' },
     ],
   },
   {
-    titre: 'La planète',
+    titre: t('wiki.groups.planet'),
     icone: 'leaf',
     liens: [
-      { titre: 'Pollution', page: 'Pollution' },
-      { titre: 'Agriculture', page: 'Agriculture' },
-      { titre: 'Nourriture', page: 'Nourriture' },
-      { titre: 'Laser', page: 'Laser', aide: 'L’arme contre l’astéroïde' },
+      { titre: t('wiki.links.pollution'), page: 'Pollution' },
+      { titre: t('wiki.links.agriculture'), page: 'Agriculture' },
+      { titre: t('wiki.links.food'), page: 'Nourriture' },
+      { titre: t('wiki.links.laser'), page: 'Laser', aide: t('wiki.links.laserHelp') },
     ],
   },
 ];
@@ -95,12 +96,12 @@ function chercher(): void {
   <div class="wiki">
     <SectionTitle
       :level="1"
-      title="Wiki"
-      hint="Le wiki officiel d’Eco, en français : recettes, métiers, lois et mécaniques du jeu."
+      :title="$t('wiki.title')"
+      :hint="$t('wiki.hint')"
     >
       <template #actions>
         <a :href="ACCUEIL" target="_blank" rel="noopener" class="btn btn--primary btn--sm">
-          <Icon name="book" :size="15" /><span>Ouvrir le wiki</span>
+          <Icon name="book" :size="15" /><span>{{ $t('wiki.open') }}</span>
         </a>
       </template>
     </SectionTitle>
@@ -111,10 +112,10 @@ function chercher(): void {
         v-model="recherche"
         class="input"
         type="search"
-        placeholder="Rechercher dans le wiki : fer, laser, école…"
-        aria-label="Rechercher dans le wiki"
+        :placeholder="$t('wiki.searchPlaceholder')"
+        :aria-label="$t('wiki.searchLabel')"
       />
-      <button class="btn btn--primary" type="submit">Rechercher</button>
+      <button class="btn btn--primary" type="submit">{{ $t('wiki.search') }}</button>
     </form>
 
     <div class="wiki__grille">
@@ -135,8 +136,7 @@ function chercher(): void {
     </div>
 
     <p class="wiki__note u-faint">
-      Le wiki s’ouvre dans un nouvel onglet : il n’autorise pas son affichage à l’intérieur d’un
-      autre site. Il est rédigé par la communauté et peut avoir une version de retard sur le jeu.
+      {{ $t('wiki.note') }}
     </p>
   </div>
 </template>

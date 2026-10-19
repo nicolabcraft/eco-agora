@@ -1,0 +1,53 @@
+{
+  "hint": "L’outil pour calculer vos prix en jeu. Pratique pour fixer des prix justes et rentables.",
+  "open": "Ouvrir Eco Gnome",
+  "copied": "{libelle} copié",
+  "copyFailed": "Copie impossible",
+  "clipboardRefused": "Le navigateur a refusé l’accès au presse-papiers.",
+  "codeLabel": "Code de participation du serveur",
+  "code": "Code",
+  "copyCode": "Copier le code",
+  "setupTitle": "Configurer Eco Gnome en 4 étapes",
+  "commandStart": "Début de commande",
+  "copy": "Copier",
+  "replace1": "Remplacez",
+  "replace2": "par votre identifiant, sans les accolades.",
+  "steps": {
+    "account": "Créez votre compte",
+    "accountText": "Rendez-vous sur Eco Gnome et connectez-vous.",
+    "join": "Rejoignez le serveur",
+    "joinText": "Sur Eco Gnome, rejoignez notre serveur avec le code de participation ci-dessus.",
+    "link": "Liez votre compte en jeu",
+    "linkText": "Récupérez votre secretid : cliquez sur votre pseudo, en haut à droite sur Eco Gnome. Puis tapez la commande ci-dessous dans le chat du jeu.",
+    "backup": "Sauvegardez votre compte",
+    "backupText": "Téléchargez une sauvegarde de votre compte avec le bouton de téléchargement (bleu). Sans elle, vos prix peuvent être perdus."
+  },
+  "usefulCommands": "Commandes utiles en jeu",
+  "commands": {
+    "join": "Ouvre Eco Gnome et rejoint directement ce serveur.",
+    "open": "Ouvre Eco Gnome dans votre navigateur.",
+    "syncRoom": "Met à jour les prix des objets en vente dans la pièce où vous êtes.",
+    "syncDeed": "Même chose, sur toute la propriété où vous vous trouvez."
+  },
+  "shopTab1": "Sur vos boutiques, un onglet",
+  "shopTab2": "permet aussi de synchroniser prix et offres. Raccourci :",
+  "shortcut": "Maj + clic droit",
+  "shopTab3": "sur une boutique pour mettre ses prix à jour.",
+  "admin": {
+    "title": "Côté serveur (administrateurs)",
+    "intro1": "Les commandes",
+    "intro2": "… n’existent que si le",
+    "modName": "mod serveur Eco Gnome",
+    "intro3": "est installé. Sans lui, les joueurs obtiendront une commande inconnue.",
+    "install1": "Déposer",
+    "install2": "et",
+    "install3": "(page des versions du mod) dans",
+    "install4": ", puis redémarrer le serveur.",
+    "register": "Une seule fois, en jeu :",
+    "registerEnd": ".",
+    "config1": "La configuration est dans",
+    "config2": " ; les valeurs par défaut conviennent.",
+    "storeObjectNote": "remplace la définition des boutiques du jeu : pensez à le mettre à jour à chaque nouvelle version d’Eco.",
+    "releases": "Versions du mod"
+  }
+}

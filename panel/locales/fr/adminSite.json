@@ -1,0 +1,104 @@
+{
+  "titre": "Personnalisation",
+  "hint": "Nom, couleurs, liens, règlement et rideau d’ouverture : tout ce qui rend ce panel propre à votre serveur.",
+  "importer": "Importer",
+  "exporter": "Exporter",
+  "modAbsentTitre": "Mod Eco Agora absent",
+  "modAbsentTexte": "La personnalisation est enregistrée par le mod serveur Eco Agora (Mods/EcoAgora/). Installez-le puis redémarrez le serveur : en attendant, le panel utilise ses valeurs par défaut.",
+  "erreurSite": "⚠️ {erreur} — les valeurs par défaut sont affichées.",
+  "erreurs": {
+    "couleur": "La couleur doit être au format #rrggbb.",
+    "port": "Le port doit être un nombre entre 0 et 65535.",
+    "date": "Le rideau d’ouverture est actif mais sa date est vide."
+  },
+  "toasts": {
+    "enregistre": "Personnalisation enregistrée",
+    "enregistreTexte": "Visible par tous les visiteurs au prochain chargement.",
+    "refuse": "Enregistrement refusé",
+    "charge": "Fichier chargé",
+    "chargeTexte": "Vérifiez puis enregistrez pour publier.",
+    "illisible": "Fichier illisible",
+    "illisibleTexte": "Un fichier site.json exporté depuis cette page est attendu."
+  },
+  "confirmQuitter": "Des modifications ne sont pas enregistrées. Quitter quand même ?",
+  "identite": {
+    "titre": "Identité",
+    "nom": "Nom de la communauté",
+    "nomPlaceholder": "Nom du serveur Eco",
+    "nomAide": "Vide : le nom du serveur Eco.",
+    "couleur": "Couleur d’accent",
+    "couleurDefaut": "Couleur par défaut",
+    "langue": "Langue par défaut",
+    "langueAide": "Chaque visiteur peut en changer. Textes : WebClient/WebBin/lang/.",
+    "baseline": "Phrase d’accueil",
+    "baselinePlaceholder": "Affichée quand le serveur n’a pas de description.",
+    "logo": "Logo",
+    "logoPlaceholder": "https://… ou /brand/mon-logo.png",
+    "logoAide": "Image carrée. Vide : logo Eco Agora. Un fichier déposé dans WebClient/WebBin/ s’écrit /nom-du-fichier.png."
+  },
+  "jeu": {
+    "titre": "Bouton « Rejoindre le serveur »",
+    "hote": "Adresse du jeu",
+    "hoteAide": "IP ou nom de domaine. Vide : l’adresse de ce site.",
+    "port": "Port de jeu",
+    "portAide": "0 : celui du serveur.",
+    "portAideConnu": "0 : celui du serveur ({port}).",
+    "secours": "Seconde adresse (facultatif)",
+    "secoursPlaceholder": "jeu.exemple.fr",
+    "secoursAide": "Proposée au survol du bouton, par exemple un nom de domaine en plus de l’IP."
+  },
+  "liens": {
+    "titre": "Liens",
+    "site": "Site de la communauté",
+    "sitePlaceholder": "https://exemple.fr",
+    "libelle": "Texte du lien",
+    "libellePlaceholder": "exemple.fr",
+    "hebergeur": "Crédit d’hébergement",
+    "hebergeurPlaceholder": "Hébergé par …",
+    "hebergeurUrl": "Lien de l’hébergeur",
+    "noteDiscord": "Le lien Discord vient de la configuration du serveur Eco (Administration › Configuration)."
+  },
+  "guides": {
+    "titre": "Guides",
+    "langueWiki": "Langue du wiki",
+    "afficherEcoGnome": "Afficher la page Eco Gnome",
+    "codeEcoGnome": "Code de participation Eco Gnome"
+  },
+  "reglement": {
+    "titre": "Règlement",
+    "publier": "Publier la page Règlement",
+    "champTitre": "Titre",
+    "signature": "Signature",
+    "intro": "Introduction",
+    "emoji": "Emoji",
+    "titreSection": "Titre de la section",
+    "monter": "Monter",
+    "descendre": "Descendre",
+    "supprimerSection": "Supprimer la section",
+    "introSection": "Introduction de la section",
+    "regles": "Règles — une par ligne",
+    "alerte": "Avertissement (facultatif)",
+    "finale": "Section finale : pleine largeur, avec le compte à rebours de l’astéroïde",
+    "fin": "Lignes de conclusion — une par ligne",
+    "ajouterSection": "Ajouter une section",
+    "reglesExemple": "Remettre les règles d’exemple"
+  },
+  "ouverture": {
+    "titre": "Rideau d’ouverture",
+    "activer": "Activer le rideau",
+    "note": "Avant la date, tout le panel est caché derrière un compte à rebours. Le jour J, une animation l’ouvre, puis le rideau ne revient plus. Pour bloquer réellement l’accès au jeu, utilisez la salle d’attente du mod (Configs/EcoAgora.eco) ou le mot de passe du serveur.",
+    "date": "Date et heure d’ouverture",
+    "dateAide": "Heure de votre navigateur, enregistrée avec son fuseau.",
+    "motDePasse": "Mot de passe testeurs (facultatif)",
+    "motDePasseAide": "Pas une sécurité : il est lisible par tous dans la page.",
+    "champTitre": "Titre",
+    "sousTitre": "Sous-titre",
+    "sousTitrePlaceholder": "Le serveur ouvre samedi à 20 h."
+  },
+  "barre": {
+    "nonEnregistre": "Modifications non enregistrées.",
+    "annuler": "Annuler",
+    "enregistrement": "Enregistrement…",
+    "enregistrer": "Enregistrer"
+  }
+}

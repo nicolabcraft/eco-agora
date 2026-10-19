@@ -1,0 +1,33 @@
+{
+  "nouvelleSection": "Nouvelle section",
+  "reglementTitre": "Règlement",
+  "reglementIntro": "Bienvenue sur le serveur ! Avant de commencer l’aventure, merci de prendre connaissance des règles suivantes.",
+  "reglementSignature": "Bon jeu à tous !",
+  "ouvertureTitre": "Ouverture prochaine",
+  "exemple": {
+    "respectTitre": "Respect et coopération",
+    "respectIntro": "Eco est avant tout une aventure communautaire et coopérative.",
+    "respectR1": "Respectez les autres joueurs et le staff.",
+    "respectR2": "Les insultes, le harcèlement et les comportements toxiques ne sont pas tolérés.",
+    "respectR3": "Privilégiez la communication et l’entraide : une question posée évite souvent un conflit.",
+    "respectR4": "Respectez le travail, les constructions et les ressources des autres joueurs.",
+    "environnementTitre": "Protégez l’environnement",
+    "environnementIntro": "Vos actions ont des conséquences durables sur l’écosystème.",
+    "environnementR1": "Évitez la surexploitation des ressources : replantez ce que vous abattez.",
+    "environnementR2": "Ne cherchez pas volontairement à faire disparaître une espèce.",
+    "environnementR3": "Limitez la pollution de l’air, de l’eau et des sols.",
+    "environnementAlerte": "La destruction volontaire de l’écosystème pourra entraîner une intervention du staff.",
+    "loisTitre": "Gouvernement et lois",
+    "loisIntro": "Dans Eco, ce sont les joueurs qui écrivent les lois et élisent leurs représentants.",
+    "loisR1": "Respectez les lois votées par la communauté, même celles que vous n’avez pas soutenues.",
+    "loisR2": "Proposez vos idées par les voies prévues (propositions, votes, élections) plutôt que de les imposer.",
+    "bugsTitre": "Bugs et triche",
+    "bugsIntro": "Logiciels, exploits ou bugs donnant un avantage injuste sont interdits.",
+    "bugsR1": "Si vous découvrez un problème important, prévenez le staff.",
+    "objectifTitre": "L’objectif",
+    "objectifIntro": "Un astéroïde menace la planète : coopérez pour le détruire à temps.",
+    "objectifFin1": "🌍 Construisez ensemble.",
+    "objectifFin2": "🤝 Entraidez-vous.",
+    "objectifFin3": "🌱 Protégez votre planète."
+  }
+}

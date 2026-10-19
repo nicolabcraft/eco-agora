@@ -10,6 +10,7 @@ import { useSessionStore } from '@/stores/session';
 import { useToastStore } from '@/stores/toasts';
 import { dateTime, days, num, stripMarkup } from '@/utils/format';
 import EcoTexte from '@/components/EcoTexte.vue';
+import { t } from '@/i18n';
 
 const route = useRoute();
 const session = useSessionStore();
@@ -34,7 +35,7 @@ async function load(): Promise<void> {
   try {
     election.value = await civics.election(id.value);
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Élection introuvable';
+    error.value = err instanceof Error ? err.message : t('election.notFound');
   } finally {
     loading.value = false;
   }
@@ -59,10 +60,10 @@ async function submitVote(): Promise<void> {
       Voter: session.username,
       RankedVotes: [...ranking.value],
     });
-    toasts.ok('Vote enregistré', 'Merci pour votre participation.');
+    toasts.ok(t('election.voteSaved'), t('election.voteThanks'));
     await load();
   } catch (err) {
-    toasts.fail('Vote refusé', err instanceof Error ? err.message : 'Réessayez depuis le jeu.');
+    toasts.fail(t('election.voteRefused'), err instanceof Error ? err.message : t('election.retryFromGame'));
   } finally {
     sending.value = false;
   }
@@ -74,10 +75,10 @@ async function submitComment(): Promise<void> {
   try {
     await civics.addComment(election.value.Id, comment.value.trim(), session.username);
     comment.value = '';
-    toasts.ok('Commentaire publié');
+    toasts.ok(t('election.commentPublished'));
     await load();
   } catch (err) {
-    toasts.fail('Commentaire refusé', err instanceof Error ? err.message : 'Action indisponible.');
+    toasts.fail(t('election.commentRefused'), err instanceof Error ? err.message : t('election.actionUnavailable'));
   } finally {
     sending.value = false;
   }
@@ -90,25 +91,25 @@ watch(id, () => void load());
 <template>
   <div class="elec">
     <RouterLink to="/gouvernance" class="elec__back">
-      <Icon name="chevron" :size="14" class="elec__back-icon" /> Retour à la gouvernance
+      <Icon name="chevron" :size="14" class="elec__back-icon" /> {{ $t('election.back') }}
     </RouterLink>
 
-    <StateBlock v-if="loading" kind="loading" title="Chargement de l'élection" />
-    <StateBlock v-else-if="error" kind="error" title="Élection introuvable" :text="error">
-      <RouterLink to="/gouvernance" class="btn btn--primary btn--sm">Liste des élections</RouterLink>
+    <StateBlock v-if="loading" kind="loading" :title="$t('election.loading')" />
+    <StateBlock v-else-if="error" kind="error" :title="$t('election.notFound')" :text="error">
+      <RouterLink to="/gouvernance" class="btn btn--primary btn--sm">{{ $t('election.list') }}</RouterLink>
     </StateBlock>
 
     <template v-else-if="election">
       <SectionTitle
         :level="1"
-        :title="stripMarkup(election.Name) || 'Élection ' + election.Id"
+        :title="stripMarkup(election.Name) || $t('election.fallback', { id: election.Id })"
       >
         <template #actions>
           <span
             class="badge"
             :class="election.Finished ? (election.Passed ? 'badge--success' : 'badge--danger') : 'badge--primary'"
           >
-            {{ election.Finished ? (election.Passed ? 'Adoptée' : 'Rejetée') : 'En cours' }}
+            {{ election.Finished ? (election.Passed ? $t('election.passed') : $t('election.rejected')) : $t('election.ongoing') }}
           </span>
         </template>
       </SectionTitle>
@@ -125,11 +126,11 @@ watch(id, () => void load());
             <div class="card__head">
               <div>
                 <h3 class="card__title">
-                  {{ election.BooleanElection ? 'Proposition' : 'Candidats et options' }}
+                  {{ election.BooleanElection ? $t('election.proposal') : $t('election.candidates') }}
                 </h3>
                 <p class="card__sub">
-                  {{ election.PollElection ? 'Sondage' : 'Scrutin à vote alternatif' }} &middot;
-                  {{ num(election.TotalVotes) }} vote(s) exprimé(s)
+                  {{ election.PollElection ? $t('election.poll') : $t('election.rankedBallot') }} &middot;
+                  {{ $t('election.votesCast', { n: num(election.TotalVotes) }) }}
                 </p>
               </div>
             </div>
@@ -137,8 +138,8 @@ watch(id, () => void load());
             <StateBlock
               v-if="election.Choices.length === 0"
               kind="empty"
-              title="Aucun choix publié"
-              text="Le serveur n'expose pas d'option pour cette élection."
+              :title="$t('election.noChoice')"
+              :text="$t('election.noChoiceText')"
             />
             <ul v-else class="elec__choices">
               <li v-for="c in election.Choices" :key="c.Id">
@@ -161,7 +162,7 @@ watch(id, () => void load());
 
             <div v-if="canVote" class="elec__vote">
               <p class="u-muted">
-                Cliquez les options dans votre ordre de préférence, du plus au moins souhaité.
+                {{ $t('election.rankHelp') }}
               </p>
               <button
                 class="btn btn--primary"
@@ -169,32 +170,32 @@ watch(id, () => void load());
                 @click="submitVote"
               >
                 <Icon name="check" :size="15" />
-                <span>Soumettre mon vote</span>
+                <span>{{ $t('election.submitVote') }}</span>
               </button>
             </div>
             <div v-else-if="!election.Finished" class="elec__vote u-muted">
               <Icon name="shield" :size="15" />
-              <span>Ouvrez ce panel depuis le jeu pour pouvoir voter.</span>
+              <span>{{ $t('election.openFromGame') }}</span>
             </div>
           </section>
 
           <!-- Commentaires -->
           <section class="card">
             <div class="card__head">
-              <h3 class="card__title">Débat</h3>
+              <h3 class="card__title">{{ $t('election.debate') }}</h3>
               <span class="badge">{{ election.Comments.length }}</span>
             </div>
 
             <StateBlock
               v-if="election.Comments.length === 0"
               kind="empty"
-              title="Aucun commentaire"
-              text="Les échanges des citoyens sur cette élection apparaîtront ici."
+              :title="$t('election.noComment')"
+              :text="$t('election.noCommentText')"
             />
             <ul v-else class="elec__comments">
               <li v-for="(c, i) in election.Comments" :key="i">
                 <div class="elec__comment-head">
-                  <strong>{{ stripMarkup(c.Username) || 'Anonyme' }}</strong>
+                  <strong>{{ stripMarkup(c.Username) || $t('election.anonymous') }}</strong>
                   <span class="u-faint">{{ dateTime(c.Timestamp) }}</span>
                 </div>
                 <p>{{ stripMarkup(c.Text) }}</p>
@@ -203,11 +204,11 @@ watch(id, () => void load());
 
             <div v-if="session.isLoggedIn && !election.Finished" class="elec__compose">
               <label class="field">
-                <span class="field__label">Votre commentaire</span>
-                <textarea v-model="comment" class="textarea" rows="3" placeholder="Argumentez votre position..." />
+                <span class="field__label">{{ $t('election.yourComment') }}</span>
+                <textarea v-model="comment" class="textarea" rows="3" :placeholder="$t('election.commentPlaceholder')" />
               </label>
               <button class="btn btn--ghost btn--sm" :disabled="!comment.trim() || sending" @click="submitComment">
-                <Icon name="send" :size="14" /><span>Publier</span>
+                <Icon name="send" :size="14" /><span>{{ $t('election.publish') }}</span>
               </button>
             </div>
           </section>
@@ -216,37 +217,37 @@ watch(id, () => void load());
         <!-- Colonne latérale -->
         <aside class="elec__side">
           <section class="card">
-            <div class="card__head"><h3 class="card__title">Informations</h3></div>
+            <div class="card__head"><h3 class="card__title">{{ $t('election.info') }}</h3></div>
             <dl class="kv">
-              <dt>Initiateur</dt>
+              <dt>{{ $t('election.initiator') }}</dt>
               <dd>{{ stripMarkup(election.Creator) || '--' }}</dd>
-              <dt>État</dt>
+              <dt>{{ $t('election.state') }}</dt>
               <dd>{{ election.State || '--' }}</dd>
-              <dt>Début</dt>
+              <dt>{{ $t('election.start') }}</dt>
               <dd>{{ days(Math.abs(election.TimeStartAgo ?? 0) / 86400) }}</dd>
-              <dt>{{ election.Finished ? 'Terminée depuis' : 'Fin dans' }}</dt>
+              <dt>{{ election.Finished ? $t('election.endedSince') : $t('election.endsIn') }}</dt>
               <dd>{{ days(Math.abs(election.TimeEndAgo ?? 0) / 86400) }}</dd>
-              <dt>Type</dt>
-              <dd>{{ election.BooleanElection ? 'Oui / Non' : election.PollElection ? 'Sondage' : 'Alternatif' }}</dd>
+              <dt>{{ $t('election.type') }}</dt>
+              <dd>{{ election.BooleanElection ? $t('election.yesNo') : election.PollElection ? $t('election.poll') : $t('election.alternative') }}</dd>
             </dl>
           </section>
 
           <section v-if="election.Results" class="card">
-            <div class="card__head"><h3 class="card__title">Résultats</h3></div>
+            <div class="card__head"><h3 class="card__title">{{ $t('election.results') }}</h3></div>
             <dl class="kv">
-              <dt>Issue</dt>
+              <dt>{{ $t('election.outcome') }}</dt>
               <dd><EcoTexte v-if="election.Results.Result" :texte="election.Results.Result" /><template v-else>--</template></dd>
-              <dt>Votes gagnants</dt>
+              <dt>{{ $t('election.winningVotes') }}</dt>
               <dd>{{ num(election.Results.TotalVotesForWinner) }}</dd>
             </dl>
             <div v-if="election.Results.Winners?.length" class="elec__winners">
-              <span class="field__label">Vainqueurs</span>
+              <span class="field__label">{{ $t('election.winners') }}</span>
               <p>{{ election.Results.Winners.map((w) => stripMarkup(String(w))).join(', ') }}</p>
             </div>
           </section>
 
           <section v-if="election.PositionForWinner" class="card">
-            <div class="card__head"><h3 class="card__title">Poste en jeu</h3></div>
+            <div class="card__head"><h3 class="card__title">{{ $t('election.position') }}</h3></div>
             <p><strong>{{ stripMarkup(election.PositionForWinner.Name) }}</strong></p>
             <p class="u-muted">{{ stripMarkup(election.PositionForWinner.UserDescription) || '--' }}</p>
           </section>

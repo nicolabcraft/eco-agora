@@ -1,0 +1,7 @@
+{
+  "exporterCsv": "Exporter en CSV",
+  "recharger": "Recharger",
+  "indisponibles": "Données indisponibles",
+  "pasHistorique": "Pas encore d’historique",
+  "pasHistoriqueTexte": "Le serveur enregistre un point par heure de jeu. Cette courbe se remplira au fil de la partie."
+}

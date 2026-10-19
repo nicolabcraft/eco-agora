@@ -1,0 +1,86 @@
+{
+  "titre": "Joueurs et modération",
+  "hint": "Comptes connus du serveur et actions de modération. Chaque action est une commande /manage exécutée sous votre identité d’administrateur.",
+  "actualiser": "Actualiser",
+  "actions": {
+    "kick": "Expulser",
+    "ban": "Bannir",
+    "unban": "Débannir",
+    "mute": "Museler",
+    "unmute": "Démuseler",
+    "admin": "Donner admin",
+    "removeadmin": "Retirer admin",
+    "whitelist": "Ajouter en liste blanche",
+    "unwhitelist": "Retirer de la liste blanche"
+  },
+  "arguments": {
+    "motif": "motif (facultatif)",
+    "duree": "durée en heures (facultatif)"
+  },
+  "listes": {
+    "titre": "Listes du serveur",
+    "sub": "Interroge directement le serveur. La réponse s’affiche juste en dessous.",
+    "connectes": "Joueurs connectés",
+    "admins": "Administrateurs",
+    "listeBlanche": "Liste blanche",
+    "bannis": "Bannis",
+    "museles": "Muselés",
+    "comptes": "Tous les comptes connus"
+  },
+  "toasts": {
+    "listeIndisponible": "Liste indisponible",
+    "echec": "Échec",
+    "erreurServeur": "Le serveur a signalé une erreur",
+    "executee": "Commande exécutée",
+    "impossible": "Action impossible",
+    "aucunJoueur": "Aucun joueur indiqué"
+  },
+  "tuiles": {
+    "comptes": "Comptes connus",
+    "enLigne": "En ligne",
+    "admins": "Administrateurs",
+    "pic": "Pic de joueurs actifs"
+  },
+  "annonce": {
+    "titre": "Annonce dans le chat",
+    "sub": "Diffuse un message à tous les joueurs connectés, via la commande d’annonce du jeu.",
+    "placeholder": "Redémarrage prévu dans 10 minutes...",
+    "envoyer": "Envoyer"
+  },
+  "reponse": {
+    "titre": "Réponse du serveur",
+    "erreur": "erreur",
+    "ok": "ok",
+    "fermer": "Fermer",
+    "vide": "(aucune sortie)"
+  },
+  "comptes": {
+    "titre": "Comptes",
+    "sub": "L’API du serveur ne fournit que le nom et les identifiants de plateforme : ni temps de jeu, ni compétences, ni richesse.",
+    "recherche": "Rechercher un joueur",
+    "heuresMin": "Heures min.",
+    "chargement": "Chargement des comptes",
+    "aucun": "Aucun compte",
+    "aucunTexte": "Aucun joueur ne correspond aux filtres, ou personne n’a encore rejoint le monde.",
+    "joueur": "Joueur",
+    "statut": "Statut",
+    "moderation": "Modération",
+    "admin": "Admin",
+    "enJeu": "En jeu",
+    "horsLigne": "Hors ligne"
+  },
+  "droits": {
+    "titre": "Droits et liste blanche",
+    "sub": "Accepte un nom d’utilisateur, un identifiant de compte, un SteamID ou un slgid.",
+    "placeholder": "Nom ou identifiant du joueur",
+    "joueurArg": "<joueur>"
+  },
+  "confirmation": {
+    "titre": "{action} : {cible}",
+    "texte": "Cette commande est exécutée immédiatement sur le serveur de jeu, qui la journalise.",
+    "confirmer": "Confirmer",
+    "complement": "Complément — {aide}",
+    "complementPlaceholder": "laisser vide en cas de doute",
+    "complementAide": "Laissez vide si vous n’êtes pas sûr : certaines sous-commandes d’Eco refusent un complément inattendu."
+  }
+}

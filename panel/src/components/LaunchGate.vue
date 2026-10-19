@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import Icon from './Icon.vue';
 import { useSiteStore } from '@/stores/site';
+import { localeIntl, t } from '@/i18n';
 
 /**
  * Rideau affiche avant l'ouverture : decompte, acces anticipe par mot de passe,
@@ -112,15 +113,15 @@ onBeforeUnmount(() => {
 const parts = computed(() => {
   const total = Math.floor(restant.value / 1000);
   return [
-    { valeur: Math.floor(total / 86400), libelle: 'jours' },
-    { valeur: Math.floor((total % 86400) / 3600), libelle: 'heures' },
-    { valeur: Math.floor((total % 3600) / 60), libelle: 'minutes' },
-    { valeur: total % 60, libelle: 'secondes' },
+    { valeur: Math.floor(total / 86400), libelle: t('launchGate.jours') },
+    { valeur: Math.floor((total % 86400) / 3600), libelle: t('launchGate.heures') },
+    { valeur: Math.floor((total % 3600) / 60), libelle: t('launchGate.minutes') },
+    { valeur: total % 60, libelle: t('launchGate.secondes') },
   ];
 });
 
 const dateLisible = computed(() =>
-  new Date(cible).toLocaleString('fr-FR', {
+  new Date(cible).toLocaleString(localeIntl(), {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -153,12 +154,12 @@ const dateLisible = computed(() =>
 
         <form v-if="LAUNCH.motDePasse" class="gate__form" @submit.prevent="verifier">
           <label class="field">
-            <span class="field__label">Accès anticipé (testeurs)</span>
+            <span class="field__label">{{ $t('launchGate.accesAnticipe') }}</span>
             <input
               v-model="saisie"
               class="input"
               type="password"
-              placeholder="Mot de passe"
+              :placeholder="$t('launchGate.motDePasse')"
               autocomplete="off"
               data-1p-ignore
               data-lpignore="true"
@@ -166,17 +167,17 @@ const dateLisible = computed(() =>
             />
           </label>
           <button class="btn btn--primary" type="submit">
-            <Icon name="check" :size="15" /><span>Entrer</span>
+            <Icon name="check" :size="15" /><span>{{ $t('launchGate.entrer') }}</span>
           </button>
         </form>
-        <p v-if="erreur" class="gate__erreur">Mot de passe incorrect.</p>
+        <p v-if="erreur" class="gate__erreur">{{ $t('launchGate.erreur') }}</p>
 
         <p class="gate__pied">{{ dateLisible }}</p>
       </template>
 
       <template v-else>
-        <h1 class="gate__titre gate__titre--ouvert">C’est ouvert !</h1>
-        <p class="gate__sous">Bienvenue sur le panel de {{ site.nom }}.</p>
+        <h1 class="gate__titre gate__titre--ouvert">{{ $t('launchGate.ouvert') }}</h1>
+        <p class="gate__sous">{{ $t('launchGate.bienvenue', { nom: site.nom }) }}</p>
         <div class="gate__onde" />
       </template>
     </div>

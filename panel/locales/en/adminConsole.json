@@ -1,0 +1,41 @@
+{
+  "titre": "Command console",
+  "hint": "Runs a game command on the server. Sensitive commands require confirmation, and the server logs administration actions.",
+  "suggestions": {
+    "players": "Lists online players",
+    "time": "Shows the world time",
+    "whitelist": "Manages the whitelist",
+    "admin": "Manages administrators",
+    "announce": "Message to the whole server",
+    "tp": "Teleports a player",
+    "give": "Gives an item",
+    "weather": "Weather status",
+    "help": "List of server commands"
+  },
+  "aucuneSortie": "(no output)",
+  "toasts": {
+    "erreur": "The command reported an error",
+    "executee": "Command executed",
+    "echec": "Command failed",
+    "refusee": "Command rejected"
+  },
+  "executer": "Run",
+  "aide": {
+    "avant": "Commands that act on a character (",
+    "milieu": "...) are rejected: the server requires an in-game player, not a web command. Type",
+    "famille": "or a family on its own (",
+    "apres": ") to see its subcommands."
+  },
+  "sensible": "This command is considered sensitive: confirmation will be required.",
+  "sorties": "Output",
+  "vider": "Clear the display",
+  "aucune": "No commands run",
+  "aucuneTexte": "The server response, including its error messages, will be shown here.",
+  "erreur": "error",
+  "ok": "ok",
+  "confirmation": {
+    "titre": "Sensitive command",
+    "texte": "This command may permanently change the server or affect players. Check it before continuing.",
+    "confirmer": "Run the command"
+  }
+}
