@@ -5,7 +5,7 @@ statistiques, écologie, marché, économie, gouvernance, règlement, wiki) et e
 d'administration (santé, joueurs, console, chat, annonces, journal, exports,
 personnalisation, configuration).
 
-Construction, développement et paquet : voir `../README.md`.
+Construction, développement et paquet : voir `../DEVELOPPEMENT.md`.
 Installation sur un serveur : voir `../INSTALLATION.md`.
 
 | | |

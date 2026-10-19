@@ -1,75 +1,100 @@
+<p align="center"><img src="modio/logo.png" alt="Eco Agora : le panel web complet pour votre serveur Eco" width="820"></p>
+
 # Eco Agora
 
-Panel web et mod serveur pour **Eco** (Strange Loop Games), version 0.14.2.1.
-Interface en français, configurable depuis le panel lui-même : nom, couleur,
-logo, liens, règlement, rideau d'ouverture.
+**Le panel web complet pour votre serveur Eco.** Eco Agora remplace le site web
+de votre serveur Eco (Strange Loop Games) par un panel moderne, en français,
+que vous personnalisez depuis le panel lui-même.
 
-- Installer le paquet sur un serveur : [INSTALLATION.md](INSTALLATION.md)
-  ([English](INSTALL.en.md)).
-- Ce fichier : construire le paquet depuis les sources.
+*[English below](#english)* · [Installation](INSTALLATION.md) · [Install guide (EN)](INSTALL.en.md) · [Développement](DEVELOPPEMENT.md)
 
-```
-mod/     mod serveur C# (EcoAgoraMod.dll) : API /api/agora, journal, relevés
-panel/   panel Vue 3 + Vite, servi par le serveur Eco depuis WebClient/WebBin
-```
+<p align="center"><img src="modio/galerie-01.png" alt="Tableau de bord" width="820"></p>
 
-## Prérequis
+## Espace citoyen
 
-- SDK .NET 10 (même cible que le serveur Eco 0.14).
-- Node.js 20 ou plus.
-- Un serveur Eco 0.14.2.1 avec son dossier `EcoModKit/` (fourni avec le
-  serveur) : le mod se compile contre ses `ReferenceAssemblies`.
+- **Tableau de bord** : compte à rebours de l'astéroïde, joueurs, population, climat, bouton « Rejoindre le serveur ».
+- **Carte du monde en 3D** : calques d'environnement, historique animé, districts et propriétés.
+- **Statistiques** : plus de 200 séries du serveur, jusqu'à 6 superposées, export CSV et PNG.
+- **Écologie et climat**, **Économie** (avoirs réels des comptes), **Marché**, **Gouvernance** (lois, élections, titres).
+- **Règlement**, **Wiki** et **Eco Gnome**, annonces du staff en bandeau.
 
-## Construire
+## Administration
 
-```bash
-# 1. le mod
-cd mod
-dotnet build -c Release -p:EcoServerDir="D:/MonServeurEco"
-#   (ou ECO_SERVER_DIR, ou un fichier mod/local.props qui definit EcoServerDir)
+- Santé du serveur, joueurs et modération, console, chat, annonces, exports, configuration.
+- **Journal d'activité** des joueurs : qui a fait quoi, où et quand, avec recherche et filtres.
+- **Ventes des boutiques** : qui a dépensé combien, dans quelle boutique.
+- Connexion depuis le jeu, ou sans lancer le jeu avec la clé d'administration du serveur.
 
-# 2. le panel + le paquet
-cd ../panel
-npm install
-npm run package      # build dans dist/, puis release/ et eco-agora-<version>.zip
-```
+## Personnalisation, sans recompiler
 
-`npm run package` assemble `release/` (panel + `Mods/EcoAgora/EcoAgoraMod.dll`
-+ guides d'installation) et l'archive `eco-agora-<version>.zip`.
+- Nom de la communauté, phrase d'accueil, logo, couleur d'accent.
+- Adresse du bouton « Rejoindre » (détectée automatiquement), liens, crédit d'hébergement.
+- Éditeur de règlement section par section, langue du wiki, page Eco Gnome.
+- **Rideau d'ouverture** : compte à rebours devant le panel jusqu'au jour J, accès anticipé pour les testeurs.
+- **Salle d'attente** en jeu (facultative) : avant l'ouverture, les joueurs se connectent mais ne peuvent ni bouger ni agir.
 
-## Développer
+## Aperçu
 
-```bash
-cd panel
-npm run dev          # http://localhost:5180, proxy vers le serveur Eco sur :3001
-ECO_DEV_TARGET=http://mon-serveur:3001 npm run dev   # contre un autre serveur
-npm run typecheck
-```
+| | |
+|---|---|
+| ![Carte du monde en 3D](modio/galerie-02.png) | ![Statistiques](modio/galerie-03.png) |
+| ![Écologie et climat](modio/galerie-04.png) | ![Règlement](modio/galerie-05.png) |
+| ![Personnalisation](modio/galerie-06.png) | ![Administration](modio/galerie-07.png) |
 
-Construire directement dans un serveur (sans paquet) :
+## Installation
 
-```bash
-ECO_SERVER_DIR="D:/MonServeurEco" npm run build     # panel dans WebClient/WebBin
-node ../mod/tools/deploy.mjs "D:/MonServeurEco"     # mod dans Mods/EcoAgora
-```
+1. Téléchargez `eco-agora-1.0.0.zip` dans les [Releases](../../releases).
+2. Serveur arrêté, sauvegardez `WebClient/WebBin/index.html`.
+3. Copiez le contenu de l'archive à la racine du serveur (dossiers `WebClient/` et `Mods/`).
+4. Démarrez le serveur, ouvrez son site web, puis *Administration › Personnalisation*.
 
-Le webroot d'un serveur n'est jamais vidé : le panel s'appuie sur les fichiers
-d'origine d'Eco (`Layers/`, `images/`, `i18n/`…). Les anciens fragments
-`assets/` sont gardés trois jours pour les onglets restés ouverts.
-
-## Personnalisation
-
-Le schéma vit dans `panel/src/site/schema.ts` : types, valeurs par défaut, et
-fusion tolérante (un champ absent ou mal typé retombe sur son défaut, ce qui
-permet d'ajouter des réglages sans migration). Le mod ne fait que garder
-l'objet (`GET`/`PUT /api/agora/site`, fichier `data/site.json`).
-
-Pour ajouter un réglage : un champ dans `SiteConfig` et `SITE_DEFAUT`, un
-champ dans `pages/admin/SitePage.vue`, et sa lecture via `useSiteStore()`.
+Guide complet : [INSTALLATION.md](INSTALLATION.md). Compatibilité : Eco 0.14.2.1.
+Mod facultatif recommandé : EcoMarketApi (page Marché).
 
 ## Licence
 
-**PolyForm Noncommercial 1.0.0** (`LICENSE.md`) : gratuit, code ouvert,
-modifiable et réutilisable, mais **aucun usage commercial** : ni vente, ni
-vente d'une version modifiée. Mentions et exceptions (moteur de carte de
-Strange Loop Games, three.js, icônes) : `NOTICE.md`.
+Gratuit et à code ouvert, sous **PolyForm Noncommercial 1.0.0**
+([LICENSE.md](LICENSE.md)) : utilisez-le, modifiez-le, partagez vos versions,
+mais **jamais à des fins commerciales** (ni vente, ni vente d'une version
+modifiée). Mentions et exceptions dans [NOTICE.md](NOTICE.md) : le moteur de
+carte est adapté du client web d'Eco et reste la propriété de Strange Loop
+Games. Eco est un jeu de Strange Loop Games ; Eco Agora est un projet
+communautaire indépendant.
+
+Voir aussi : [Location](https://github.com/nicolabcraft/eco-location), un mod
+pour louer ses véhicules et bateaux.
+
+---
+
+## English
+
+**Eco Agora** replaces your Eco server's website with a complete, modern panel
+(French interface) that you customise from the panel itself.
+
+**Citizen area**: dashboard with meteor countdown, players, population and
+climate; 3D world map with environment layers, animated history, districts and
+plots; over 200 statistics (up to 6 overlaid, CSV and PNG export); ecology and
+climate; economy with real account holdings; market; civics (laws, elections,
+titles); rules, wiki and Eco Gnome pages; staff announcements as a banner.
+
+**Administration**: server health, players and moderation, console, chat,
+announcements, exports, configuration, a full player activity log (who did
+what, where and when) and shop sales (who spent how much, in which shop). Sign
+in from the game, or without launching it using the server's admin key.
+
+**Customisation, no rebuild needed**: community name, tagline, logo, accent
+colour, join address (detected automatically), links, hosting credit, a section
+by section rules editor, wiki language, Eco Gnome page, an opening countdown
+curtain with tester access, and an optional in-game waiting room that keeps
+players frozen until opening time.
+
+**Install**: download `eco-agora-1.0.0.zip` from the [Releases](../../releases),
+stop the server, back up `WebClient/WebBin/index.html`, copy the archive
+content to the server root and start it. Full guide:
+[INSTALL.en.md](INSTALL.en.md). Compatibility: Eco 0.14.2.1.
+
+**License**: free and source available under **PolyForm Noncommercial 1.0.0**:
+use it, modify it, share your versions, but never use it commercially. See
+[NOTICE.md](NOTICE.md): the map engine is adapted from Eco's web client and
+remains the property of Strange Loop Games. Eco is a game by Strange Loop
+Games; Eco Agora is an independent community project.

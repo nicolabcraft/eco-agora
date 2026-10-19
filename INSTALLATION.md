@@ -13,7 +13,7 @@ Mods/EcoAgora/EcoAgoraMod.dll                  le mod serveur (API du panel)
 ```
 
 Compatibilité : **Eco 0.14.2.1**. Le mod est compilé contre l'EcoModKit de
-cette version ; sur une autre version d'Eco, recompilez-le (voir README.md).
+cette version ; sur une autre version d'Eco, recompilez-le (voir DEVELOPPEMENT.md).
 
 ## 1. Installer
 

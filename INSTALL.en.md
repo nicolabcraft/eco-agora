@@ -14,7 +14,7 @@ Mods/EcoAgora/EcoAgoraMod.dll                  the server mod (panel API)
 ```
 
 Compatibility: **Eco 0.14.2.1**. The mod is built against that version's
-EcoModKit; for another Eco version, rebuild it (see README.md).
+EcoModKit; for another Eco version, rebuild it (see DEVELOPPEMENT.md).
 
 ## 1. Install
 
