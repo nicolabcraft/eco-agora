@@ -64,11 +64,24 @@ im.paste(logo,(170,390),logo)
 d.text((520,350),"Eco Agora",font=font("segoeuib.ttf",150),fill=(255,255,255))
 d.text((528,585),"Le panel web complet pour votre serveur Eco",font=font("segoeui.ttf",46),fill=(230,230,236))
 d.text((530,655),"The complete web panel for your Eco server",font=font("segoeuii.ttf",34),fill=(255,150,90))
-# vignette carte a droite en filigrane
-c=Image.open(os.path.join(CAP,"02-carte.png")).convert('RGBA').crop((640,300,1200,860)).resize((420,420))
-masque=Image.new('L',c.size,0); ImageDraw.Draw(masque).ellipse([0,0,419,419],fill=95)
-im.paste(c,(1420,80),masque)
-d.rounded_rectangle([530,740,990,810],radius=35,fill=ORANGE)
-d.text((560,749),"Gratuit · code ouvert",font=font("segoeuib.ttf",36),fill=(25,18,8))
+# planete : la sphere de la carte 3D, decoupee au plus pres et rendue parfaitement ronde
+D=400
+sph=Image.open(os.path.join(CAP,"02-carte.png")).convert('RGB').crop((680,331,1162,849)).resize((D,D),Image.LANCZOS)
+# masque rond net (sur-echantillonne), legerement en retrait pour couper les franges grises
+masque=Image.new('L',(D*4,D*4),0); ImageDraw.Draw(masque).ellipse([24,24,D*4-24,D*4-24],fill=255)
+masque=masque.resize((D,D),Image.LANCZOS)
+cx,cy=1440,90
+halo=Image.new('RGBA',(W,H),(0,0,0,0)); ImageDraw.Draw(halo).ellipse([cx-30,cy-30,cx+D+30,cy+D+30],fill=(90,150,255,80))
+halo=halo.filter(ImageFilter.GaussianBlur(36)); im.paste(halo,(0,0),halo)
+im.paste(sph,(cx,cy),masque)
+# eclairage : clair en haut a gauche, nuit en bas a droite (degrade radial)
+nuit=Image.new('L',(D,D),170); nd=ImageDraw.Draw(nuit)
+lx,ly=D*0.32,D*0.30
+for i in range(170,-1,-2):
+    r=D*0.12+(D*1.1)*(i/170)
+    nd.ellipse([lx-r,ly-r,lx+r,ly+r],fill=int(i*0.85))
+nuit=nuit.filter(ImageFilter.GaussianBlur(10))
+nuit=Image.composite(nuit,Image.new('L',(D,D),0),masque)
+im.paste(Image.new('RGB',(D,D),(6,8,18)),(cx,cy),nuit)
 im.convert('RGB').save(os.path.join(OUT,"logo.png"),optimize=True)
 print('logo')
