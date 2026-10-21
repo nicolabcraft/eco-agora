@@ -50,7 +50,7 @@ jobs:
           AGORA_VERSION: dev.${{ github.run_number }}
         run: npm run package
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: eco-agora-dev
           path: panel/eco-agora-*.zip
