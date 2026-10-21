@@ -17,16 +17,18 @@ panel/   panel Vue 3 + Vite, servi par le serveur Eco depuis WebClient/WebBin
 
 - SDK .NET 10 (même cible que le serveur Eco 0.14).
 - Node.js 20 ou plus.
-- Un serveur Eco 0.14.2.1 avec son dossier `EcoModKit/` (fourni avec le
-  serveur) : le mod se compile contre ses `ReferenceAssemblies`.
+- C'est tout : **aucun serveur Eco n'est nécessaire pour compiler**. Les
+  assemblies d'Eco viennent du paquet NuGet officiel `Eco.ReferenceAssemblies`
+  (version fixée dans `mod/EcoAgoraMod.csproj`, propriété `EcoVersion`). Un
+  serveur local reste utile pour tester.
 
 ## Construire
 
 ```bash
 # 1. le mod
 cd mod
-dotnet build -c Release -p:EcoServerDir="D:/MonServeurEco"
-#   (ou ECO_SERVER_DIR, ou un fichier mod/local.props qui definit EcoServerDir)
+dotnet build -c Release
+#   autre version d'Eco : -p:EcoVersion=<version NuGet d'Eco.ReferenceAssemblies>
 
 # 2. le panel + le paquet
 cd ../panel
@@ -34,8 +36,29 @@ npm install
 npm run package      # build dans dist/, puis release/ et eco-agora-<version>.zip
 ```
 
-`npm run package` assemble `release/` (panel + `Mods/EcoAgora/EcoAgoraMod.dll`
-+ guides d'installation) et l'archive `eco-agora-<version>.zip`.
+`npm run package` assemble `release/` (panel, `Mods/EcoAgora/EcoAgoraMod.dll`,
+`Mods/Translations/EcoAgora.csv`, guides d'installation, licence) et l'archive
+`eco-agora-<version>.zip`.
+
+## Traductions
+
+- Panel : `panel/locales/<langue>/*.json`, vérifiées par `npm run locales:check`
+  (voir [CONTRIBUTING.md](CONTRIBUTING.md#traduire)).
+- Textes en jeu du mod : sources en anglais dans le code, traductions dans
+  `mod/translations/EcoAgora.csv` (format `Mods/Translations` d'Eco). Après un
+  ajout de texte : `cd mod && node tools/eco-translations.mjs extract translations/EcoAgora.csv src`.
+
+## Intégration continue
+
+- `.github/workflows/ci.yml` : à chaque push et pull request, compile le mod,
+  vérifie les traductions et les types, construit le panel et publie un paquet
+  de test (artefact de l'onglet *Actions*).
+- `.github/workflows/release.yml` : à chaque tag `v*`, fabrique le paquet et
+  publie la release GitHub :
+  ```bash
+  git tag v1.2.0 && git push origin v1.2.0
+  ```
+  Pensez à mettre à jour `CHANGELOG.md` et la version de `panel/package.json`.
 
 ## Développer
 

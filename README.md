@@ -48,7 +48,7 @@ que vous personnalisez depuis le panel lui-même.
 
 ## Installation
 
-1. Téléchargez `eco-agora-1.1.0.zip` dans les [Releases](../../releases).
+1. Téléchargez `eco-agora-1.2.0.zip` dans les [Releases](../../releases).
 2. Serveur arrêté, déplacez `WebClient/WebBin/index.html` dans `WebClient/WebBin/legacy/index.html` (l'interface d'origine reste accessible à `/legacy/`).
 3. Copiez le contenu de l'archive à la racine du serveur (dossiers `WebClient/` et `Mods/`).
 4. Démarrez le serveur, ouvrez son site web, puis *Administration › Personnalisation*.
@@ -98,7 +98,7 @@ every text lives in `WebClient/WebBin/lang/*.json`, so you can fix wording or
 add a language without rebuilding. Mods with their own pages keep working, and
 Eco's original interface stays reachable at `/legacy/`.
 
-**Install**: download `eco-agora-1.1.0.zip` from the [Releases](../../releases),
+**Install**: download `eco-agora-1.2.0.zip` from the [Releases](../../releases),
 stop the server, move `WebClient/WebBin/index.html` to `WebClient/WebBin/legacy/index.html`, copy the archive
 content to the server root and start it. Full guide:
 [INSTALL.en.md](INSTALL.en.md). Compatibility: Eco 0.14.2.1.

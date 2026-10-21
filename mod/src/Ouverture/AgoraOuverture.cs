@@ -34,13 +34,6 @@ namespace EcoAgora.Ouverture
         private static readonly int[] PaliersSecondes = { 30, 10, 5, 4, 3, 2, 1 };
         // Le runtime d'Eco n'active pas le mode de globalisation invariante (verifie),
         // mais une culture manquante ne doit jamais faire tomber le mod.
-        private static readonly CultureInfo Fr = CultureFr();
-
-        private static CultureInfo CultureFr()
-        {
-            try { return CultureInfo.GetCultureInfo("fr-FR"); }
-            catch (CultureNotFoundException) { return CultureInfo.InvariantCulture; }
-        }
 
         private static readonly ConcurrentDictionary<User, Vector3> Ancrages = new();
         private static Timer horloge;
@@ -144,9 +137,8 @@ namespace EcoAgora.Ouverture
 
             // Le temps reel restant, pas le palier : un serveur demarre a 18 h 02
             // annoncerait sinon « dans 1 h 00 » au lieu de 58 min.
-            var texte = $"Ouverture du serveur dans {Duree(restant)}.";
             var style = p >= 60 ? NotificationStyle.InfoBox : NotificationStyle.Info;
-            ATous(texte, style);
+            ATous((user, s) => AnnoncerDecompte(user, restant, s), style);
         }
 
         private static void Retenir()
@@ -187,10 +179,10 @@ namespace EcoAgora.Ouverture
             try
             {
                 if (!EnAttente || user == null) return;
-                user.MsgLocStr(
-                    $"Bienvenue ! Le serveur ouvre {Quand()}, dans {Duree(Restant)}. " +
-                    "D'ici là, restez où vous êtes : la partie démarrera pour tout le monde en même temps.",
+                user.MsgLoc(
+                    $"Welcome! The server opens on {Quand()}. Until then, stay where you are: the game starts for everyone at the same time.",
                     NotificationStyle.InfoBox);
+                AnnoncerDecompte(user, Restant, NotificationStyle.Info);
             }
             catch (Exception ex)
             {
@@ -212,7 +204,7 @@ namespace EcoAgora.Ouverture
                 ouverte = true;
                 File.WriteAllText(Temoin, DateTimeOffset.UtcNow.ToString("o"));
 
-                ATous("C'est parti ! Le serveur est ouvert. Vous avez 60 jours pour détruire l'astéroïde : bonne partie à tous !",
+                ATous((user, s) => user.MsgLocStr("Here we go! The server is open. Destroy the meteor before it strikes: have a great game, everyone!", s),
                     NotificationStyle.InfoBox);
                 Console.WriteLine("[EcoAgora] OUVERTURE du serveur");
             }
@@ -268,14 +260,19 @@ namespace EcoAgora.Ouverture
 
         private static User[] EnLigne() => UserManager.Users.Where(u => u != null && u.IsOnline).ToArray();
 
-        private static void ATous(string texte, NotificationStyle style)
+        /// <summary>
+        /// Message a tous les joueurs connectes, chacun dans sa langue : `envoyer`
+        /// recoit le joueur et le style, le texte est traduit par Eco a l'envoi. Hors chat, le
+        /// message est aussi repete dans le chat, ou il reste lisible.
+        /// </summary>
+        private static void ATous(Action<User, NotificationStyle> envoyer, NotificationStyle style)
         {
             foreach (var user in EnLigne())
             {
                 try
                 {
-                    user.MsgLocStr(texte, style);
-                    if (style != NotificationStyle.Chat) user.MsgLocStr(texte, NotificationStyle.Chat);
+                    envoyer(user, style);
+                    if (style != NotificationStyle.Chat) envoyer(user, NotificationStyle.Chat);
                 }
                 catch
                 {
@@ -284,20 +281,30 @@ namespace EcoAgora.Ouverture
             }
         }
 
-        /// <summary>« mercredi 30 septembre à 19 h 00 », a l'heure de la date configuree.</summary>
+        /// <summary>Date d'ouverture, neutre (lisible dans toutes les langues) : « 2026-09-30 19:00 (UTC+02:00) ».</summary>
         private static string Quand()
         {
-            if (Ouverture is not { } o) return "prochainement";
-            return "le " + o.ToString("dddd d MMMM 'à' HH 'h' mm", Fr);
+            if (Ouverture is not { } o) return "?";
+            var decalage = o.Offset;
+            var signe = decalage < TimeSpan.Zero ? "-" : "+";
+            return $"{o:yyyy-MM-dd HH:mm} (UTC{signe}{decalage:hh\\:mm})";
         }
 
-        private static string Duree(TimeSpan t)
+        /// <summary>Duree courte et neutre pour la ligne d'etat du greffon (administrateurs).</summary>
+        private static string Duree(TimeSpan t) =>
+            t <= TimeSpan.Zero ? "0" : t.TotalHours < 24 ? t.ToString(@"hh\:mm\:ss") : $"{(int)t.TotalDays}d {t.Hours}h";
+
+        /// <summary>
+        /// « Ouverture dans ... » : un modele par ordre de grandeur, pour que les
+        /// unites se traduisent avec le reste de la phrase.
+        /// </summary>
+        private static void AnnoncerDecompte(User user, TimeSpan t, NotificationStyle style)
         {
-            if (t <= TimeSpan.Zero) return "quelques instants";
-            if (t.TotalSeconds < 60) return $"{(int)Math.Ceiling(t.TotalSeconds)} s";
-            if (t.TotalMinutes < 60) return $"{(int)Math.Ceiling(t.TotalMinutes)} min";
-            if (t.TotalHours < 24) return $"{(int)t.TotalHours} h {t.Minutes:00}";
-            return $"{(int)t.TotalDays} j {t.Hours} h";
+            if (t <= TimeSpan.Zero) user.MsgLocStr("The server opens in a few moments.", style);
+            else if (t.TotalSeconds < 60) user.MsgLoc($"The server opens in {(int)Math.Ceiling(t.TotalSeconds)} s.", style);
+            else if (t.TotalMinutes < 60) user.MsgLoc($"The server opens in {(int)Math.Ceiling(t.TotalMinutes)} min.", style);
+            else if (t.TotalHours < 24) user.MsgLoc($"The server opens in {(int)t.TotalHours} h {t.Minutes:00}.", style);
+            else user.MsgLoc($"The server opens in {(int)t.TotalDays} d {t.Hours} h.", style);
         }
     }
 }

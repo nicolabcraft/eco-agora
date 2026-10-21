@@ -18,7 +18,7 @@ namespace EcoAgora
     public class AgoraPlugin : IModKitPlugin, IInitializablePlugin, IShutdownablePlugin, IServerPlugin,
         IConfigurablePlugin
     {
-        public const string Version = "1.0.0";
+        public const string Version = "1.2.0";
 
         private static PluginConfig<AgoraConfig> configHolder;
         private static AgoraActionListener listener;

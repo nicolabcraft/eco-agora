@@ -20,9 +20,6 @@ namespace EcoAgora.Ouverture
     /// </summary>
     public class AgoraAttenteListener : IGameActionAware
     {
-        private const string Refus =
-            "Le serveur n'est pas encore ouvert : patience, le décompte est en cours !";
-
         /// <summary>Par type d'action, la propriete qui designe le joueur (ou null).</summary>
         private static readonly ConcurrentDictionary<Type, PropertyInfo> Acteurs = new();
 
@@ -37,7 +34,8 @@ namespace EcoAgora.Ouverture
                 if (user == null) return new LazyResult(Result.Succeeded);
                 if (AgoraPlugin.Config.AdminsLibres && user.IsAdmin) return new LazyResult(Result.Succeeded);
 
-                return new LazyResult(Result.FailLocStr(Refus));
+                // Texte source anglais, traduit par Eco (Mods/Translations/EcoAgora.csv).
+                return new LazyResult(Result.FailLocStr("The server is not open yet: be patient, the countdown is running!"));
             }
             catch
             {

@@ -8,11 +8,12 @@ d'activité des joueurs, configuration).
 Le paquet contient deux morceaux :
 
 ```
-WebClient/WebBin/index.html, assets/, brand/   le panel web
-Mods/EcoAgora/EcoAgoraMod.dll                  le mod serveur (API du panel)
+WebClient/WebBin/index.html, assets/, brand/, lang/   le panel web
+Mods/EcoAgora/EcoAgoraMod.dll                         le mod serveur (API du panel)
+Mods/Translations/EcoAgora.csv                        traductions des messages en jeu
 ```
 
-Compatibilité : **Eco 0.14.2.1**. Le mod est compilé contre l'EcoModKit de
+Compatibilité : **Eco 0.14.2.1**. Le mod est compilé contre les assemblies de référence de
 cette version ; sur une autre version d'Eco, recompilez-le (voir DEVELOPPEMENT.md).
 
 ## 1. Installer
@@ -34,7 +35,7 @@ Serveur **arrêté** :
    fichiers d'origine d'Eco (`Layers/`, `images/`, `i18n/`…).
 3. Démarrez le serveur. Dans le journal doit apparaître :
    ```
-   [EcoAgora] mod 1.0.0 initialise (Mods\EcoAgora\data\agora.db)
+   [EcoAgora] mod 1.2.0 initialise (Mods\EcoAgora\data\agora.db)
    ```
 4. Ouvrez `http://<adresse-du-serveur>:<WebServerPort>/` (3001 par défaut)
    et forcez le rechargement (Ctrl+F5).
@@ -95,6 +96,12 @@ Les textes sont dans `WebClient/WebBin/lang/`, modifiables sans recompiler :
 
 Pensez à garder une copie de vos fichiers modifiés : une mise à jour du panel
 remplace le dossier `lang/`.
+
+Les messages envoyés en jeu par le mod (salle d'attente, ouverture) et les
+descriptions de ses réglages sont traduits par Eco dans la langue de chaque
+joueur, grâce à `Mods/Translations/EcoAgora.csv`. Pour une autre langue,
+ajoutez-y une colonne au nom de la langue d'Eco (`German`, `Spanish`…) : voir
+[CONTRIBUTING.md](CONTRIBUTING.md#traduire).
 
 ## 5. Mods qui utilisent l'interface d'origine
 

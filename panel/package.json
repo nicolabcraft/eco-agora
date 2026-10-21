@@ -1,6 +1,6 @@
 {
   "name": "eco-agora-panel",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "license": "PolyForm-Noncommercial-1.0.0",
   "description": "Eco Agora - panel web pour serveur Eco",
@@ -14,7 +14,8 @@
     "postbuild": "node scripts/prune-assets.mjs",
     "package": "npm run build && node scripts/package-release.mjs",
     "locales": "node scripts/build-locales.mjs",
-    "predev": "node scripts/build-locales.mjs"
+    "predev": "node scripts/build-locales.mjs",
+    "locales:check": "node scripts/check-locales.mjs"
   },
   "dependencies": {
     "axios": "^1.7.9",

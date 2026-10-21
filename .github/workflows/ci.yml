@@ -1,0 +1,56 @@
+# Verifie chaque contribution : mod, traductions du jeu et du panel, panel, paquet.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: Compilation et verifications
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: panel/package-lock.json
+
+      # Assemblies d'Eco : paquet NuGet officiel Eco.ReferenceAssemblies.
+      - name: Compiler le mod
+        working-directory: mod
+        run: dotnet build -c Release
+
+      - name: Verifier les traductions en jeu (mod/translations/EcoAgora.csv)
+        working-directory: mod
+        run: node tools/eco-translations.mjs check translations/EcoAgora.csv src
+
+      - name: Installer le panel
+        working-directory: panel
+        run: npm ci
+
+      - name: Verifier les traductions du panel (panel/locales)
+        working-directory: panel
+        run: npm run locales:check
+
+      - name: Verifier les types
+        working-directory: panel
+        run: npx vue-tsc --noEmit
+
+      - name: Construire le panel et le paquet
+        working-directory: panel
+        env:
+          AGORA_VERSION: dev.${{ github.run_number }}
+        run: npm run package
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eco-agora-dev
+          path: panel/eco-agora-*.zip

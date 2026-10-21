@@ -7,12 +7,12 @@ d'attente avant l'ouverture. Installation : voir `../INSTALLATION.md`.
 ## Compiler
 
 ```bash
-dotnet build -c Release -p:EcoServerDir="D:/MonServeurEco"
+dotnet build -c Release
 node tools/deploy.mjs "D:/MonServeurEco"   # copie dans Mods/EcoAgora/
 ```
 
-Les assemblies d'Eco viennent de l'EcoModKit officiel
-(`<serveur>/EcoModKit/ReferenceAssemblies`). LiteDB et Newtonsoft.Json servent
+Les assemblies d'Eco viennent du paquet NuGet officiel `Eco.ReferenceAssemblies`
+(aucun serveur nécessaire). LiteDB et Newtonsoft.Json servent
 seulement à compiler (paquets NuGet, jamais livrés) : à l'exécution, ce sont les
 copies du serveur qui sont chargées. Le mod n'est chargé qu'au **démarrage** du
 serveur.

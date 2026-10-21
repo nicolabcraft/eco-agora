@@ -9,12 +9,13 @@ The interface is available in **French** and **English**, and can be translated 
 The package holds two parts:
 
 ```
-WebClient/WebBin/index.html, assets/, brand/   the web panel
-Mods/EcoAgora/EcoAgoraMod.dll                  the server mod (panel API)
+WebClient/WebBin/index.html, assets/, brand/, lang/   the web panel
+Mods/EcoAgora/EcoAgoraMod.dll                         the server mod (panel API)
+Mods/Translations/EcoAgora.csv                        in-game message translations
 ```
 
 Compatibility: **Eco 0.14.2.1**. The mod is built against that version's
-EcoModKit; for another Eco version, rebuild it (see DEVELOPPEMENT.md, in French).
+reference assemblies; for another Eco version, rebuild it (see DEVELOPPEMENT.md, in French).
 
 ## 1. Install
 
@@ -33,7 +34,7 @@ With the server **stopped**:
    anything in `WebClient/WebBin/`: the panel uses Eco's original files
    (`Layers/`, `images/`, `i18n/`…).
 3. Start the server. The log should show
-   `[EcoAgora] mod 1.0.0 initialise (Mods\EcoAgora\data\agora.db)`.
+   `[EcoAgora] mod 1.2.0 initialise (Mods\EcoAgora\data\agora.db)`.
 4. Open `http://<server>:<WebServerPort>/` (3001 by default) and hard-refresh.
 
 Quick check: `http://<server>:<port>/api/agora/ping` must answer
@@ -72,6 +73,11 @@ edit `lang/en.json` to change any wording, or copy it to `de.json`, translate
 the values and add `{ "code": "de", "nom": "Deutsch", "intl": "de-DE" }` to
 `lang/langues.json` to add a language. Missing keys fall back to French. Keep
 a copy of your edited files: a panel update replaces the `lang/` folder.
+
+In-game messages from the mod (waiting room, opening) and its setting
+descriptions are translated by Eco into each player's language through
+`Mods/Translations/EcoAgora.csv`. To add a language, add a column named after
+the Eco language (`German`, `Spanish`…): see [CONTRIBUTING.md](CONTRIBUTING.md#english).
 
 ## 5. Mods using the original interface
 

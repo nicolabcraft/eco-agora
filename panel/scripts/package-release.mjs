@@ -17,7 +17,8 @@ import { join } from 'node:path';
 const WEBROOT = process.env.ECO_WEBROOT ?? 'dist';
 const MOD_DLL = process.env.AGORA_MOD_DLL ?? '../mod/bin/Release/EcoAgoraMod.dll';
 const SORTIE = (process.argv[2] ?? 'release').replace(/[\/]+$/, '');
-const VERSION = JSON.parse(await readFile('package.json', 'utf8')).version;
+// Version : celle du tag en CI (AGORA_VERSION=1.2.0), sinon package.json.
+const VERSION = process.env.AGORA_VERSION ?? JSON.parse(await readFile('package.json', 'utf8')).version;
 
 /**
  * Le dossier assets/ conserve les fragments des builds precedents pendant trois
@@ -75,7 +76,15 @@ for (const dossier of ['brand', 'lang']) {
   console.log(`${dossier}/ : copie`);
 }
 
-// 3. le mod
+// 3. traductions des textes en jeu (lues par Eco dans Mods/Translations/)
+const CSV = '../mod/translations/EcoAgora.csv';
+if (existsSync(CSV)) {
+  await mkdir(join(SORTIE, 'Mods/Translations'), { recursive: true });
+  await cp(CSV, join(SORTIE, 'Mods/Translations/EcoAgora.csv'));
+  console.log('Mods/Translations/EcoAgora.csv : copie');
+}
+
+// 4. le mod
 if (existsSync(MOD_DLL)) {
   await cp(MOD_DLL, join(SORTIE, 'Mods/EcoAgora/EcoAgoraMod.dll'));
   const { size, mtime } = statSync(MOD_DLL);
@@ -91,12 +100,17 @@ await cp('../INSTALL.en.md', join(SORTIE, 'INSTALL.en.md'));
 await cp('../LICENSE.md', join(SORTIE, 'LICENSE.md'));
 await cp('../NOTICE.md', join(SORTIE, 'NOTICE.md'));
 
-// 4. archive, quand PowerShell est disponible
+// 5. archive : zip (Linux, macOS, GitHub Actions), sinon PowerShell (Windows)
+const zip = `eco-agora-${VERSION}.zip`;
+await rm(zip, { force: true });
 try {
-  const zip = `eco-agora-${VERSION}.zip`;
-  await rm(zip, { force: true });
-  execFileSync('powershell', ['-NoProfile', '-Command', `Compress-Archive -Path '${SORTIE}/*' -DestinationPath '${zip}' -Force`], { stdio: 'pipe' });
+  try {
+    execFileSync('zip', ['-qr', join('..', zip), '.'], { cwd: SORTIE, stdio: 'pipe' });
+  } catch {
+    execFileSync('powershell', ['-NoProfile', '-Command', `Compress-Archive -Path '${SORTIE}/*' -DestinationPath '${zip}' -Force`], { stdio: 'pipe' });
+  }
   console.log(`archive : ${zip} (${(statSync(zip).size / 1048576).toFixed(1)} Mo)`);
 } catch {
   console.log(`archive non creee : copiez le dossier ${SORTIE}/ tel quel`);
+  process.exitCode = 1;
 }

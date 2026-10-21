@@ -5,7 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>EcoAgoraMod</AssemblyName>
     <RootNamespace>EcoAgora</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.2.0</Version>
     <Product>Eco Agora</Product>
     <Copyright>Copyright (c) 2026 Nicolas Abrantes - PolyForm Noncommercial 1.0.0</Copyright>
     <LangVersion>latest</LangVersion>
@@ -32,32 +32,15 @@
   </ItemGroup>
 
   <!--
-    Assemblies du jeu : celles de l'EcoModKit officiel, livre avec le serveur
-    (<serveur>/EcoModKit/ReferenceAssemblies). Indiquez la racine du serveur :
-      dotnet build -c Release -p:EcoServerDir="D:/MonServeurEco"
-    ou la variable d'environnement ECO_SERVER_DIR, ou un fichier local.props
-    (non versionne) qui definit EcoServerDir.
+    Assemblies du jeu : paquet NuGet officiel de Strange Loop Games, rien a
+    installer. Pour une autre version d'Eco : -p:EcoVersion=<version NuGet>
+    (liste : https://www.nuget.org/packages/Eco.ReferenceAssemblies).
   -->
-  <Import Project="local.props" Condition="Exists('local.props')" />
   <PropertyGroup>
-    <EcoServerDir Condition="'$(EcoServerDir)' == ''">$(ECO_SERVER_DIR)</EcoServerDir>
-    <EcoRefs>$(EcoServerDir)/EcoModKit/ReferenceAssemblies</EcoRefs>
+    <EcoVersion Condition="'$(EcoVersion)' == ''">0.14.2.1-beta-release-1106</EcoVersion>
   </PropertyGroup>
-  <Target Name="VerifierEcoModKit" BeforeTargets="ResolveAssemblyReferences">
-    <Error Condition="!Exists('$(EcoRefs)/Eco.Gameplay.dll')"
-           Text="EcoModKit introuvable dans '$(EcoRefs)'. Indiquez la racine du serveur Eco : -p:EcoServerDir=... ou ECO_SERVER_DIR (le dossier EcoModKit est fourni avec le serveur)." />
-  </Target>
-
   <ItemGroup>
-    <Reference Include="Eco.Core"><HintPath>$(EcoRefs)/Eco.Core.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Eco.Gameplay"><HintPath>$(EcoRefs)/Eco.Gameplay.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Eco.ModKit"><HintPath>$(EcoRefs)/Eco.ModKit.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Eco.Plugins"><HintPath>$(EcoRefs)/Eco.Plugins.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Eco.Shared"><HintPath>$(EcoRefs)/Eco.Shared.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Eco.Simulation"><HintPath>$(EcoRefs)/Eco.Simulation.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Eco.Stats"><HintPath>$(EcoRefs)/Eco.Stats.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Eco.WebServer"><HintPath>$(EcoRefs)/Eco.WebServer.dll</HintPath><Private>false</Private></Reference>
-    <Reference Include="Eco.World"><HintPath>$(EcoRefs)/Eco.World.dll</HintPath><Private>false</Private></Reference>
+    <PackageReference Include="Eco.ReferenceAssemblies" Version="$(EcoVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <!-- Bibliotheques deja embarquees dans le serveur : utilisees a la compilation, jamais livrees. -->

@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.2.0 (2026-10-21)
+
+### Français
+
+**Nouveautés**
+- **Messages en jeu traduits** : les annonces de la salle d'attente et de l'ouverture, ainsi que les descriptions des réglages du mod, sont traduites par Eco dans la langue de chaque joueur, grâce à `Mods/Translations/EcoAgora.csv` (fourni en français).
+- **Projet ouvert aux contributions** : guide de contribution (code et traductions), modèles d'issues (bug, idée, traduction), intégration continue GitHub (compilation, vérification des traductions et des types, paquet de test) et releases automatiques à chaque tag.
+- Compilation sans serveur Eco : les assemblies d'Eco viennent du paquet NuGet officiel `Eco.ReferenceAssemblies`.
+- Vérificateur des traductions du panel (`npm run locales:check`) ; la liste des langues vit dans `panel/locales/langues.json`.
+
+**Changements**
+- Le message de bienvenue de la salle d'attente affiche la date d'ouverture au format `2026-09-30 19:00 (UTC+02:00)`, lisible dans toutes les langues.
+
+**Mise à jour depuis 1.1.0** : copiez l'archive par-dessus l'installation existante (elle ajoute `Mods/Translations/EcoAgora.csv`), puis redémarrez le serveur.
+
+### English
+
+**New**
+- **Translated in-game messages**: waiting room and opening announcements, plus the mod's setting descriptions, are translated by Eco into each player's language through `Mods/Translations/EcoAgora.csv` (French included).
+- **Open to contributions**: contributing guide (code and translations), issue templates (bug, idea, translation), GitHub CI (build, translation and type checks, test package) and automatic releases on every tag.
+- Build without an Eco server: Eco assemblies come from the official `Eco.ReferenceAssemblies` NuGet package.
+- Panel translation checker (`npm run locales:check`); the language list lives in `panel/locales/langues.json`.
+
+**Changed**
+- The waiting room welcome message shows the opening date as `2026-09-30 19:00 (UTC+02:00)`, readable in every language.
+
+**Updating from 1.1.0**: copy the archive over your existing install (it adds `Mods/Translations/EcoAgora.csv`), then restart the server.
+
 ## 1.1.0 (2026-10-19)
 
 ### Français

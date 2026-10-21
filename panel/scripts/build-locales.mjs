@@ -26,6 +26,9 @@ for (const langue of langues) {
   console.log(`lang/${langue}.json : ${Object.keys(out).length} domaine(s)`);
 }
 
+// Liste des langues proposees : locales/langues.json, copiee telle quelle.
+await writeFile(join(SORTIE, 'langues.json'), await readFile(join(SOURCE, 'langues.json'), 'utf8'), 'utf8');
+
 // Cles du francais absentes des autres langues : affichees en francais, a traduire.
 const cles = (o, p = '') => Object.entries(o).flatMap(([k, v]) => (typeof v === 'object' && v ? cles(v, `${p}${k}.`) : [`${p}${k}`]));
 const ref = new Set(cles(reference));

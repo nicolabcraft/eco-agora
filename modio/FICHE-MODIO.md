@@ -1,4 +1,4 @@
-# Fiche mod.io : Eco Agora 1.1.0
+# Fiche mod.io : Eco Agora 1.2.0
 
 À copier dans le formulaire mod.io (jeu : **Eco**). La description est dans
 `description.html` : à coller en mode code source de l'éditeur (bouton `<>`).
@@ -11,9 +11,9 @@
 | URL (name_id) | `eco-agora` |
 | Logo | `logo.png` (1920×1080, 16:9) |
 | Galerie | `galerie-01.png` à `galerie-07.png` (1920×1080), dans l'ordre |
-| Fichier | `../eco-agora-1.1.0.zip` |
-| Version | `1.1.0` |
-| Notes de version | Panel en français et en anglais, textes modifiables dans `lang/`, lien vers l’interface d’origine d’Eco. |
+| Fichier | `../eco-agora-1.2.0.zip` |
+| Version | `1.2.0` |
+| Notes de version | Voir CHANGELOG.md (section 1.2.0) : messages en jeu traduits, projet ouvert aux contributions. |
 | Compatibilité | Eco 0.14.2.1 |
 | Tags | Server, Web, UI, Admin, Statistics, Map (ceux proposés par mod.io pour Eco qui s'en rapprochent) |
 | Licence | Autre / personnalisée : **PolyForm Noncommercial 1.0.0** (gratuit, réutilisable, pas d'usage commercial) |
