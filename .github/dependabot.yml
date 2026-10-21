@@ -1,0 +1,38 @@
+# Mises a jour automatiques des dependances (Dependabot).
+# Les assemblies d'Eco (Eco.ReferenceAssemblies) et les bibliotheques fournies
+# par le serveur (LiteDB, Newtonsoft.Json) sont exclues : leur version doit
+# rester celle du serveur Eco, on les change a la main a chaque version d'Eco.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /panel
+    target-branch: dev
+    schedule:
+      interval: weekly
+    groups:
+      panel:
+        patterns: ['*']
+        update-types: [minor, patch]
+    ignore:
+      # three.js est fige sur la version du moteur de carte d'Eco.
+      - dependency-name: three
+      - dependency-name: '@types/three'
+    labels: [dependencies]
+
+  - package-ecosystem: nuget
+    directory: /mod
+    target-branch: dev
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: Eco.ReferenceAssemblies
+      - dependency-name: LiteDB
+      - dependency-name: Newtonsoft.Json
+    labels: [dependencies]
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: monthly
+    labels: [dependencies]

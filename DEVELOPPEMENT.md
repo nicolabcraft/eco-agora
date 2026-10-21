@@ -60,6 +60,9 @@ npm run package      # build dans dist/, puis release/ et eco-agora-<version>.zi
   ```
   Pensez à mettre à jour `CHANGELOG.md` et la version de `panel/package.json`.
 
+Organisation des branches (`main`, `dev`, `feature/…`) et publication d'une
+version : voir [CONTRIBUTING.md](CONTRIBUTING.md#branches-et-versions).
+
 ## Développer
 
 ```bash

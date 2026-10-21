@@ -45,9 +45,41 @@ d'Eco : `French`, `German`, `Spanish`, `Italian`, `Portuguese`,
 Vous pouvez aussi simplement ouvrir une issue « Traduction » avec vos textes :
 nous les intégrerons.
 
+## Branches et versions
+
+| Branche | Rôle |
+|---|---|
+| `main` | **Versions publiées** uniquement. Chaque version y porte un tag `vX.Y.Z`, qui déclenche la release automatique. On n'y pousse jamais directement. |
+| `dev` | **Intégration** : la prochaine version en préparation. Toutes les pull requests visent `dev`. |
+| `feature/<sujet>` | Une **nouvelle fonction**, partie de `dev` (ex. `feature/traduction-allemand`). |
+| `fix/<sujet>` | Une **correction**, partie de `dev` (ex. `fix/rideau-date`). |
+
+Travailler sur une fonction :
+
+```bash
+git checkout dev && git pull
+git checkout -b feature/mon-sujet
+# ... modifications, commits ...
+git push -u origin feature/mon-sujet
+# puis pull request vers dev
+```
+
+La CI vérifie chaque pull request et chaque push sur `main` et `dev`, et fournit
+un paquet de test dans l'onglet *Actions*.
+
+Publier une version (mainteneurs) :
+
+1. mettre à jour `CHANGELOG.md` et le numéro de version (`panel/package.json`, `mod/src/AgoraPlugin.cs`, `mod/EcoAgoraMod.csproj`) sur `dev` ;
+2. pull request `dev` → `main`, puis fusion ;
+3. tag sur `main` : `git tag vX.Y.Z && git push origin vX.Y.Z` ; le workflow
+   *Release* fabrique l'archive et publie la release.
+
+Une correction urgente peut partir de `main` (`fix/…`), puis être fusionnée dans
+`main` **et** `dev`.
+
 ## Proposer du code
 
-1. Forkez le dépôt et créez une branche.
+1. Forkez le dépôt et créez une branche `feature/…` ou `fix/…` à partir de `dev`.
 2. Installez les outils : .NET 10 SDK et Node.js 20 ou plus. **Aucun serveur
    Eco n'est nécessaire pour compiler** : les assemblies d'Eco viennent du paquet
    NuGet officiel `Eco.ReferenceAssemblies`.
@@ -57,7 +89,7 @@ nous les intégrerons.
    cd mod && dotnet build -c Release
    cd ../panel && npm run locales:check && npx vue-tsc --noEmit && npm run build
    ```
-5. Ouvrez une pull request : la CI refait ces vérifications et fabrique un
+5. Ouvrez une pull request **vers `dev`** : la CI refait ces vérifications et fabrique un
    paquet de test, téléchargeable depuis l'onglet *Actions*.
 
 ### Règles
@@ -69,6 +101,10 @@ nous les intégrerons.
 - Pas de `v-html` : les textes venant des joueurs ou des serveurs sont affichés
   comme du texte.
 - Une modification = une pull request ciblée, avec une description claire.
+
+## Sécurité
+
+Ne signalez jamais une faille dans une issue publique : voir [SECURITY.md](SECURITY.md).
 
 ## Licence
 
@@ -101,5 +137,12 @@ Thanks for helping! Fixes, features and translations are all welcome.
   translation files (`$t()` in the panel; English source through `Localizer` /
   `MsgLoc` in the mod, then run the `extract` command). Pull requests are
   checked by CI, which also builds a test package.
+- **Branches**: `main` only holds released versions (each tagged `vX.Y.Z`,
+  which triggers the automatic release); `dev` is the integration branch for the
+  next version, and **every pull request targets `dev`**; work in
+  `feature/<topic>` or `fix/<topic>` branches created from `dev`. To release,
+  maintainers update `CHANGELOG.md` and the version (`panel/package.json`, `mod/src/AgoraPlugin.cs`, `mod/EcoAgoraMod.csproj`) on `dev`, merge
+  `dev` into `main` through a pull request, then push a `vX.Y.Z` tag on `main`.
+- **Security**: report vulnerabilities privately, see [SECURITY.md](SECURITY.md).
 - **License**: contributions are published under the project's
   [PolyForm Noncommercial 1.0.0](LICENSE.md) license.
