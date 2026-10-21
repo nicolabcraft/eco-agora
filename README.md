@@ -1,5 +1,7 @@
 <p align="center"><img src="modio/logo.png" alt="Eco Agora : le panel web complet pour votre serveur Eco" width="820"></p>
 
+<p align="center"><a href="https://github.com/sponsors/nicolabcraft"><img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-ea4aaa?logo=githubsponsors&logoColor=white" alt="Sponsor"></a></p>
+
 # Eco Agora
 
 **Le panel web complet pour votre serveur Eco.** Eco Agora remplace le site web
@@ -56,6 +58,14 @@ que vous personnalisez depuis le panel lui-même.
 Guide complet : [INSTALLATION.md](INSTALLATION.md). Compatibilité : Eco 0.14.2.1.
 Mod facultatif recommandé : EcoMarketApi (page Marché).
 
+## Soutenir le projet
+
+Eco Agora est gratuit et le restera. Si le panel vous rend service, vous pouvez
+soutenir son développement sur [GitHub Sponsors](https://github.com/sponsors/nicolabcraft) :
+cela aide à maintenir le mod à jour avec les nouvelles versions d'Eco et à
+ajouter des fonctions. Contribuer du code ou une traduction aide tout autant :
+voir [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Licence
 
 Gratuit et à code ouvert, sous **PolyForm Noncommercial 1.0.0**
@@ -102,6 +112,11 @@ Eco's original interface stays reachable at `/legacy/`.
 stop the server, move `WebClient/WebBin/index.html` to `WebClient/WebBin/legacy/index.html`, copy the archive
 content to the server root and start it. Full guide:
 [INSTALL.en.md](INSTALL.en.md). Compatibility: Eco 0.14.2.1.
+
+**Support the project**: Eco Agora is and will stay free. If it helps your
+server, you can support its development on
+[GitHub Sponsors](https://github.com/sponsors/nicolabcraft); code and translation
+contributions help just as much (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 **License**: free and source available under **PolyForm Noncommercial 1.0.0**:
 use it, modify it, share your versions, but never use it commercially. See
