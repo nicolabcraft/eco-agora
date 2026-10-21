@@ -14,7 +14,7 @@ Mods/EcoAgora/EcoAgoraMod.dll                  the server mod (panel API)
 ```
 
 Compatibility: **Eco 0.14.2.1**. The mod is built against that version's
-EcoModKit; for another Eco version, rebuild it (see DEVELOPPEMENT.md).
+EcoModKit; for another Eco version, rebuild it (see DEVELOPPEMENT.md, in French).
 
 ## 1. Install
 
@@ -24,7 +24,7 @@ With the server **stopped**:
    `WebClient/WebBin/index.html`. Moved to `legacy/index.html`, the original
    site stays as a backup and remains reachable at `/legacy/`, so mods that
    integrate into the original interface keep working (admins get an
-   "Interface d'origine d'Eco" link in the panel).
+   "Original Eco interface" link in the panel).
    ```
    mkdir WebClient\WebBin\legacy
    move WebClient\WebBin\index.html WebClient\WebBin\legacy\index.html

@@ -6,7 +6,7 @@
 de votre serveur Eco (Strange Loop Games) par un panel moderne, en français et en anglais (traduisible),
 que vous personnalisez depuis le panel lui-même.
 
-*[English below](#english)* · [Installation](INSTALLATION.md) · [Install guide (EN)](INSTALL.en.md) · [Développement](DEVELOPPEMENT.md)
+*[English below](#english)* · [Installation](INSTALLATION.md) · [Install guide (EN)](INSTALL.en.md) · [Changelog](CHANGELOG.md) · [Développement](DEVELOPPEMENT.md)
 
 <p align="center"><img src="modio/galerie-01.png" alt="Tableau de bord" width="820"></p>
 
