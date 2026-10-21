@@ -1,5 +1,5 @@
 import type { EChartsOption } from 'echarts';
-import { dateMonde, num, unitLabel } from './format';
+import { dateMonde, escapeHtml, num, unitLabel } from './format';
 
 /** Palette de series, alignee sur les jetons CSS de la charte. */
 export const SERIES_COLORS = [
@@ -129,9 +129,10 @@ export function lineOption(series: Serie[], opts: { smooth?: boolean; stack?: bo
           const unite = uniteParSerie.get(serie.name) ?? '';
           const couleur = SERIES_COLORS[i % SERIES_COLORS.length];
           const pastille = `<span style="display:inline-block;margin-right:6px;border-radius:50%;width:9px;height:9px;background:${couleur}"></span>`;
-          return [`${pastille}${serie.name} : <strong>${num(v, 2)}${unite ? ' ' + unite : ''}</strong>`];
+          // Infobulle en HTML : les noms viennent du serveur, on les echappe.
+          return [`${pastille}${escapeHtml(serie.name)} : <strong>${escapeHtml(num(v, 2))}${unite ? ' ' + escapeHtml(unite) : ''}</strong>`];
         });
-        return [dateMonde(x, true), ...lignes].join('<br/>');
+        return [escapeHtml(dateMonde(x, true)), ...lignes].join('<br/>');
       },
     },
     xAxis: {
