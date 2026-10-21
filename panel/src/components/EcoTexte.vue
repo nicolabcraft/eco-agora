@@ -45,7 +45,8 @@ function analyser(source: string): Noeud {
 
   const ajouterTexte = (t: string): void => {
     if (!t) return;
-    const texte = t.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    // &amp; en dernier, sinon « &amp;lt; » serait decode deux fois en « < ».
+    const texte = t.replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
     pile[pile.length - 1].enfants.push(texte);
   };
 

@@ -108,9 +108,22 @@ export function shorten(text: string, max = 90): string {
 /** Retire les balises de mise en forme du jeu (TMP) et le HTML des libelles. */
 export function stripMarkup(text: string | null | undefined): string {
   if (!text) return '';
-  return text
-    .replace(/<[^>]*>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .trim();
+  // Repete jusqu'a stabilite : « <<b>b> » laisserait sinon une balise reconstituee.
+  let sans = text;
+  for (let avant = ''; avant !== sans; ) {
+    avant = sans;
+    sans = sans.replace(/<[^<>]*>/g, '');
+  }
+  // &amp; en dernier : « &amp;nbsp; » doit rester « &nbsp; » et non devenir une espace.
+  return sans.replace(/[<>]/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').trim();
+}
+
+/** Echappe un texte pour l'inserer dans du HTML (infobulles ECharts). */
+export function escapeHtml(text: unknown): string {
+  return String(text ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
