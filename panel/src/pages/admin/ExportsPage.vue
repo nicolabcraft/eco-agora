@@ -123,6 +123,11 @@ async function loadLists(): Promise<void> {
   loading.value = false;
 }
 
+// Fonctions nommees : vue-tsc 3 confond exporter.actions/species/environment avec les refs locales du meme nom dans le template.
+const fetchAction = (a: string) => exporter.actions(a);
+const fetchSpecies = (s: string) => exporter.species(s);
+const fetchEnvironment = (e: { category: string; units?: string; column?: string }) => exporter.environment(e.category, e.units, e.column);
+
 async function show(title: string, fetcher: () => Promise<unknown>): Promise<void> {
   busy.value = true;
   previewTitle.value = title;
@@ -215,7 +220,7 @@ onMounted(() => void loadLists());
             v-for="a in actions"
             :key="a"
             class="exp__chip"
-            @click="show($t('adminExports.prefixes.action') + '-' + a, () => exporter.actions(a))"
+            @click="show($t('adminExports.prefixes.action') + '-' + a, () => fetchAction(a))"
           >{{ a }}</button>
         </div>
       </section>
@@ -232,7 +237,7 @@ onMounted(() => void loadLists());
             v-for="s in species"
             :key="s"
             class="exp__chip"
-            @click="show($t('adminExports.prefixes.espece') + '-' + s, () => exporter.species(s))"
+            @click="show($t('adminExports.prefixes.espece') + '-' + s, () => fetchSpecies(s))"
           >{{ s }}</button>
         </div>
       </section>
@@ -250,7 +255,7 @@ onMounted(() => void loadLists());
             :key="e.label"
             class="exp__chip"
             :title="e.label"
-            @click="show($t('adminExports.prefixes.environnement') + '-' + e.category, () => exporter.environment(e.category, e.units, e.column))"
+            @click="show($t('adminExports.prefixes.environnement') + '-' + e.category, () => fetchEnvironment(e))"
           >{{ e.category }}<span v-if="e.units" class="u-faint"> &middot; {{ e.units }}</span></button>
         </div>
       </section>
